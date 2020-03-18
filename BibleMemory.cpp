@@ -334,7 +334,7 @@ void getReference(std::istream& in, std::string &dest)
 		std::string tempTwo;
 		in >> tempTwo;
 		// Check to see if this is a one-chaptered, numbered book.
-		if (((ref == "2" || ref == "3") && temp == "John" && !(tempTwo.length() >= 3))
+		if (((ref == "2" || ref == "3") && temp == "John" && !(tempTwo.length() < 3))
 			tempTwo = "1:" + tempTwo;
 		ref += ' ' + temp + ' ' + tempTwo;
 	}
@@ -350,7 +350,7 @@ void getReference(std::istream& in, std::string &dest)
 	else
 	{
 		// Check for one-chapter books and books with or without an 's'.
-		if ((ref == "Obadiah" || ref == "Philemon" || ref == "Jude") && !(temp.length() >= 3))
+		if ((ref == "Obadiah" || ref == "Philemon" || ref == "Jude") && !(temp.length() < 3))
 			temp = "1:" + temp;
 		else if (ref == "Psalm")
 			ref = "Psalms";
