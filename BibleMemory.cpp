@@ -65,6 +65,7 @@ void getReference(std::istream&, std::string&);
 
 int main(int argc, char* argv[])
 {
+	std::cout << "hi\n";
 	// PATH is a macro passed to the preprocessor during compilation.
 	std::string g_pathToBible = PATH;
 	
