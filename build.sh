@@ -35,7 +35,7 @@ print_help()
     echo "  -v, --verbose       Show detailed information from the compiler"
     echo "                      about the build."
     echo "  -h, --help          Show this message."
-    echo "  -u, --uninstall     Uninstall the Bible Memory program."
+    echo "  -r, --remove     Remove the Bible Memory program."
     echo
     echo "If the script fails, type \"\$?\" to get the exit code. Then"
     echo "read the script to find where that particular exit code is used."
@@ -43,7 +43,7 @@ print_help()
 
 uninstall_program()
 {
-    printf "Are you sure you want to uninstall the program? "
+    printf "Are you sure you want to remove the program? "
     read SHOULDPROCEED
     case "$SHOULDPROCEED" in
         "y")
@@ -86,7 +86,7 @@ main()
                 print_help
                 exit 0
                 ;;
-            -u|--uninstall)
+            -r|--remove)
                 uninstall_program
                 exit 0
                 ;;
