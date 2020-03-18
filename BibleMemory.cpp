@@ -32,9 +32,7 @@
 #include <thread>
 #include <exception>
 #include <sstream>
-#include <termios.h>
-#include <unistd.h>
-#include <cstdio>
+#include "getch.h"
 
 // make sure that the PATH is defined
 #if not defined PATH
@@ -54,8 +52,8 @@ public:
 	virtual const char* what() { return m_what; }
 };
 
-int _getch();
-int _getche();
+//int _getch();
+//int _getche();
 void loadBible(const std::string&);
 void printHelpMessage();
 bool shouldDoAnotherVerse();
@@ -334,7 +332,7 @@ void getReference(std::istream& in, std::string &dest)
 		std::string tempTwo;
 		in >> tempTwo;
 		// Check to see if this is a one-chaptered, numbered book.
-		if (((ref == "2" || ref == "3") && temp == "John" && !(tempTwo.length() < 3))
+		if ((ref == "2" || ref == "3") && temp == "John" && !(tempTwo.length() < 3))
 			tempTwo = "1:" + tempTwo;
 		ref += ' ' + temp + ' ' + tempTwo;
 	}
@@ -359,32 +357,4 @@ void getReference(std::istream& in, std::string &dest)
 		ref += ' ' + temp;
 	}
 	dest = ref;
-}
-
-// The following two functions came from zobayer.
-// See <http://zobayer.blogspot.com/2010/12/getch-getche-in-gccg.html>.
-int _getch()
-{
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    return ch;
-}
-
-int _getche()
-{
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr(STDIN_FILENO, &oldattr);
-    newattr = oldattr;
-    newattr.c_lflag &= ~(ICANON);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newattr);
-    ch = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldattr);
-    return ch;
 }
