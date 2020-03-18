@@ -36,6 +36,11 @@
 #include <unistd.h>
 #include <cstdio>
 
+// make sure that the PATH is defined
+#if not defined PATH
+	#error "You must define the path to the Bible file! Please pass this path to the compiler."
+#endif
+
 // global variables
 const std::string g_version = "4.1.1";
 std::string g_bible;
@@ -54,7 +59,7 @@ int _getche();
 void loadBible(const std::string&);
 void printHelpMessage();
 bool shouldDoAnotherVerse();
-unsigned int getNumOfVerses();
+inline unsigned int getNumOfVerses();
 void runQuiz(std::iostream&, std::string&);
 void getVerseString(std::string&, int, std::string&, std::string &);
 void getReference(std::istream&, std::string&);
@@ -62,14 +67,9 @@ void getReference(std::istream&, std::string&);
 
 int main(int argc, char* argv[])
 {
-	// This is a rather ugly macro, but it gets us a path for whatever system we're building on.
-#if defined (__WIN32__) || defined (_Win32) || defined (__CYGWIN32__) || defined (_MSC_VER) || defined (__MINGW32)
-	std::string g_pathToBible = "bible.txt";
-#elif defined (__linux__)
+	// PATH is a macro passed to the preprocessor during compilation.
 	std::string g_pathToBible = PATH;
-#elif defined (__APPLE__)
-	#error "TODO: What would be the appropriate method for hard-coding a path in Mac?"
-#endif
+	
 	try
 	{
 		loadBible(g_pathToBible);
@@ -214,11 +214,11 @@ bool shouldDoAnotherVerse()
 }
 
 
-unsigned int getNumOfVerses()
+inline unsigned int getNumOfVerses()
 {
-	char tempCinVal;
+	unsigned int tempCinVal;
 	std::cin >> tempCinVal;
-	return static_cast<unsigned int>(tempCinVal - abs('1' - 1));
+	return tempCinVal;
 }
 
 void runQuiz(std::iostream& verseFile, std::string& reference)
