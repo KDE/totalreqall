@@ -11,7 +11,6 @@ BIBLEPATH=
 BUILDTYPE=
 SUDO=
 
-
 # This function will build the program.
 build()
 {
@@ -43,6 +42,34 @@ print_help()
     echo "read the script to find where that particular exit code is used."
 }
 
+uninstall_program()
+{
+    printf "Are you sure you want to uninstall the program? "
+    read SHOULDPROCEED
+    case "$SHOULDPROCEED" in
+        "y")
+            if [ -e "/bin/biblememory" ]; then
+                sudo rm "/bin/biblememory"
+            fi
+            if [ -e "/etc/biblememory/bible.txt" ]; then
+                sudo rm "/etc/biblememory/bible.txt"
+                sudo rmdir "/etc/biblememory"
+            fi
+            if [ -e "/home/$USERNAME/.local/bin/biblememory" ]; then
+                rm "/home/$USERNAME/.local/bin/biblememory"
+            fi
+            if [ -e "/home/$USERNAME/.local/var/biblememory/bible.txt" ]; then
+                rm "/home/$USERNAME/.local/var/biblememory/bible.txt"
+                rmdir "/home/$USERNAME/.local/var/biblememory/"
+            fi
+            ;;
+        *)
+            echo "Aborting."
+            exit 0
+            ;;
+    esac
+}
+
 # Our main function. This takes care of all operations.
 main()
 {
@@ -63,20 +90,7 @@ main()
                 exit 0
                 ;;
             -u|--uninstall)
-                if [ -e "/bin/biblememory" ]; then
-                    sudo rm "/bin/biblememory"
-                fi
-                if [ -e "/etc/biblememory/bible.txt" ]; then
-                    sudo rm "/etc/biblememory/bible.txt"
-                    sudo rmdir "/etc/biblememory"
-                fi
-                if [ -e "/home/$USERNAME/.local/bin/biblememory" ]; then
-                    rm "/home/$USERNAME/.local/bin/biblememory"
-                fi
-                if [ -e "/home/$USERNAME/.local/var/biblememory/bible.txt" ]; then
-                    rm "/home/$USERNAME/.local/var/biblememory/bible.txt"
-                    rmdir "/home/$USERNAME/.local/var/biblememory/"
-                fi
+                uninstall_program
                 exit 0
                 ;;
             *)
