@@ -21,6 +21,10 @@ build()
     fi
     echo "Building BibleMemory.cpp..."
     $SUDO $COMPILER BibleMemory.cpp -D "PATH=\"$BIBLEPATH/bible.txt\"" -o "$BUILDPATH/biblememory" $VERBOSE
+    if [ "$?" != 0 ]; then
+        echo "Build error!"
+        exit 1
+    fi
     $SUDO chmod +x "$BUILDPATH/biblememory"
 }
 
@@ -98,7 +102,7 @@ main()
             ;;
         *)
             echo "Invalid option specified! Exiting..."
-            exit 1
+            exit 2
     esac
 
     # Build.

@@ -62,8 +62,7 @@ void getReference(std::istream&, std::string&);
 
 int main(int argc, char* argv[])
 {
-	// start loading the Bible file
-	//std::thread bibleLoader{ loadBible, "bible.txt" };
+	// This is a rather ugly macro, but it gets us a path for whatever system we're building on.
 #if defined (__WIN32__) || defined (_Win32) || defined (__CYGWIN32__) || defined (_MSC_VER) || defined (__MINGW32)
 	std::string g_pathToBible = "bible.txt";
 #elif defined (__linux__)
@@ -139,11 +138,6 @@ int main(int argc, char* argv[])
 				// get user preferences on how many verses
 				std::cout << "\n\nNumber of verses to do (starting from the reference): ";
 				unsigned int numOfVerses = getNumOfVerses();
-				// close the thread so there aren't any conflicts over bible_g
-				// call joinable() to see if it can be joined (this prevents
-				// errors caused by calling join() after the thread is joined)
-				// if (bibleLoader.joinable())
-				// 	bibleLoader.join();
 				std::string theVerse;
 				getVerseString(reference, numOfVerses, g_bible, theVerse);
 				*versesToDo << theVerse << "\n-----";
@@ -368,6 +362,8 @@ void getReference(std::istream& in, std::string &dest)
 	dest = ref;
 }
 
+// The following two functions came from zobayer.
+// See <http://zobayer.blogspot.com/2010/12/getch-getche-in-gccg.html>.
 int _getch()
 {
     struct termios oldattr, newattr;
