@@ -67,6 +67,15 @@ uninstall_program()
     esac
 }
 
+update_program()
+{
+    git clone "https://github.com/LorenDB/bible-memory.git/"
+    FILES=`ls bible-memory`
+    rm "$FILES"
+    cp bible-memory/*.* .
+    rm -r bible-memory
+}
+
 # Our main function. This takes care of all operations.
 main()
 {
@@ -89,6 +98,10 @@ main()
             -r|--remove)
                 uninstall_program
                 exit 0
+                ;;
+            -u|--update)
+                update_program
+                shift
                 ;;
             *)
                 shift
