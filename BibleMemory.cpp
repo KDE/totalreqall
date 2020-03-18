@@ -320,7 +320,7 @@ void getReference(std::istream& in, std::string &dest)
 	}
 	in >> temp;
 	// if this reference has a total of 3 space-separated parts,  let's get them
-	if (ref == "1" || ref == "I" || ref == "2" || ref == "II" || ref == "3" || ref == "III")
+	if (ref == "1" || ref == "2" || ref == "3" || (ref[0] == 'I' && ref[1] != 's'))
 	{
 		// The Bible I use has "1 Peter", "2 John", etc., not "I Peter", "II John",
 		// so this will set the book no. to the format used in the Bible in this program.
@@ -334,15 +334,14 @@ void getReference(std::istream& in, std::string &dest)
 		std::string tempTwo;
 		in >> tempTwo;
 		// Check to see if this is a one-chaptered, numbered book.
-		if (((ref == "2" && temp == "John") || (ref == "3" && temp == "John")) && !(tempTwo.length() >= 3))
+		if (((ref == "2" || ref == "3") && temp == "John" && !(tempTwo.length() >= 3))
 			tempTwo = "1:" + tempTwo;
 		ref += ' ' + temp + ' ' + tempTwo;
 	}
 	// four part reference! (Song of Solomon)
 	else if (ref == "Song" && (temp == "of" || temp == "Of"))
 	{
-		if (ref == "Song" && temp == "Of") // just in case someone enters Song Of Solomon
-			temp = "of";
+		temp = "of"; // just in case someone enters Song Of Solomon
 		std::string tempTwo, tempThree;
 		in >> tempTwo >> tempThree;
 		ref += ' ' + temp + ' ' + tempTwo + ' ' + tempThree;
