@@ -71,7 +71,7 @@ update_program()
 {
     git clone "https://github.com/LorenDB/bible-memory.git/"
     FILES=`ls bible-memory`
-    rm $FILES -f $VERBOSE
+    rm $FILES -f -r $VERBOSE
     cp bible-memory/*.* .
     rm -r bible-memory
 }
