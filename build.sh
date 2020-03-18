@@ -8,7 +8,6 @@ COMPILER="g++"
 VERBOSE=
 BUILDPATH=
 BIBLEPATH=
-BUILDTYPE=
 SUDO=
 
 # This function will build the program.
@@ -52,15 +51,13 @@ uninstall_program()
                 sudo rm "/bin/biblememory"
             fi
             if [ -e "/etc/biblememory/bible.txt" ]; then
-                sudo rm "/etc/biblememory/bible.txt"
-                sudo rmdir "/etc/biblememory"
+                sudo rm -r "/etc/biblememory"
             fi
             if [ -e "/home/$USERNAME/.local/bin/biblememory" ]; then
                 rm "/home/$USERNAME/.local/bin/biblememory"
             fi
             if [ -e "/home/$USERNAME/.local/var/biblememory/bible.txt" ]; then
-                rm "/home/$USERNAME/.local/var/biblememory/bible.txt"
-                rmdir "/home/$USERNAME/.local/var/biblememory/"
+                rm -r "/home/$USERNAME/.local/var/biblememory"
             fi
             ;;
         *)
@@ -106,12 +103,10 @@ main()
         u|U)
             BUILDPATH="/home/$USERNAME/.local/bin"
             BIBLEPATH="/home/$USERNAME/.local/var/biblememory"
-            BUILDTYPE="user"
             ;;
         s|S)
             BUILDPATH="/bin"
             BIBLEPATH="/etc/biblememory"
-            BUILDTYPE="system"
             SUDO="sudo"
             ;;
         *)
