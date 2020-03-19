@@ -57,7 +57,6 @@ public:
 void loadBible(const std::string&);
 void printHelpMessage();
 bool shouldDoAnotherVerse();
-inline unsigned int getNumOfVerses();
 void runQuiz(std::iostream&, std::string&);
 void getVerseString(std::string&, int, std::string&, std::string &);
 void getReference(std::istream&, std::string&);
@@ -65,24 +64,6 @@ void getReference(std::istream&, std::string&);
 
 int main(int argc, char* argv[])
 {
-	// PATH is a macro passed to the preprocessor during compilation.
-	std::string g_pathToBible = PATH;
-	
-	try
-	{
-		loadBible(g_pathToBible);
-	}
-	catch (std::exception& ex)
-	{
-		std::cout << "Error: " << ex.what();
-		exit(1);
-	}
-	catch (...)
-	{
-		std::cout << "Error: Unknown exception.\n";
-		exit(1);
-	}
-
 	// This holds the filename. The default filename will be "verse.txt". However, this will only
 	// be used if the user enters the /f parameter but no filename.
 	std::string filename = "verse.txt";
@@ -113,6 +94,25 @@ int main(int argc, char* argv[])
 		}
 	}
 	std::cout << "Welcome to the Bible Memory program! (version " << g_version << ")\n"; // print greetings and salutations
+	
+	// PATH is a macro passed to the preprocessor during compilation.
+	std::string g_pathToBible = PATH;
+	
+	try
+	{
+		loadBible(g_pathToBible);
+	}
+	catch (std::exception& ex)
+	{
+		std::cout << "Error: " << ex.what();
+		exit(1);
+	}
+	catch (...)
+	{
+		std::cout << "Error: Unknown exception.\n";
+		exit(1);
+	}
+
 	// versesToDo is the iostream device to read verses from in my format. (The
 	// program copies the requested verses into a temporary std::stringstream, and then
 	// reads them back. For me, this was simpler than reading in words from
@@ -135,7 +135,8 @@ int main(int argc, char* argv[])
 					reference = oldRef;
 				// get user preferences on how many verses
 				std::cout << "\n\nNumber of verses to do (starting from the reference): ";
-				unsigned int numOfVerses = getNumOfVerses();
+				unsigned int numOfVerses;
+				std::cin >> numOfVerses;
 				std::string theVerse;
 				getVerseString(reference, numOfVerses, g_bible, theVerse);
 				*versesToDo << theVerse << "\n-----";
@@ -170,8 +171,7 @@ int main(int argc, char* argv[])
 	_getch();
 	std::cout << "\n";
 	// delete the verse string pointer
-	if (versesToDo != nullptr)
-		delete versesToDo;
+	delete versesToDo;
 	return 0;
 }
 
@@ -211,21 +211,12 @@ bool shouldDoAnotherVerse()
 	return (anotherVerse == 'y' || anotherVerse == 'Y') ? true : false;
 }
 
-
-inline unsigned int getNumOfVerses()
-{
-	unsigned int tempCinVal;
-	std::cin >> tempCinVal;
-	return tempCinVal;
-}
-
 void runQuiz(std::iostream& verseFile, std::string& reference)
 {
 	// outputting verse reference
 	std::cout << "\n\nVerse: ";
 	getReference(verseFile, reference);
-	std::cout << reference;
-	std::cout << "\n\n";
+	std::cout << reference << "\n\n";
 	// variables we will need
 	std::string nextWord;
 	int incorrectTries = 0;
