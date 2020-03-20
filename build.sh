@@ -35,7 +35,7 @@ print_help()
     echo "  -v, --verbose       Show detailed information from the compiler"
     echo "                      about the build."
     echo "  -h, --help          Show this message."
-    echo "  -r, --remove     Remove the Bible Memory program."
+    echo "  -r, --remove        Remove the Bible Memory program."
     echo
     echo "If the script fails, type \"\$?\" to get the exit code. Then"
     echo "read the script to find where that particular exit code is used."
