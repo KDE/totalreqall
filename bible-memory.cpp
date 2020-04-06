@@ -40,7 +40,7 @@
 #endif
 
 // global variables
-const std::string g_version = "4.1.1";
+const std::string g_version = "4.1.2";
 std::string g_bible;
 
 class BadFileEx : public std::exception
@@ -129,12 +129,12 @@ int main(int argc, char* argv[])
 			{
 				versesToDo = new std::stringstream{ " " };
 				// get verse to use
-				std::cout << "\n\nReference to use: ";
+				std::cout << "Reference to use: ";
 				getReference(std::cin, reference);
 				if (reference[0] == '<')
 					reference = oldRef;
 				// get user preferences on how many verses
-				std::cout << "\n\nNumber of verses to do (starting from the reference): ";
+				std::cout << "Number of verses to do (starting from the reference): ";
 				unsigned int numOfVerses;
 				std::cin >> numOfVerses;
 				std::string theVerse;
@@ -145,7 +145,7 @@ int main(int argc, char* argv[])
 			else if (useFile)
 			{
 				versesToDo = new std::fstream{ filename, std::ios::in };
-				std::cout << "\n\nUsing file: " << filename;
+				std::cout << "\nUsing file: " << filename;
 				// is it an empty file?
 				if (!versesToDo)
 					throw BadFileEx{ "Invalid file!" };
@@ -232,9 +232,9 @@ void runQuiz(std::iostream& verseFile, std::string& reference)
 		// next verse
 		else if (nextWord == "+++++")
 		{
-			std::cout << "\n" << incorrectTries << " incorrect guesses.\n";
+			std::cout << "\n\n" << incorrectTries << " incorrect guesses.\n";
 			incorrectTries = 0;
-			std::cout << "\nNext verse: ";
+			std::cout << "Next verse: ";
 			getReference(verseFile, reference);
 			std::cout << reference << "\n\n";
 			continue;

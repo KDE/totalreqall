@@ -19,7 +19,7 @@ build()
         $SUDO rm "$BUILDPATH/$OUTNAME"
     fi
     echo "Building bible-memory.cpp..."
-    $SUDO $COMPILER bible-memory.cpp -o "$BUILDPATH/$OUTNAME" $VERBOSE
+    $SUDO $COMPILER bible-memory.cpp -o "$BUILDPATH/$OUTNAME" -D PATH="\"$BIBLEPATH/bible.txt\"" $VERBOSE
     if [ "$?" != 0 ]; then
         echo "Build error!"
         exit 1
@@ -90,11 +90,13 @@ main()
                 shift
                 BUILDTYPE="$1"
                 case "$BUILDTYPE" in
-                    user)
+                    u|user)
                         BUILDPATH="/home/$USERNAME/.local/bin"
+                        BIBLEPATH="/home/$USERNAME/.local/var/biblememory"
                         ;;
-                    system)
+                    s|system)
                         BUILDPATH="/bin"
+                        BIBLEPATH="/etc/biblememory"
                         SUDO="sudo"
                         ;;
                     *)
@@ -138,6 +140,11 @@ main()
 
     # Build.
     build
+
+    # Make sure the Bible file is available
+    if [ ! -e "$BIBLEPATH/bible.txt" ]; then
+        $SUDO cp "bible.txt" "$BIBLEPATH/bible.txt"
+    fi
 }
 
 # Run the script. $* passes parameters to main.
