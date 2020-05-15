@@ -214,7 +214,7 @@ bool shouldDoAnotherVerse()
 void runQuiz(std::iostream& verseFile, std::string& reference)
 {
 	// outputting verse reference
-	std::cout << "\n\nVerse: ";
+	std::cout << "\nVerse: ";
 	getReference(verseFile, reference);
 	std::cout << reference << "\n\n";
 	// variables we will need
