@@ -15,9 +15,12 @@ OUTNAME="biblememory"
 build()
 {
     echo "Compiler: $COMPILER"
+
+    # remove existing binary
     if [ -e "$BUILDPATH/$OUTNAME" ]; then
         $SUDO rm "$BUILDPATH/$OUTNAME"
     fi
+    
     echo "Building bible-memory.cpp..."
     $SUDO $COMPILER bible-memory.cpp -o "$BUILDPATH/$OUTNAME" -D PATH="\"$BIBLEPATH/bible.txt\"" $VERBOSE
     if [ "$?" != 0 ]; then
@@ -138,7 +141,6 @@ main()
         esac
     done
 
-    # Build.
     build
 
     # Make sure the Bible file is available
