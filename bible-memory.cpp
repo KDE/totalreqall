@@ -282,6 +282,7 @@ void getVerseString(std::string& refToFind, int numVerses, std::string& source, 
 	std::string::size_type pos = std::string::npos;
 	std::string verseLine;
 	bool shouldParseOffset = false;
+	bool reverse = false;
 	int offset = 0;
 
 	// parse any options
@@ -298,7 +299,8 @@ void getVerseString(std::string& refToFind, int numVerses, std::string& source, 
 		{
 			std::string numOffset = refToFind;
 			numOffset.erase(0, 2);
-			offset = std::stoi(numOffset);
+			offset = std::stoi(numOffset) + 1; // need to back up past the one we just did
+			reverse = true;
 			shouldParseOffset = true;
 		}
 		refToFind = *oldRef;
@@ -312,7 +314,15 @@ void getVerseString(std::string& refToFind, int numVerses, std::string& source, 
 		if (shouldParseOffset)
 		{
 			for (int i = 0; i < offset; ++i)
-				pos = source.find("\n", pos);
+			{
+				if (reverse)
+				{
+					--pos; // move past the previous '\n' found
+					pos = source.rfind("\n", pos);
+				}
+				else
+					pos = source.find("\n", pos);
+			}
 			++pos; // move past the '\n' to avoid strange behavior
 		}
 		for (int i = 0; i < numVerses; ++i)
