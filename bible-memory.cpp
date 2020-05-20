@@ -40,7 +40,7 @@
 #endif
 
 // global variables
-const std::string g_version = "4.1.2";
+const std::string g_version = "4.1.3";
 std::string g_bible;
 
 class BadFileEx : public std::exception
@@ -52,13 +52,22 @@ public:
 	virtual const char* what() { return m_what; }
 };
 
+class VerseEx : public std::exception
+{
+private:
+	const char *m_what;
+public:
+	VerseEx(const char *what) : m_what{ what } {}
+	virtual const char* what() { return m_what; }
+};
+
 //int _getch();
 //int _getche();
 void loadBible(const std::string&);
 void printHelpMessage();
 bool shouldDoAnotherVerse();
 void runQuiz(std::iostream&, std::string&);
-void getVerseString(std::string&, int, std::string&, std::string &);
+void getVerseString(std::string&, int, std::string&, std::string &, std::string * = nullptr);
 void getReference(std::istream&, std::string&);
 
 
@@ -131,14 +140,15 @@ int main(int argc, char* argv[])
 				// get verse to use
 				std::cout << "Reference to use: ";
 				getReference(std::cin, reference);
-				if (reference[0] == '<')
-					reference = oldRef;
 				// get user preferences on how many verses
 				std::cout << "Number of verses to do (starting from the reference): ";
 				unsigned int numOfVerses;
 				std::cin >> numOfVerses;
 				std::string theVerse;
-				getVerseString(reference, numOfVerses, g_bible, theVerse);
+				if (reference[0] == '<')
+					getVerseString(reference, numOfVerses, g_bible, theVerse, &oldRef);
+				else
+					getVerseString(reference, numOfVerses, g_bible, theVerse);
 				*versesToDo << theVerse << "\n-----";
 				oldRef = reference;
 			}
@@ -266,18 +276,45 @@ void runQuiz(std::iostream& verseFile, std::string& reference)
 	std::cout << "\n\n" << incorrectTries << " incorrect guesses. ";
 }
 
-void getVerseString(std::string& refToFind, int numVerses, std::string& source, std::string &dest)
+void getVerseString(std::string& refToFind, int numVerses, std::string& source, std::string &dest, std::string* oldRef)
 {
 	// position indicator
 	std::string::size_type pos = std::string::npos;
-
-	// find the string
 	std::string verseLine;
+	bool shouldParseOffset = false;
+	int offset = 0;
+
+	// parse any options
+	if (refToFind[0] == '<')
+	{
+		if (refToFind[1] == '+')
+		{
+			std::string numOffset = refToFind;
+			numOffset.erase(0, 2);
+			offset = std::stoi(numOffset);
+			shouldParseOffset = true;
+		}
+		else if (refToFind[1] == '-')
+		{
+			std::string numOffset = refToFind;
+			numOffset.erase(0, 2);
+			offset = std::stoi(numOffset);
+			shouldParseOffset = true;
+		}
+		refToFind = *oldRef;
+	}
+	// find the string
 	pos = source.find(refToFind.c_str(), 0);
 	if (pos == std::string::npos) // not in the file
 		throw std::invalid_argument{ "Invalid reference." };
-	else if (pos != std::string::npos) // Found it!
+	else // Found it!
 	{
+		if (shouldParseOffset)
+		{
+			for (int i = 0; i < offset; ++i)
+				pos = source.find("\n", pos);
+			++pos; // move past the '\n' to avoid strange behavior
+		}
 		for (int i = 0; i < numVerses; ++i)
 		{
 			while (source[pos] != '\n')
