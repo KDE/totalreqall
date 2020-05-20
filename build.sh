@@ -116,6 +116,8 @@ main()
                 shift
                 case "$1" in
                     g++)
+                        COMPILER="$1"
+                        ;;
                     clang++)
                         COMPILER="$1"
                         ;;
