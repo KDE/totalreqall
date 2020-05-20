@@ -10,7 +10,7 @@ If you ever think my code needs modified in any way, please send me a pull reque
 1. Clone this repo to your computer.
 2. In a terminal, change to the directory you cloned the repo to and run `chmod +x build.sh`.
 3. Run `./build.sh`.  
-    By default, build.sh will build the program in the current directory. However, you have the option of installing the program for all users (a system install) or for the current user only (a user install). Pass the option `-i u` to build.sh for a user install and the option `-i s` for a system install. For advanced usage, pass the option `-h` to build.sh.
+    > By default, build.sh will build the program in the current directory. However, you have the option of installing the program for all users (a system install) or for the current user only (a user install). Pass the option `-i u` to build.sh for a user install and the option `-i s` for a system install. For advanced usage, pass the option `-h` to build.sh.
 4. To run the program, type `biblememory` at the command prompt.
 
 ### Uninstall
