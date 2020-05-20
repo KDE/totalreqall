@@ -6,8 +6,8 @@ USERNAME=`whoami`
 HAVECDED="no" # This tells us whether we have changed directories to build the program.
 COMPILER="g++"
 VERBOSE=
-BUILDPATH=
-BIBLEPATH=
+BUILDPATH="."
+BIBLEPATH="."
 SUDO=
 OUTNAME="biblememory"
 
@@ -24,7 +24,7 @@ build()
     echo "Building bible-memory.cpp..."
     $SUDO $COMPILER bible-memory.cpp -o "$BUILDPATH/$OUTNAME" -D PATH="\"$BIBLEPATH/bible.txt\"" $VERBOSE
     if [ "$?" != 0 ]; then
-        echo "Build error!"
+        echo "Build failed, please check $COMPILER output."
         exit 1
     fi
     $SUDO chmod +x "$BUILDPATH/$OUTNAME"
@@ -32,12 +32,14 @@ build()
 
 print_help()
 {
-    echo "Build script for the Bible Memory program."
+    echo "Build script for the Bible Memory program. By default, builds program in"
+    echo "current directory."
     echo "Usage:"
-    echo "  -b, --buildtype <type>      Specify how to build the program. Type \'user\'"
+    echo "  -i, --install <type>        Specify how to install the program. Type \'user\'"
     echo "                              to build it for your user account only, and"
-    echo "                              type \'system\' to install for all users. Note:"
-    echo "                              a system build requires sudo priveliges."
+    echo "                              type \'system\' to install for all users. Defaults"
+    echo "                              to current directory. Note: a system build requires"
+    echo "                              sudo privileges."
     echo "  -c, --compiler <compiler>   Specify the compiler to use. The script"
     echo "                              currently supports g++ and clang++."
     echo "  -h, --help                  Show this message."
@@ -61,10 +63,13 @@ uninstall_program()
     case "$SHOULDPROCEED" in
         "y")
             if [ -e "/bin/$OUTNAME" ]; then
-                sudo rm "/bin/ttt"
+                sudo rm "/bin/$OUTNAME"
             fi
             if [ -e "/home/$USERNAME/.local/bin/$OUTNAME" ]; then
                 rm "/home/$USERNAME/.local/bin/$OUTNAME"
+            fi
+            if [ -e "./$OUTNAME" ]; then
+                rm "./$OUTNAME"
             fi
             ;;
         *)
@@ -78,9 +83,9 @@ update_program()
 {
     git clone "https://github.com/LorenDB/bible-memory.git/"
     FILES=`ls bible-memory`
-    rm $FILES -f -r $VERBOSE
+    rm -rf $FILES $VERBOSE
     cp "bible-memory/*.*" .
-    rm -r "bible-memory"
+    rm -rf "bible-memory"
 }
 
 # Our main function. This takes care of all operations.
@@ -89,10 +94,10 @@ main()
     # Parse args.
     while [ "$1" != "" ]; do
         case "$1" in
-            -b|--buildtype)
+            -i|--install)
                 shift
-                BUILDTYPE="$1"
-                case "$BUILDTYPE" in
+                INSTALLTYPE="$1"
+                case "$INSTALLTYPE" in
                     u|user)
                         BUILDPATH="/home/$USERNAME/.local/bin"
                         BIBLEPATH="/home/$USERNAME/.local/var/biblememory"
@@ -103,15 +108,26 @@ main()
                         SUDO="sudo"
                         ;;
                     *)
-                        echo "Invalid build type! Exiting..."
-                        exit 2
-                        ;;
+                        ;; # leave the install type as current dir and keep going
                 esac
                 shift
                 ;;
             -c|--compiler)
                 shift
-                COMPILER="$1"
+                case "$1" in
+                    g++)
+                    clang++)
+                        COMPILER="$1"
+                        ;;
+                    *)
+                        echo "You are attempting to use an unsupported compiler. If this compiler"
+                        echo "works, please create a pull request on Github with an updated compiler"
+                        echo "list or send an email to <computersemiexpert@outlook.com>. Do you want"
+                        printf "to continue? (y or n)"
+                        read ANSWER
+                        $ANSWER = "y" && COMPILER="$1"
+                        $ANSWER = "n" && exit 2
+                esac
                 shift
                 ;;
             -h|--help)
