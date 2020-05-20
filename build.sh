@@ -120,10 +120,10 @@ main()
                         COMPILER="$1"
                         ;;
                     *)
-                        echo "You are attempting to use an unsupported compiler. If this compiler"
-                        echo "works, please create a pull request on Github with an updated compiler"
-                        echo "list or send an email to <computersemiexpert@outlook.com>. Do you want"
-                        printf "to continue? (y or n)"
+                        echo "You are attempting to use an unsupported compiler ($COMPILER). If this"
+                        echo "compiler works, please create a pull request on Github with an updated"
+                        echo "compiler list or send an email to <computersemiexpert@outlook.com>. Do"
+                        printf "you want to continue? (y or n) "
                         read ANSWER
                         $ANSWER = "y" && COMPILER="$1"
                         $ANSWER = "n" && exit 2
