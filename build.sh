@@ -74,7 +74,7 @@ uninstall_program()
             ;;
         *)
             echo "Aborting."
-            exit 0
+            exit 3
             ;;
     esac
 }
