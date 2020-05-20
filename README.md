@@ -3,6 +3,10 @@ BibleMemory program to help you memorize the Bible.
 
 If you ever think my code needs modified in any way, please send me a pull request.
 
+# Usage
+Enter the reference that you want to start from. Then enter the number of verses that you want to practice. If you have already done a verse, you may enter `<` to practice it again. A statement such as `<+1` will start from the next verse, while `<-2` will start 2 verses back.  
+When you have selected which verses to practice, you may type the first letter of each word. Typing `?` will give you a hint. If you press any incorrect keys or use a hint, it will be added to the tally of incorrect guesses.
+
 # Installing
 ## Linux
 ### Install
