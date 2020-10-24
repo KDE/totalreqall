@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/bible.txt</file>
+    </qresource>
+</RCC>

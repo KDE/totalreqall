@@ -1,28 +1,6 @@
 // BibleMemory.cpp : This file contains the 'main' function.
 //
-// Copyright (c) 2020, Loren Burkholder
-// All rights reserved.
-//
-// Redistribution and use in source and binary forms, with or without
-// modification, are permitted provided that the following conditions are met:
-//
-// 1. Redistributions of source code must retain the above copyright notice, this
-//    list of conditions and the following disclaimer.
-//
-// 2. Redistributions in binary form must reproduce the above copyright notice,
-//    this list of conditions and the following disclaimer in the documentation
-//    and/or other materials provided with the distribution.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-// DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-// FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-// DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-// SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-// OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 
 #include <iostream>
 #include <fstream>
@@ -127,7 +105,7 @@ int main(int argc, char* argv[])
 	// reads them back. For me, this was simpler than reading in words from
 	// an std::string. reference contains the reference requested. anotherVerse is either 'y'
 	// or 'n' to indicate whether we should do another verse.
-	std::iostream* versesToDo = nullptr;
+	std::iostream *versesToDo = nullptr;
 	std::string reference, oldRef;
 	char anotherVerse = '\0';
 	do
@@ -198,14 +176,13 @@ void loadBible(const std::string &filename)
 
 void printHelpMessage()
 {
-	std::cout << "You will be asked for a reference. Then you will be asked for the\n"
-				 "number of verses to be quizzed on after the starting reference. Then\n"
-				 "type the first letter of each word of the verse. For a hint, type \'?\'.\n"
-				 "For support, email Loren Burkholder at <computersemiexpert@gmail.com>."
-				 "\n\nCommand line usage :\n"
-				 "\t/? - Displays this message.\n"
-				 "\t/f - Specifies file with verses e.g. /f VerseFile.txt\n"
-				 "\t/v - Displays the program version.\n";
+	std::cout <<	"You will be asked for a reference. Then you will be asked for the\n"
+			"number of verses to be quizzed on after the starting reference. Then\n"
+			"type the first letter of each word of the verse. For a hint, type \'?\'.\n"
+			"\n\nCommand line usage :\n"
+			"\t/? - Displays this message.\n"
+			"\t/f - Specifies file with verses e.g. /f VerseFile.txt\n"
+			"\t/v - Displays the program version.\n";
 }
 
 bool shouldDoAnotherVerse()
