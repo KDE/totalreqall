@@ -31,7 +31,7 @@ HEADERS += \
     MemorizeWidget.h
 
 TRANSLATIONS += \
-    bible-memory_en_US.ts
+    TotalReqall_en_US.ts
 
 RESOURCES += \
     bible.qrc

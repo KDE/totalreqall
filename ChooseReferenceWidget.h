@@ -15,24 +15,25 @@
 
 class ChooseReferenceWidget : public QWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 public:
-    explicit ChooseReferenceWidget(QWidget *parent = nullptr);
+	explicit ChooseReferenceWidget(QWidget *parent = nullptr);
 
 signals:
 
 private:
-    QGridLayout *m_layout;
-    QComboBox *m_books;
-    QComboBox *m_chapters;
-    QComboBox *m_verses;
+	QGridLayout *m_layout;
+	QComboBox *m_books;
+	QComboBox *m_chapters;
+	QComboBox *m_verses;
 
+	Bible *m_bible;
 	QTimer *m_freeTimer;
 
 	void setUpBible();
 	void freeBible();
 
-    // here we store our data about the sizes of each book & chapter
+	// here we store our data about the sizes of each book & chapter
 
 };
 

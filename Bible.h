@@ -20,12 +20,12 @@ public:
 signals:
 
 private:
-    QStringList m_booksOfBible;
-    QFile *m_bibleFile;
-    std::string m_bibleData;
+	QStringList m_booksOfBible;
+	QFile *m_bibleFile;
+	std::string m_bibleData;
 
-    int scrapeChaptersPerBook(const QString &);
-    int scrapeVersesPerChapter(const QString &, const int);
+	int scrapeChaptersPerBook(const QString &);
+	int scrapeVersesPerChapter(const QString &, const int);
 };
 
 #endif // BIBLE_H
