@@ -9,11 +9,10 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-
-    Bible bible;
+	QApplication a(argc, argv);
 
     MainWindow mainWindow;
+	mainWindow.setWindowTitle("TotalReqall Bible Memory");
     mainWindow.show();
 
     return a.exec();

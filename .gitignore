@@ -72,4 +72,4 @@ Thumbs.db
 *.exe
 
 # build dirs
-build-bible-memory*/
+build*/

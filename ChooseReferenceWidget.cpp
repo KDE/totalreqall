@@ -5,10 +5,20 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_layout{ new QGridLayout{ this } },
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
-      m_verses{ new QComboBox }
+      m_verses{ new QComboBox },
+      m_bible{ new Bible },
+      m_displayVerse{ new QPushButton },
+      m_freeTimer{ new QTimer }
 {
-	QStringList books;
-	books << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
+	// the timer needs to only run once
+	m_freeTimer->setSingleShot(true);
+
+	// set this up first so that we can scrape data for the combo boxes
+	setUpBible();
+
+	// set up the first combo box manually and scrape the other 2
+	// maybe the books could be scraped but this way seems easier ATM
+	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
 	      << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
 	      << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
 	      << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
@@ -22,27 +32,83 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	      << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
 	      << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
 	      << "Revelation";
+	m_books->insertItems(0, m_bookList);
+	updateChapterVerseValues();
 
-	m_books->insertItems(0, books);
+	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
+	// viewing the chapters for Psalms if you think this is unnecessary!)
+	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	m_verses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+	// update the combos as appropriate
+	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+
+	m_displayVerse->setText("Display selected verse");
+	connect(m_displayVerse, SIGNAL(clicked(bool)), this, SLOT(displayVerse()));
+
+	// set up the layout
 	m_layout->addWidget(m_books, 0, 0);
+	m_layout->addWidget(m_chapters, 0, 1);
+	m_layout->addWidget(m_verses, 0, 2);
+	m_layout->addWidget(m_displayVerse, 1, 0);
 
 	this->setLayout(m_layout);
+}
 
-	setUpBible();
+void ChooseReferenceWidget::updateChapterVerseValues()
+{
+	// first take care of the chapter
+	// get data to insert
+	int chapters = m_bible->scrapeChaptersPerBook(m_books->currentText());
+
+	// remove existing items
+	m_chapters->clear();
+
+	// insert the new data
+	for (int i = 0; i < chapters; ++i)
+	{
+		QString temp{ "%1" };
+		temp = temp.arg(i + 1);
+		m_chapters->insertItem(m_chapters->count() + 1, temp); // + 1 to ensure that we insert at the end
+	}
+
+	// now take care of the verses
+	updateVerseValues();
+}
+
+void ChooseReferenceWidget::updateVerseValues()
+{
+	// get data to insert
+	int verses = m_bible->scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+
+	// remove existing items
+	m_verses->clear();
+
+	// insert the new data
+	for (int i = 0; i < verses; ++i)
+	{
+		QString temp{ "%1" };
+		temp = temp.arg(i + 1);
+		m_verses->insertItem(m_verses->count() + 1, temp);
+	}
 }
 
 void ChooseReferenceWidget::setUpBible()
 {
-	m_bible = new Bible;
+	m_bible->readData();
 
-	// TODO: start destruction trigger timer with appropriate callback
+	// give the user 3 minutes
+	m_freeTimer->start(180000);
 }
 
 void ChooseReferenceWidget::freeBible()
 {
-	delete m_bible;
-
-	// TODO: take care of the timer here as well
+	m_bible->freeData();
+	m_freeTimer->stop();
 }
 
-// TODO: is there a way to simply de-allocate the Bible string instead?
+void ChooseReferenceWidget::displayVerse()
+{
+	this->m_layout->addWidget(new QLabel{ "TODO: insert content here" }, 2, 0);
+}

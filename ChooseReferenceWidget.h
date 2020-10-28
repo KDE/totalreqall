@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QTimer>
+#include <QStringList>
 
 #include "Bible.h"
 
@@ -21,20 +22,26 @@ public:
 
 signals:
 
+private slots:
+	void updateChapterVerseValues();
+	void updateVerseValues();
+
+	void displayVerse();
+
 private:
 	QGridLayout *m_layout;
 	QComboBox *m_books;
 	QComboBox *m_chapters;
 	QComboBox *m_verses;
+	QPushButton *m_displayVerse;
+
+	QStringList m_bookList;
 
 	Bible *m_bible;
 	QTimer *m_freeTimer;
 
 	void setUpBible();
 	void freeBible();
-
-	// here we store our data about the sizes of each book & chapter
-
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

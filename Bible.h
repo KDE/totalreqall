@@ -13,19 +13,24 @@ class Bible : public QObject
     Q_OBJECT
 public:
     explicit Bible(QObject *parent = nullptr);
+	~Bible();
 
     QMap<QString, int> m_chaptersPerBook;
     QMap<int, int> m_versesPerChapter;
+
+	void readData();
+	void freeData();
+
+	int scrapeChaptersPerBook(const QString &);
+	int scrapeVersesPerChapter(const QString &, const QString &);
+	int scrapeVersesPerChapter(const QString &, const int);
 
 signals:
 
 private:
 	QStringList m_booksOfBible;
 	QFile *m_bibleFile;
-	std::string m_bibleData;
-
-	int scrapeChaptersPerBook(const QString &);
-	int scrapeVersesPerChapter(const QString &, const int);
+	QString m_bibleData;
 };
 
 #endif // BIBLE_H
