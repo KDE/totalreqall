@@ -14,7 +14,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 {
     // set up the widgets...
     m_statusLabel->setText("");
-	m_statusLabel->setWordWrap(true);
+	m_displayText->setWordWrap(true);
 
     // ...and add them to the layout
     m_layout->addWidget(new QLabel{ tr("Type the first letter of each word.") }, 0, 0);

@@ -13,6 +13,10 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_verseDisplayBox{ new QLabel{ "" } },
       m_bible{ new Bible }
 {
+	// connect the combos now so that they automatically update on the initial setup
+	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+
 	// set up the first combo box manually and scrape the other 2
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
@@ -37,10 +41,6 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// viewing the chapters for Psalms if you think this is unnecessary!)
 	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 	m_verses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-
-	// update the combos as appropriate
-	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
-	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
 
 	m_runMemorizerBtn->setText(tr("Memorize verse"));
 	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
@@ -67,6 +67,9 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 	// get data to insert
 	int chapters = m_bible->scrapeChaptersPerBook(m_books->currentText());
 
+	// make sure that we do not set the current index to -1, use the first item instead
+	auto old = (m_chapters->currentIndex() == -1) ? 0 : m_chapters->currentIndex();
+
 	// remove existing items
 	m_chapters->clear();
 
@@ -78,14 +81,20 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 		m_chapters->insertItem(m_chapters->count() + 1, temp); // + 1 to ensure that we insert at the end
 	}
 
-	// now take care of the verses
-	updateVerseValues();
+	// this triggers a call to updateVerseValues()
+	if ((m_chapters->count() - 1) >= old)
+		m_chapters->setCurrentIndex(old);
+	else // use the closest thing to the old index that we have
+		m_chapters->setCurrentIndex(m_chapters->count() - 1);
 }
 
 void ChooseReferenceWidget::updateVerseValues()
 {
 	// get data to insert
 	int verses = m_bible->scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+
+	// make sure that we do not set the current index to -1, use the first item instead
+	auto old = (m_verses->currentIndex() == -1) ? 0 : m_verses->currentIndex();
 
 	// remove existing items
 	m_verses->clear();
@@ -97,6 +106,14 @@ void ChooseReferenceWidget::updateVerseValues()
 		temp = temp.arg(i + 1);
 		m_verses->insertItem(m_verses->count() + 1, temp);
 	}
+
+	// TODO: figure out why this sometimes sets the index back to 0 unecessarily
+	// make sure that the old index is still valid
+	// - 1 because count isn't zero numbered but the index is
+	if ((m_verses->count() - 1) >= old)
+		m_verses->setCurrentIndex(old);
+	else // use the closest thing to the old index that we have
+		m_verses->setCurrentIndex(m_verses->count() - 1);
 }
 
 void ChooseReferenceWidget::setUpBible()
@@ -121,4 +138,6 @@ void ChooseReferenceWidget::displayVerse()
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
 	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference));
+	m_verseDisplayBox->updateGeometry();
+	this->updateGeometry();
 }
