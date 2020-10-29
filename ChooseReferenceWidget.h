@@ -9,7 +9,6 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QTimer>
 #include <QStringList>
 
 #include "Bible.h"
@@ -21,24 +20,27 @@ public:
 	explicit ChooseReferenceWidget(QWidget *parent = nullptr);
 
 signals:
+	void signalRunMemorizer(const QString &);
 
 private slots:
 	void updateChapterVerseValues();
 	void updateVerseValues();
 
 	void displayVerse();
+	void runMemorizer();
 
 private:
 	QGridLayout *m_layout;
 	QComboBox *m_books;
 	QComboBox *m_chapters;
 	QComboBox *m_verses;
-	QPushButton *m_displayVerse;
+	QPushButton *m_runMemorizerBtn;
+	QPushButton *m_displayVerseBtn;
+	QLabel *m_verseDisplayBox;
 
 	QStringList m_bookList;
 
 	Bible *m_bible;
-	QTimer *m_freeTimer;
 
 	void setUpBible();
 	void freeBible();

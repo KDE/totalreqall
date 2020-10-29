@@ -13,13 +13,17 @@ class MainWindow : public QWidget
 
 public:
 	MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	~MainWindow();
 
 private:
-    QGridLayout *m_layout;
+	QGridLayout *m_layout;
 
-    ChooseReferenceWidget *m_refChooser;
-    MemorizeWidget *m_memorizer = nullptr;
+	ChooseReferenceWidget *m_refChooser;
+	MemorizeWidget *m_memorizer = nullptr;
+    
+private slots:
+	void runMemorizer(const QString &);
+	void cleanUpMemorizer();
 
 };
 #endif // MAINWINDOW_H

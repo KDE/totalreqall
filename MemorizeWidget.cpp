@@ -9,14 +9,15 @@
 MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_displayText{ new QLabel },
-      m_layout{ new QGridLayout{ this } },
-      m_statusLabel{ new QLabel }
+      m_statusLabel{ new QLabel },
+      m_layout{ new QGridLayout{ this } }
 {
     // set up the widgets...
     m_statusLabel->setText("");
+	m_statusLabel->setWordWrap(true);
 
     // ...and add them to the layout
-    m_layout->addWidget(new QLabel{ "Type the first letter of each word." }, 0, 0);
+    m_layout->addWidget(new QLabel{ tr("Type the first letter of each word.") }, 0, 0);
     m_layout->addWidget(m_displayText, 1, 0);
     m_layout->addWidget(m_statusLabel, 2, 0);
 
@@ -45,7 +46,7 @@ void MemorizeWidget::keyPressEvent(QKeyEvent *event)
         QChar firstChar;
         for (int i = 0; i < m_words[0].length(); ++i)
         {
-            if (m_words[0][i].isLetter())
+			if (m_words[0][i].isLetterOrNumber())
             {
                 firstChar = m_words[0][i];
                 break;
@@ -64,11 +65,18 @@ void MemorizeWidget::keyPressEvent(QKeyEvent *event)
             m_statusLabel->setText("");
         }
         else
-            m_statusLabel->setText("Oops, you messed up! Try again.");
+            m_statusLabel->setText(tr("Oops, you messed up! Try again."));
     }
-    else // we're done with the memorization, clean up and shut down
+    if (m_words.length() < 1) // we're done with the memorization, clean up and shut down
     {
-        releaseKeyboard();
-        emit contentCompleted();
+		releaseKeyboard();
+		m_statusLabel->setText(tr("Done!"));
+
+		// Destroy after 1 sec (give the user time to see the verse they just completed
+		m_endMemorizerTimer = new QTimer;
+		m_endMemorizerTimer->setInterval(1000);
+		m_endMemorizerTimer->setSingleShot(true);
+		connect(m_endMemorizerTimer, &QTimer::timeout, this, &MemorizeWidget::done);
+		m_endMemorizerTimer->start();
     }
 }

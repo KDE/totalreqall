@@ -7,6 +7,7 @@
 #include <QMap>
 #include <QStringList>
 #include <QFile>
+#include <QTimer>
 
 class Bible : public QObject
 {
@@ -25,12 +26,16 @@ public:
 	int scrapeVersesPerChapter(const QString &, const QString &);
 	int scrapeVersesPerChapter(const QString &, const int);
 
+	QString getVerseStringFromRef(const QString &);
+
 signals:
 
 private:
 	QStringList m_booksOfBible;
 	QFile *m_bibleFile;
 	QString m_bibleData;
+
+	QTimer *m_freeTimer;
 };
 
 #endif // BIBLE_H
