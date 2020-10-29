@@ -1,23 +1,21 @@
 #include "ChooseReferenceWidget.h"
 
+#include <QDebug>
+
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
       m_layout{ new QGridLayout{ this } },
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
       m_verses{ new QComboBox },
-      m_bible{ new Bible },
-      m_displayVerse{ new QPushButton },
-      m_freeTimer{ new QTimer }
+      m_runMemorizerBtn{ new QPushButton },
+      m_displayVerseBtn{ new QPushButton },
+      m_verseDisplayBox{ new QLabel{ "" } },
+      m_bible{ new Bible }
 {
-	// the timer needs to only run once
-	m_freeTimer->setSingleShot(true);
-
-	// set this up first so that we can scrape data for the combo boxes
-	setUpBible();
-
 	// set up the first combo box manually and scrape the other 2
-	// maybe the books could be scraped but this way seems easier ATM
+	// maybe the books could be scraped as well but this way seems easier ATM
+	// TODO: add tr() to each of these
 	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
 	      << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
 	      << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
@@ -44,14 +42,21 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
 	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
 
-	m_displayVerse->setText("Display selected verse");
-	connect(m_displayVerse, SIGNAL(clicked(bool)), this, SLOT(displayVerse()));
+	m_runMemorizerBtn->setText(tr("Memorize verse"));
+	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
+
+	m_displayVerseBtn->setText(tr("Display verse"));
+	connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
+
+	m_verseDisplayBox->setWordWrap(true);
 
 	// set up the layout
 	m_layout->addWidget(m_books, 0, 0);
 	m_layout->addWidget(m_chapters, 0, 1);
 	m_layout->addWidget(m_verses, 0, 2);
-	m_layout->addWidget(m_displayVerse, 1, 0);
+	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
+	m_layout->addWidget(m_displayVerseBtn, 1, 1);
+	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 3);
 
 	this->setLayout(m_layout);
 }
@@ -97,18 +102,23 @@ void ChooseReferenceWidget::updateVerseValues()
 void ChooseReferenceWidget::setUpBible()
 {
 	m_bible->readData();
-
-	// give the user 3 minutes
-	m_freeTimer->start(180000);
 }
 
 void ChooseReferenceWidget::freeBible()
 {
 	m_bible->freeData();
-	m_freeTimer->stop();
+}
+
+void ChooseReferenceWidget::runMemorizer()
+{
+	QString reference{ "%1 %2:%3" };
+	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
+	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference));
 }
 
 void ChooseReferenceWidget::displayVerse()
 {
-	this->m_layout->addWidget(new QLabel{ "TODO: insert content here" }, 2, 0);
+	QString reference{ "%1 %2:%3" };
+	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
+	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference));
 }

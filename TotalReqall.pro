@@ -18,7 +18,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Files from this project...
 SOURCES += \
     Bible.cpp \
-    BibleProcessor.cpp \
     ChooseReferenceWidget.cpp \
     MainWindow.cpp \
     MemorizeWidget.cpp \

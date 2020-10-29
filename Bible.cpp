@@ -9,10 +9,16 @@
 
 Bible::Bible(QObject *parent)
     : QObject(parent),
-      m_bibleFile { new QFile{ ":/resources/bible.txt" } }
+      m_bibleFile { new QFile{ ":/resources/bible.txt" } },
+      m_freeTimer{ new QTimer }
 {
+	// the timer needs to only run once
+	m_freeTimer->setSingleShot(true);
+	m_freeTimer->setInterval(1500);
+	connect(m_freeTimer, &QTimer::timeout, this, &Bible::freeData);
+
 	if (!m_bibleFile->open(QIODevice::ReadOnly | QIODevice::Text))
-		qDebug() << "Failed to open :/resources/bible.txt";
+		qDebug() << tr("Failed to open :/resources/bible.txt");
 	else
 		readData();
 }
@@ -86,18 +92,37 @@ int Bible::scrapeVersesPerChapter(const QString &bookName, const QString &chapte
 
 void Bible::readData()
 {
-	static bool ran = false;
-	if (!ran)
+	if (m_bibleData.size() == 0)
 	{
+		qDebug() << tr("Loading Bible");
+
+		// move to the beginning of the file
+		m_bibleFile->seek(0);
 		m_bibleData.reserve(m_bibleFile->size());
 		QTextStream ts{ m_bibleFile };
 		m_bibleData = ts.readAll();
-		ran = true;
 	}
+
+	// give the user 3 minutes before we free the Bible
+	m_freeTimer->start(180000);
 }
 
 void Bible::freeData()
 {
-//	m_bibleData = "";
-//	m_bibleData.shrink_to_fit();
+	qDebug() << tr("Freeing Bible");
+	m_bibleData = "";
+	m_bibleData.shrink_to_fit();
+	m_freeTimer->stop();
 }
+
+QString Bible::getVerseStringFromRef(const QString &reference)
+{
+	readData();
+	int startPos = m_bibleData.indexOf(reference, 0);
+	int endPos = m_bibleData.indexOf("\n", startPos);
+	std::string temp = m_bibleData.toStdString();
+	temp = temp.substr(startPos + reference.size() + 1, (endPos - startPos) - reference.size());
+	QString verse = temp.c_str();
+	return verse;
+}
+
