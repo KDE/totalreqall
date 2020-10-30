@@ -103,8 +103,8 @@ void Bible::readData()
 		m_bibleData = ts.readAll();
 	}
 
-	// give the user 3 minutes before we free the Bible
-	m_freeTimer->start(180000);
+	// give the user 30 seconds before we free the Bible
+	m_freeTimer->start(30000);
 }
 
 void Bible::freeData()

@@ -21,6 +21,7 @@ public:
 
 signals:
 	void signalRunMemorizer(const QString &);
+	void resizeNeeded();
 
 private slots:
 	void updateChapterVerseValues();

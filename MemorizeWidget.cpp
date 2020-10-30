@@ -10,16 +10,21 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_displayText{ new QLabel },
       m_statusLabel{ new QLabel },
+      m_endSession{ new QPushButton },
       m_layout{ new QGridLayout{ this } }
 {
     // set up the widgets...
     m_statusLabel->setText("");
 	m_displayText->setWordWrap(true);
+	m_endSession->setText(tr("Stop memorizing"));
+
+	connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
 
     // ...and add them to the layout
     m_layout->addWidget(new QLabel{ tr("Type the first letter of each word.") }, 0, 0);
     m_layout->addWidget(m_displayText, 1, 0);
     m_layout->addWidget(m_statusLabel, 2, 0);
+	m_layout->addWidget(m_endSession, 3, 0);
 
     // now we can set the layout
     this->setLayout(m_layout);
@@ -33,6 +38,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 
 MemorizeWidget::~MemorizeWidget()
 {
+	releaseKeyboard();
 }
 
 void MemorizeWidget::keyPressEvent(QKeyEvent *event)

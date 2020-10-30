@@ -1,14 +1,27 @@
 #include "MainWindow.h"
 
+#include "AppInfo.h"
+
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent),
       m_refChooser{ new ChooseReferenceWidget }
 {
 	connect(m_refChooser, &ChooseReferenceWidget::signalRunMemorizer, this, &MainWindow::runMemorizer);
+	connect(m_refChooser, &ChooseReferenceWidget::resizeNeeded, this, &MainWindow::resizeToFit);
 
 	setCentralWidget(m_refChooser);
 
-	// set up the help menu
+	// set up the menus
+	// file menu
+	QMenu *fileMenu = new QMenu{ tr("&File") };
+
+	QAction *exit = new QAction{ tr("Exit") };
+
+	connect(exit, &QAction::triggered, this, &MainWindow::close);
+
+	fileMenu->addAction(exit);
+
+	// help menu
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
 	QAction *aboutQt = new QAction{ tr("About Qt") };
@@ -21,6 +34,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 	helpMenu->addAction(about);
 
 	// add all menus
+	this->menuBar()->addMenu(fileMenu);
 	this->menuBar()->addMenu(helpMenu);
 
 	// set up the status bar
@@ -49,6 +63,10 @@ void MainWindow::cleanUpMemorizer()
 
 void MainWindow::showAboutDlg()
 {
-	QMessageBox dlg{ QMessageBox::Icon::Information, tr("About"), tr("TotalReqall version x.x.x") };
-	dlg.exec();
+	QMessageBox::about(this, tr("About"), TotalReqall::appName + " version " + TotalReqall::version);
+}
+
+void MainWindow::resizeToFit()
+{
+	resize(sizeHint());
 }

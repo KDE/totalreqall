@@ -24,6 +24,7 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
+    AppInfo.h \
     Bible.h \
     ChooseReferenceWidget.h \
     MainWindow.h \

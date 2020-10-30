@@ -37,6 +37,12 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_books->insertItems(0, m_bookList);
 	updateChapterVerseValues();
 
+	m_books->setWhatsThis(tr("Use this to choose a book of the Bible."));
+	m_chapters->setWhatsThis(tr("Use this to choose a chapter."));
+	m_verses->setWhatsThis(tr("Use this to choose a verse."));
+	m_runMemorizerBtn->setWhatsThis(tr("Starts memorizing the selected verse."));
+	m_displayVerseBtn->setWhatsThis(tr("Displays the selected verse"));
+
 	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
 	// viewing the chapters for Psalms if you think this is unnecessary!)
 	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
@@ -138,6 +144,7 @@ void ChooseReferenceWidget::displayVerse()
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
 	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference));
-	m_verseDisplayBox->updateGeometry();
-	this->updateGeometry();
+	m_verseDisplayBox->resize(m_verseDisplayBox->sizeHint());
+	resize(sizeHint());
+	emit resizeNeeded();
 }

@@ -9,6 +9,7 @@
 #include <QStringList>
 #include <QGridLayout>
 #include <QTimer>
+#include <QPushButton>
 
 class MemorizeWidget : public QWidget
 {
@@ -21,13 +22,14 @@ protected:
     virtual void keyPressEvent(QKeyEvent *);
 
 signals:
-    void done();
+	void done();
 
 private:
     QLabel *m_displayText;
     QStringList m_words;
 	QLabel *m_statusLabel;
     QGridLayout *m_layout;
+	QPushButton *m_endSession;
 
 	QTimer *m_endMemorizerTimer = nullptr;
 };

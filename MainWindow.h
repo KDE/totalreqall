@@ -31,6 +31,7 @@ private slots:
 	void runMemorizer(const QString &);
 	void cleanUpMemorizer();
 	void showAboutDlg();
+	void resizeToFit();
 
 };
 #endif // MainWindow_H
