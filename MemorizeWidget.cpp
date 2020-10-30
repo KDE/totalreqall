@@ -10,8 +10,8 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_displayText{ new QLabel },
       m_statusLabel{ new QLabel },
-      m_endSession{ new QPushButton },
-      m_layout{ new QGridLayout{ this } }
+      m_layout{ new QGridLayout{ this } },
+      m_endSession{ new QPushButton }
 {
     // set up the widgets...
     m_statusLabel->setText("");
