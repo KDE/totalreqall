@@ -1,8 +1,10 @@
-#include "MainWindow.h"
+// main.cpp: purpose of this file should be obvious
+// Copyright 2020 Loren Burkholder.
 
 #include <QApplication>
 #include <QPushButton>
 
+#include "MainWindow.h"
 #include "MemorizeWidget.h"
 #include "ChooseReferenceWidget.h"
 #include "Bible.h"
