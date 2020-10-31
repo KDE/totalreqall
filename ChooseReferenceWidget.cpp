@@ -66,7 +66,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_layout->addWidget(m_endVerses, 0, 5);
 	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
 	m_layout->addWidget(m_displayVerseBtn, 1, 1);
-	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 3);
+	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 6);
 
 	this->setLayout(m_layout);
 }
