@@ -8,6 +8,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
       m_verses{ new QComboBox },
+      m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
       m_displayVerseBtn{ new QPushButton },
       m_verseDisplayBox{ new QLabel{ "" } },
@@ -59,7 +60,10 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// set up the layout
 	m_layout->addWidget(m_books, 0, 0);
 	m_layout->addWidget(m_chapters, 0, 1);
-	m_layout->addWidget(m_verses, 0, 2);
+	m_layout->addWidget(new QLabel{ ":" }, 0, 2);
+	m_layout->addWidget(m_verses, 0, 3);
+	m_layout->addWidget(new QLabel{ "-" }, 0, 4);
+	m_layout->addWidget(m_endVerses, 0, 5);
 	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
 	m_layout->addWidget(m_displayVerseBtn, 1, 1);
 	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 3);
@@ -101,9 +105,11 @@ void ChooseReferenceWidget::updateVerseValues()
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto old = (m_verses->currentIndex() == -1) ? 0 : m_verses->currentIndex();
+	auto oldEnd = (m_endVerses->currentIndex() == -1) ? 0 : m_endVerses->currentIndex();
 
 	// remove existing items
 	m_verses->clear();
+	m_endVerses->clear();
 
 	// insert the new data
 	for (int i = 0; i < verses; ++i)
@@ -111,15 +117,23 @@ void ChooseReferenceWidget::updateVerseValues()
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
 		m_verses->insertItem(m_verses->count() + 1, temp);
+		m_endVerses->insertItem(m_endVerses->count() + 1, temp);
 	}
 
-	// TODO: figure out why this sometimes sets the index back to 0 unecessarily
 	// make sure that the old index is still valid
 	// - 1 because count isn't zero numbered but the index is
 	if ((m_verses->count() - 1) >= old)
 		m_verses->setCurrentIndex(old);
 	else // use the closest thing to the old index that we have
 		m_verses->setCurrentIndex(m_verses->count() - 1);
+	if ((m_endVerses->count() - 1) >= oldEnd)
+		m_endVerses->setCurrentIndex(oldEnd);
+	else
+		m_endVerses->setCurrentIndex(m_endVerses->count() - 1);
+
+	// make sure that the verses aren't going backwards!
+	if (m_endVerses->currentIndex() < m_verses->currentIndex())
+		m_endVerses->setCurrentIndex(m_verses->currentIndex());
 }
 
 void ChooseReferenceWidget::setUpBible()
@@ -135,15 +149,17 @@ void ChooseReferenceWidget::freeBible()
 void ChooseReferenceWidget::runMemorizer()
 {
 	QString reference{ "%1 %2:%3" };
+	int extraVerses = (m_endVerses->currentIndex() > m_verses->currentIndex()) ? (m_endVerses->currentIndex() - m_verses->currentIndex()) : 0;
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
-	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference));
+	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference, extraVerses));
 }
 
 void ChooseReferenceWidget::displayVerse()
 {
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
-	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference));
+	int extraVerses = (m_endVerses->currentIndex() > m_verses->currentIndex()) ? (m_endVerses->currentIndex() - m_verses->currentIndex()) : 0;
+	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
 	m_verseDisplayBox->resize(m_verseDisplayBox->sizeHint());
 	resize(sizeHint());
 	emit resizeNeeded();

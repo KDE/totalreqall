@@ -26,7 +26,7 @@ public:
 	int scrapeVersesPerChapter(const QString &, const QString &);
 	int scrapeVersesPerChapter(const QString &, const int);
 
-	QString getVerseStringFromRef(const QString &);
+	QString getVerseStringFromRef(const QString &, const int);
 
 signals:
 

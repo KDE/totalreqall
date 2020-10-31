@@ -1,14 +1,26 @@
 #include "MemorizeEdit.h"
 
+#include <string>
+
 MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
     : QTextEdit{ parent },
-      m_words{ memorizeContent.split(" ") },
       m_isDone{ false }
 {
 	setAcceptRichText(false);
 
-	// TODO: debug why this doesn't work
-	setFocus();
+	auto temp = memorizeContent.toStdString();
+	for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos; pos = temp.find("\n", pos))
+	{
+		temp.replace(pos, 1, "\n ");
+		pos += 2; // get past the \n we just inserted
+	}
+
+	QString newMemContent{ temp.c_str() };
+	m_words = newMemContent.split(" ");
+
+	// remove the empty string that may be at the end of the list
+	if (m_words.last() == QString{ "" })
+		m_words.pop_back();
 }
 
 void MemorizeEdit::keyPressEvent(QKeyEvent *event)

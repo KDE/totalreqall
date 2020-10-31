@@ -35,6 +35,7 @@ private:
 	QComboBox *m_books;
 	QComboBox *m_chapters;
 	QComboBox *m_verses;
+	QComboBox *m_endVerses;
 	QPushButton *m_runMemorizerBtn;
 	QPushButton *m_displayVerseBtn;
 	QLabel *m_verseDisplayBox;

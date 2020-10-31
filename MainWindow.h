@@ -32,7 +32,6 @@ private slots:
 	void cleanUpMemorizer();
 	void showAboutDlg();
 	void resizeToFit();
-	void setStatusMessage(QString);
 
 };
 #endif // MainWindow_H
