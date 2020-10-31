@@ -11,27 +11,27 @@
 #include <QTimer>
 #include <QPushButton>
 
+#include "MemorizeEdit.h"
+
 class MemorizeWidget : public QWidget
 {
     Q_OBJECT
 public:
     explicit MemorizeWidget(QString, QWidget * = nullptr);
-    ~MemorizeWidget();
-
-protected:
-    virtual void keyPressEvent(QKeyEvent *);
+	~MemorizeWidget();
+	void focusMemorizer() { m_memorizeEdit->setFocus(); }
 
 signals:
 	void done();
+	void newStatus(QString message);
 
 private:
-    QLabel *m_displayText;
-    QStringList m_words;
-	QLabel *m_statusLabel;
     QGridLayout *m_layout;
 	QPushButton *m_endSession;
+	MemorizeEdit *m_memorizeEdit;
 
 	QTimer *m_endMemorizerTimer = nullptr;
+
 };
 
 #endif // MEMORIZEWIDGET_H
