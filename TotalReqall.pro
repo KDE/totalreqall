@@ -20,7 +20,6 @@ SOURCES += \
     Bible.cpp \
     ChooseReferenceWidget.cpp \
     MainWindow.cpp \
-    MemorizeEdit.cpp \
     MemorizeWidget.cpp \
     main.cpp
 
@@ -29,7 +28,6 @@ HEADERS += \
     Bible.h \
     ChooseReferenceWidget.h \
     MainWindow.h \
-    MemorizeEdit.h \
     MemorizeWidget.h
 
 TRANSLATIONS += \

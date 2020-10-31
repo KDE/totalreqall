@@ -50,9 +50,7 @@ void MainWindow::runMemorizer(const QString &verse)
 	m_saveCentralWidget = takeCentralWidget();
 	m_memorizer = new MemorizeWidget{ verse };
 	setCentralWidget(m_memorizer);
-	m_memorizer->focusMemorizer();
 
-	connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
 	connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);
 }
 
@@ -61,7 +59,6 @@ void MainWindow::cleanUpMemorizer()
 	delete m_memorizer;
 	setCentralWidget(m_saveCentralWidget);
 	m_saveCentralWidget = nullptr;
-	statusBar()->showMessage(tr("Please choose a verse."));
 }
 
 void MainWindow::showAboutDlg()
@@ -72,9 +69,4 @@ void MainWindow::showAboutDlg()
 void MainWindow::resizeToFit()
 {
 	resize(sizeHint());
-}
-
-void MainWindow::setStatusMessage(QString message)
-{
-	this->statusBar()->showMessage(message);
 }
