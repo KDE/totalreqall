@@ -1,5 +1,15 @@
 # CHANGELOG.md
 
+# 0.2.0 (10/31/2020)
+## What's new
+- Added ability to memorize multiple verses at once
+
+## Changes
+- MemorizeWidget now uses a QTextEdit-derived widget
+  - MemorizeEdit automatically focuses
+- MemorizeWidget's status label dropped in favor of the status bar
+- Added CI for Linux and macOS
+
 # 0.1.0 (10/30/2020)
 ## What's new
 - Switched MainWindow from QWidget to QMainWindow
