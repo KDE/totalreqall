@@ -10,6 +10,16 @@ matrix:
           packages:
             - qt5-default
             - qt5-qmake
+      deploy:
+        edge: true
+        provider: pages
+        skip_cleanup: true
+        github_token: $TRAVIS_DEPLOY_TOKEN
+        keep_history: true
+        target-branch: gh-pages
+        on:
+          branch: 
+            - master
             
     - os: osx
       osx_image: xcode12.1
@@ -18,6 +28,16 @@ matrix:
         homebrew:
           packages:
             - qt
+      deploy:
+        edge: true
+        provider: pages
+        skip_cleanup: true
+        github_token: $TRAVIS_DEPLOY_TOKEN
+        keep_history: true
+        target-branch: gh-pages
+        on:
+          branch: 
+            - master
       before_script:
         - echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
         - source ~/.zshrc
@@ -29,12 +49,3 @@ script:
   - cd build
   - qmake ..
   - make
-
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $TRAVIS_DEPLOY_TOKEN
-  keep_history: true
-  on:
-    branch: 
-      - master
