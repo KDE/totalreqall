@@ -25,6 +25,9 @@ signals:
 	void done();
 	void newStatus(QString message);
 
+private slots:
+	void editDone();
+
 private:
     QGridLayout *m_layout;
 	QPushButton *m_endSession;
