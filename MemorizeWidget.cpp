@@ -8,81 +8,36 @@
 
 MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
-      m_displayText{ new QLabel },
-      m_statusLabel{ new QLabel },
       m_layout{ new QGridLayout{ this } },
-      m_endSession{ new QPushButton }
+      m_endSession{ new QPushButton },
+      m_memorizeEdit{ new MemorizeEdit{ memorizeContent } },
+      m_endMemorizerTimer{ new QTimer }
 {
-    // set up the widgets...
-    m_statusLabel->setText("");
-	m_displayText->setWordWrap(true);
+	// clear the status bar
+	emit newStatus("");
+
+	// set up the widgets...
 	m_endSession->setText(tr("Stop memorizing"));
 
+	m_endMemorizerTimer->setInterval(1000);
+	m_endMemorizerTimer->setSingleShot(true);
+
+	// this delays the signal for 1 second so the user has a moment to look at the completed verse
+	connect(m_memorizeEdit, SIGNAL(done()), m_endMemorizerTimer, SLOT(start()));
+	connect(m_endMemorizerTimer, &QTimer::timeout, this, &MemorizeWidget::done);
+
 	connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
+	connect(m_memorizeEdit, &MemorizeEdit::messageToUser, this, &MemorizeWidget::newStatus);
 
     // ...and add them to the layout
-    m_layout->addWidget(new QLabel{ tr("Type the first letter of each word.") }, 0, 0);
-    m_layout->addWidget(m_displayText, 1, 0);
-    m_layout->addWidget(m_statusLabel, 2, 0);
-	m_layout->addWidget(m_endSession, 3, 0);
+	m_layout->addWidget(new QLabel{ tr("Type the first letter of each word.") }, 0, 0);
+	m_layout->addWidget(m_memorizeEdit, 1, 0);
+	m_layout->addWidget(m_endSession, 2, 0);
 
     // now we can set the layout
-    this->setLayout(m_layout);
-
-    // go ahead and break up the string
-    m_words = memorizeContent.split(" ");
-
-    // get all the input
-    grabKeyboard();
+	this->setLayout(m_layout);
 }
 
 MemorizeWidget::~MemorizeWidget()
 {
-	releaseKeyboard();
-}
-
-void MemorizeWidget::keyPressEvent(QKeyEvent *event)
-{
-    // make sure there's still something to take care of
-    if (m_words.length() > 0)
-    {
-        // Get the first letter of the word. This is designed to prevent one from
-        // having to input punctuation (e.g. for the string "...but" type "b"
-        // instead of ".")
-        QChar firstChar;
-        for (int i = 0; i < m_words[0].length(); ++i)
-        {
-			if (m_words[0][i].isLetterOrNumber())
-            {
-                firstChar = m_words[0][i];
-                break;
-            }
-        }
-
-        // Was the correct letter typed?
-        if (event->key() == firstChar.toUpper().unicode())
-        {
-            m_displayText->setText(m_displayText->text() + " " + m_words[0]);
-
-            // Delete this word.
-            m_words.pop_front();
-
-            // No errors to log.
-            m_statusLabel->setText("");
-        }
-        else
-            m_statusLabel->setText(tr("Oops, you messed up! Try again."));
-    }
-    if (m_words.length() < 1) // we're done with the memorization, clean up and shut down
-    {
-		releaseKeyboard();
-		m_statusLabel->setText(tr("Done!"));
-
-		// Destroy after 1 sec (give the user time to see the verse they just completed
-		m_endMemorizerTimer = new QTimer;
-		m_endMemorizerTimer->setInterval(1000);
-		m_endMemorizerTimer->setSingleShot(true);
-		connect(m_endMemorizerTimer, &QTimer::timeout, this, &MemorizeWidget::done);
-		m_endMemorizerTimer->start();
-    }
 }
