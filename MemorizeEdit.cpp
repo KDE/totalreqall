@@ -8,6 +8,8 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 {
 	setAcceptRichText(false);
 
+	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
+	// instead of "word1\nword2")
 	auto temp = memorizeContent.toStdString();
 	for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos; pos = temp.find("\n", pos))
 	{
@@ -16,11 +18,7 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 	}
 
 	QString newMemContent{ temp.c_str() };
-	m_words = newMemContent.split(" ");
-
-	// remove the empty string that may be at the end of the list
-	if (m_words.last() == QString{ "" })
-		m_words.pop_back();
+	m_words = newMemContent.split(" ", QString::SplitBehavior::SkipEmptyParts);
 }
 
 void MemorizeEdit::keyPressEvent(QKeyEvent *event)
