@@ -1,0 +1,31 @@
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: focal
+      compiler: clang
+      addons:
+        apt:
+          packages:
+            - qt5-default
+            - qt5-qmake
+            
+    - os: osx
+      osx_image: xcode12.1
+      compiler: clang
+      addons:
+        homebrew:
+          packages:
+            - qt
+      before_script:
+        - echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
+        - source ~/.zshrc
+
+    ### TODO: add Windows
+      
+script:
+  - mkdir build
+  - cd build
+  - qmake ..
+  - make
