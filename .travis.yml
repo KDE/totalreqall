@@ -20,7 +20,6 @@ matrix:
         on:
           branch: 
             - master
-            - travis
             
     - os: osx
       osx_image: xcode12.1
@@ -39,7 +38,6 @@ matrix:
         on:
           branch: 
             - master
-            - travis
       before_script:
         - echo 'export PATH="/usr/local/opt/qt/bin:$PATH"' >> ~/.zshrc
         - source ~/.zshrc
