@@ -29,3 +29,12 @@ script:
   - cd build
   - qmake ..
   - make
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $TRAVIS_DEPLOY_TOKEN
+  keep_history: true
+  on:
+    branch: 
+      - master
