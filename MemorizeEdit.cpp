@@ -95,6 +95,13 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	// we're done with the memorization, clean up and shut down
 	if (m_words.length() < 1)
 	{
+		// remove the "\n" at the end so that the box doesn't scroll down and hide some text
+		if (this->toPlainText().endsWith("\n"))
+		{
+			this->setPlainText(this->toPlainText().remove(this->toPlainText().length() - 1, 1));
+			// make sure the cursor remains at the end
+			moveCursor(QTextCursor::MoveOperation::End);
+		}
 		clearFocus();
 		emit messageToUser(tr("Done!"));
 		emit done();
