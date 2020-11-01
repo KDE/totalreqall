@@ -21,7 +21,6 @@ protected:
 
 private:
 	QStringList m_words;
-	bool m_isDone;
 };
 
 #endif // MEMORIZEEDIT_H

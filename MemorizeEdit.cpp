@@ -3,8 +3,7 @@
 #include <string>
 
 MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
-    : QTextEdit{ parent },
-      m_isDone{ false }
+    : QTextEdit{ parent }
 {
 	setAcceptRichText(false);
 
@@ -38,7 +37,24 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		emit messageToUser("Hint provided.");
 	}
 
-	// TODO: handle arrow keys properly
+	// handle arrow keys properly
+	else if (event->key() == Qt::Key::Key_Left)
+	{
+		moveCursor(QTextCursor::MoveOperation::Left);
+	}
+	else if (event->key() == Qt::Key::Key_Right)
+	{
+		moveCursor(QTextCursor::MoveOperation::Right);
+	}
+	else if (event->key() == Qt::Key::Key_Up)
+	{
+		moveCursor(QTextCursor::MoveOperation::Up);
+	}
+	else if (event->key() == Qt::Key::Key_Down)
+	{
+		moveCursor(QTextCursor::MoveOperation::Down);
+	}
+
 	// TODO: handle TAB focus switching properly
 
 	// skip all keys but the letters and numbers
@@ -77,12 +93,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	}
 
 	// we're done with the memorization, clean up and shut down
-	// m_isDone is only designed to prevent the timer from being delayed by extra keypresses
-	if (m_words.length() < 1 && !m_isDone)
+	if (m_words.length() < 1)
 	{
 		clearFocus();
 		emit messageToUser(tr("Done!"));
 		emit done();
-		m_isDone = true;
 	}
 }
