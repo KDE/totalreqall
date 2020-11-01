@@ -12,9 +12,11 @@ Bible::Bible(QObject *parent)
       m_bibleFile { new QFile{ ":/resources/bible.txt" } },
       m_freeTimer{ new QTimer }
 {
-	// the timer needs to only run once
+	// the timer shouldn't repeat over and over
 	m_freeTimer->setSingleShot(true);
-	m_freeTimer->setInterval(1500);
+
+	// free data after a minute
+	m_freeTimer->setInterval(60000);
 	connect(m_freeTimer, &QTimer::timeout, this, &Bible::freeData);
 
 	if (!m_bibleFile->open(QIODevice::ReadOnly | QIODevice::Text))
@@ -103,8 +105,8 @@ void Bible::readData()
 		m_bibleData = ts.readAll();
 	}
 
-	// give the user 30 seconds before we free the Bible
-	m_freeTimer->start(30000);
+	// give the user some time before we free the Bible
+	m_freeTimer->start();
 }
 
 void Bible::freeData()
