@@ -59,12 +59,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
 	m_verseDisplayBox->setWordWrap(true);
 
+	auto colon = new QLabel{ ":" };
+	colon->setAlignment(Qt::AlignHCenter);
+	auto dash = new QLabel{ "-" };
+	dash->setAlignment(Qt::AlignHCenter);
+
 	// set up the layout
 	m_layout->addWidget(m_books, 0, 0);
 	m_layout->addWidget(m_chapters, 0, 1);
-	m_layout->addWidget(new QLabel{ ":" }, 0, 2);
+	m_layout->addWidget(colon, 0, 2);
 	m_layout->addWidget(m_verses, 0, 3);
-	m_layout->addWidget(new QLabel{ "-" }, 0, 4);
+	m_layout->addWidget(dash, 0, 4);
 	m_layout->addWidget(m_endVerses, 0, 5);
 	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
 	m_layout->addWidget(m_displayVerseBtn, 1, 1);
