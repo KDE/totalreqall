@@ -27,7 +27,23 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	if (event->key() == Qt::Key::Key_A && event->modifiers() == Qt::ControlModifier)
 		this->selectAll();
 
+	// provide a hint
+	else if (event->key() == Qt::Key::Key_Question)
+	{
+		setText(this->toPlainText() + " " + m_words[0]);
+		moveCursor(QTextCursor::MoveOperation::End);
+
+		// Delete this word.
+		m_words.pop_front();
+		emit messageToUser("Hint provided.");
+	}
+
 	// TODO: handle arrow keys properly
+	// TODO: handle TAB focus switching properly
+
+	// skip all keys but the letters and numbers
+	else if (!((event->key() >= 0x30 && event->key() <= 0x39) || (event->key() >= 0x41 && event->key() <= 0x5a)))
+		return;
 
 	// make sure there's still something to take care of
 	else if (m_words.length() > 0)
