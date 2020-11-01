@@ -6,7 +6,7 @@
 
 namespace TotalReqall
 {
-    const QString version{ QApplication::tr("0.1.0") };
+    const QString version{ QApplication::tr("0.2.0") };
 	const QString appName{ QApplication::tr("TotalReqall") };
 }
 
