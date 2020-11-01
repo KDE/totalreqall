@@ -27,6 +27,7 @@ private slots:
 	void updateChapterVerseValues();
 	void updateVerseValues();
 	void updateEndVerseValues();
+	void updateSaveVerse();
 
 	void displayVerse();
 	void runMemorizer();
@@ -35,7 +36,7 @@ private:
 	QGridLayout *m_layout;
 	QComboBox *m_books;
 	QComboBox *m_chapters;
-	QComboBox *m_verses;
+	QComboBox *m_startVerses;
 	QComboBox *m_endVerses;
 	QPushButton *m_runMemorizerBtn;
 	QPushButton *m_displayVerseBtn;

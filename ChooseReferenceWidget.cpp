@@ -1,5 +1,6 @@
 #include "ChooseReferenceWidget.h"
 
+#include <QSettings>
 #include <QDebug>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
@@ -7,19 +8,13 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_layout{ new QGridLayout{ this } },
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
-      m_verses{ new QComboBox },
+      m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
       m_displayVerseBtn{ new QPushButton },
       m_verseDisplayBox{ new QLabel{ "" } },
       m_bible{ new Bible }
 {
-	// connect the combos now so that they automatically update on the initial setup
-	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
-	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
-	connect(m_verses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-
 	// set up the first combo box manually and scrape the other 2
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
@@ -38,18 +33,49 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	      << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
 	      << "Revelation";
 	m_books->insertItems(0, m_bookList);
+
+	// connect the combos
+	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+
+
+	QSettings settings;
+	auto lastBook = settings.value("ChooseReferenceWidget/lastBook").toString();
+	auto lastChapter = settings.value("ChooseReferenceWidget/lastChapter").toString();
+	auto lastStartVerse = settings.value("ChooseReferenceWidget/lastStartVerse").toString();
+	auto lastEndVerse = settings.value("ChooseReferenceWidget/lastEndVerse").toString();
+
+	if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
+	{
+		m_books->setCurrentText(lastBook);
+		m_chapters->setCurrentText(lastChapter);
+		m_startVerses->setCurrentText(lastStartVerse);
+		m_endVerses->setCurrentText(lastEndVerse);
+	}
+	else
+	{
+		updateSaveVerse();
+	}
 	updateChapterVerseValues();
+
+	// we also need to save all info about the last verse
+	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
 	m_books->setWhatsThis(tr("Use this to choose a book of the Bible."));
 	m_chapters->setWhatsThis(tr("Use this to choose a chapter."));
-	m_verses->setWhatsThis(tr("Use this to choose a verse."));
+	m_startVerses->setWhatsThis(tr("Use this to choose a verse."));
 	m_runMemorizerBtn->setWhatsThis(tr("Starts memorizing the selected verse."));
 	m_displayVerseBtn->setWhatsThis(tr("Displays the selected verse"));
 
 	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
 	// viewing the chapters for Psalms if you think this is unnecessary!)
 	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	m_verses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	m_startVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
 	m_runMemorizerBtn->setText(tr("Memorize verse"));
 	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
@@ -68,7 +94,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_layout->addWidget(m_books, 0, 0);
 	m_layout->addWidget(m_chapters, 0, 1);
 	m_layout->addWidget(colon, 0, 2);
-	m_layout->addWidget(m_verses, 0, 3);
+	m_layout->addWidget(m_startVerses, 0, 3);
 	m_layout->addWidget(dash, 0, 4);
 	m_layout->addWidget(m_endVerses, 0, 5);
 	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
@@ -80,6 +106,10 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
 void ChooseReferenceWidget::updateChapterVerseValues()
 {
+	// prevent lots of signals from being emitted
+	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+
 	// first take care of the chapter
 	// get data to insert
 	int chapters = m_bible->scrapeChaptersPerBook(m_books->currentText());
@@ -91,48 +121,67 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 	m_chapters->clear();
 
 	// insert the new data
+	QStringList chapList;
 	for (int i = 0; i < chapters; ++i)
 	{
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
-		m_chapters->insertItem(m_chapters->count() + 1, temp); // + 1 to ensure that we insert at the end
+		chapList.push_back(temp); // + 1 to ensure that we insert at the end
 	}
+	m_chapters->insertItems(0, chapList);
 
 	// this triggers a call to updateVerseValues()
 	if ((m_chapters->count() - 1) >= old)
 		m_chapters->setCurrentIndex(old);
 	else // use the closest thing to the old index that we have
 		m_chapters->setCurrentIndex(m_chapters->count() - 1);
+
+	updateVerseValues();
+	updateSaveVerse();
+
+	// reconnect the signals
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
 void ChooseReferenceWidget::updateVerseValues()
 {
+	// prevent lots of signals from being emitted
+	disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+
 	// get data to insert
 	int verses = m_bible->scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
 
 	// make sure that we do not set the current index to -1, use the first item instead
-	auto old = (m_verses->currentIndex() == -1) ? 0 : m_verses->currentIndex();
+	auto oldStart = (m_startVerses->currentIndex() == -1) ? 0 : m_startVerses->currentIndex();
 	auto oldEnd = (m_endVerses->currentIndex() == -1) ? 0 : m_endVerses->currentIndex();
 
 	// remove existing items
-	m_verses->clear();
+	m_startVerses->clear();
 	m_endVerses->clear();
 
 	// insert the new data
+	QStringList startVerseList;
+	QStringList endVerseList;
 	for (int i = 0; i < verses; ++i)
 	{
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
-		m_verses->insertItem(m_verses->count() + 1, temp);
-		m_endVerses->insertItem(m_endVerses->count() + 1, temp);
+		startVerseList.push_back(temp);
+		endVerseList.push_back(temp);
 	}
+	m_startVerses->insertItems(0, startVerseList);
+	m_endVerses->insertItems(0, endVerseList);
 
 	// make sure that the old index is still valid
 	// - 1 because count isn't zero numbered but the index is
-	if ((m_verses->count() - 1) >= old)
-		m_verses->setCurrentIndex(old);
+	if ((m_startVerses->count() - 1) >= oldStart)
+		m_startVerses->setCurrentIndex(oldStart);
 	else // use the closest thing to the old index that we have
-		m_verses->setCurrentIndex(m_verses->count() - 1);
+		m_startVerses->setCurrentIndex(m_startVerses->count() - 1);
 
 	if ((m_endVerses->count() - 1) >= oldEnd)
 		m_endVerses->setCurrentIndex(oldEnd);
@@ -141,12 +190,39 @@ void ChooseReferenceWidget::updateVerseValues()
 
 	// make sure that m_endVerses has a proper index
 	updateEndVerseValues();
+
+	updateSaveVerse();
+
+	// reconnect the signals
+	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
 void ChooseReferenceWidget::updateEndVerseValues()
 {
-	if (m_verses->currentIndex() > m_endVerses->currentIndex())
-		m_endVerses->setCurrentIndex(m_verses->currentIndex());
+	// prevent lots of signals from being emitted
+	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+
+	if (m_startVerses->currentIndex() > m_endVerses->currentIndex())
+		m_startVerses->setCurrentIndex(m_endVerses->currentIndex());
+
+	updateSaveVerse();
+
+	// reconnect the signals
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+}
+
+void ChooseReferenceWidget::updateSaveVerse()
+{
+	QSettings settings;
+	settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());
+	settings.setValue("ChooseReferenceWidget/lastChapter", m_chapters->currentText());
+	settings.setValue("ChooseReferenceWidget/lastStartVerse", m_startVerses->currentText());
+	settings.setValue("ChooseReferenceWidget/lastEndVerse", m_endVerses->currentText());
 }
 
 void ChooseReferenceWidget::setUpBible()
@@ -162,16 +238,16 @@ void ChooseReferenceWidget::freeBible()
 void ChooseReferenceWidget::runMemorizer()
 {
 	QString reference{ "%1 %2:%3" };
-	int extraVerses = (m_endVerses->currentIndex() > m_verses->currentIndex()) ? (m_endVerses->currentIndex() - m_verses->currentIndex()) : 0;
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
+	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
+	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference, extraVerses));
 }
 
 void ChooseReferenceWidget::displayVerse()
 {
 	QString reference{ "%1 %2:%3" };
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_verses->currentText());
-	int extraVerses = (m_endVerses->currentIndex() > m_verses->currentIndex()) ? (m_endVerses->currentIndex() - m_verses->currentIndex()) : 0;
+	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
+	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
 	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
 	m_verseDisplayBox->resize(m_verseDisplayBox->sizeHint());
 	resize(sizeHint());
