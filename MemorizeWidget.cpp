@@ -19,13 +19,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 	// set up the widgets...
 	m_endSession->setText(tr("Stop memorizing"));
 
-	m_endMemorizerTimer->setInterval(1000);
-	m_endMemorizerTimer->setSingleShot(true);
-
-	// this delays the signal for 1 second so the user has a moment to look at the completed verse
-//	connect(m_memorizeEdit, SIGNAL(done()), m_endMemorizerTimer, SLOT(start()));
-//	connect(m_endMemorizerTimer, &QTimer::timeout, this, &MemorizeWidget::done);
-
 	connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
 	connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
 	connect(m_memorizeEdit, &MemorizeEdit::messageToUser, this, &MemorizeWidget::newStatus);

@@ -17,6 +17,8 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// connect the combos now so that they automatically update on the initial setup
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
 	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+	connect(m_verses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 
 	// set up the first combo box manually and scrape the other 2
 	// maybe the books could be scraped as well but this way seems easier ATM
@@ -126,13 +128,19 @@ void ChooseReferenceWidget::updateVerseValues()
 		m_verses->setCurrentIndex(old);
 	else // use the closest thing to the old index that we have
 		m_verses->setCurrentIndex(m_verses->count() - 1);
+
 	if ((m_endVerses->count() - 1) >= oldEnd)
 		m_endVerses->setCurrentIndex(oldEnd);
 	else
 		m_endVerses->setCurrentIndex(m_endVerses->count() - 1);
 
-	// make sure that the verses aren't going backwards!
-	if (m_endVerses->currentIndex() < m_verses->currentIndex())
+	// make sure that m_endVerses has a proper index
+	updateEndVerseValues();
+}
+
+void ChooseReferenceWidget::updateEndVerseValues()
+{
+	if (m_verses->currentIndex() > m_endVerses->currentIndex())
 		m_endVerses->setCurrentIndex(m_verses->currentIndex());
 }
 

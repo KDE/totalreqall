@@ -26,6 +26,7 @@ signals:
 private slots:
 	void updateChapterVerseValues();
 	void updateVerseValues();
+	void updateEndVerseValues();
 
 	void displayVerse();
 	void runMemorizer();
