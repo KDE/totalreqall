@@ -5,8 +5,9 @@
 #include <QPushButton>
 #include <QPoint>
 #include <QScreen>
-#include <QDebug>
+#include <QSettings>
 
+#include "AppInfo.h"
 #include "MainWindow.h"
 #include "MemorizeWidget.h"
 #include "ChooseReferenceWidget.h"
@@ -16,10 +17,14 @@ inline QPoint centerWindowOnScreen(int, int);
 
 int main(int argc, char *argv[])
 {
+	QCoreApplication::setApplicationName(TotalReqall::appName);
+	QCoreApplication::setApplicationVersion(TotalReqall::version);
+	QCoreApplication::setOrganizationName(TotalReqall::organizationName);
+	QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
+
 	QApplication a(argc, argv);
 
 	MainWindow mainWindow;
-	mainWindow.setWindowTitle(QApplication::tr("TotalReqall Bible Memory"));
 
 	// TODO: Somebody with a Mac should figure out whether this is needed
 	mainWindow.setUnifiedTitleAndToolBarOnMac(true);
