@@ -1,5 +1,7 @@
 #include "MainWindow.h"
 
+#include <QSettings>
+
 #include "AppInfo.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
@@ -76,4 +78,13 @@ void MainWindow::resizeToFit()
 void MainWindow::setStatusMessage(QString message)
 {
 	this->statusBar()->showMessage(message);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+	QSettings settings;
+	settings.setValue("MainWindow/width", event->size().width());
+	settings.setValue("MainWindow/height", event->size().height());
+
+	QWidget::resizeEvent(event);
 }

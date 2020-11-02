@@ -21,6 +21,9 @@ public:
 	MainWindow(QMainWindow *parent = nullptr);
 	~MainWindow();
 
+protected:
+	virtual void resizeEvent(QResizeEvent *);
+
 private:
 	ChooseReferenceWidget *m_refChooser;
 	// when a central widget needs removed but not deleted

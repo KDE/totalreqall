@@ -29,6 +29,13 @@ int main(int argc, char *argv[])
 	// TODO: Somebody with a Mac should figure out whether this is needed
 	mainWindow.setUnifiedTitleAndToolBarOnMac(true);
 
+	QSettings settings;
+	QVariant width = settings.value("MainWindow/width");
+	QVariant height = settings.value("MainWindow/height");
+
+	if (!width.isNull() && !height.isNull())
+		mainWindow.resize(width.toInt(), height.toInt());
+
 	// calling move() before show() doesn't seem to work properly
 	mainWindow.show();
 	mainWindow.move(centerWindowOnScreen(mainWindow.width(), mainWindow.height()));
