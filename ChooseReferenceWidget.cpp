@@ -71,16 +71,11 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
-	m_books->setWhatsThis(tr("Use this to choose a book of the Bible."));
-	m_chapters->setWhatsThis(tr("Use this to choose a chapter."));
-	m_startVerses->setWhatsThis(tr("Use this to choose a verse."));
-	m_runMemorizerBtn->setWhatsThis(tr("Starts memorizing the selected verse."));
-	m_displayVerseBtn->setWhatsThis(tr("Displays the selected verse"));
-
 	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
 	// viewing the chapters for Psalms if you think this is unnecessary!)
 	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 	m_startVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	m_endVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 
 	m_runMemorizerBtn->setText(tr("Memorize verse"));
 	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
