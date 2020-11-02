@@ -1,4 +1,5 @@
-# TotalReqall
+# TotalReqall [![Build status](https://travis-ci.com/LorenDB/TotalReqall.svg?branch=master)](https://travis-ci.com/github/LorenDB/TotalReqall)
+
 A program for memorizing the Bible and other works. Written in C++ with Qt.
 
 ## Usage
