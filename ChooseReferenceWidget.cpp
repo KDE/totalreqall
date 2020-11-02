@@ -207,7 +207,7 @@ void ChooseReferenceWidget::updateEndVerseValues()
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
 	if (m_startVerses->currentIndex() > m_endVerses->currentIndex())
-		m_startVerses->setCurrentIndex(m_endVerses->currentIndex());
+		m_endVerses->setCurrentIndex(m_startVerses->currentIndex());
 
 	updateSaveVerse();
 
@@ -245,11 +245,13 @@ void ChooseReferenceWidget::runMemorizer()
 
 void ChooseReferenceWidget::displayVerse()
 {
+	auto oldWidth = width();
+	auto oldDisplayBoxWidth = m_verseDisplayBox->width();
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
 	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
-	m_verseDisplayBox->resize(m_verseDisplayBox->sizeHint());
-	resize(sizeHint());
+	m_verseDisplayBox->resize(oldDisplayBoxWidth, m_verseDisplayBox->heightForWidth(oldDisplayBoxWidth));
+	resize(oldWidth, heightForWidth(oldWidth));
 	emit resizeNeeded();
 }

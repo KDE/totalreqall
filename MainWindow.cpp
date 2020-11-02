@@ -7,7 +7,7 @@ MainWindow::MainWindow(QMainWindow *parent)
       m_refChooser{ new ChooseReferenceWidget }
 {
 	connect(m_refChooser, &ChooseReferenceWidget::signalRunMemorizer, this, &MainWindow::runMemorizer);
-	connect(m_refChooser, &ChooseReferenceWidget::resizeNeeded, this, &MainWindow::resizeToFit);
+//	connect(m_refChooser, &ChooseReferenceWidget::resizeNeeded, this, &MainWindow::resizeToFit);
 
 	setCentralWidget(m_refChooser);
 
