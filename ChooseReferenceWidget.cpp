@@ -51,15 +51,19 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
 	{
 		m_books->setCurrentText(lastBook);
+
+		// update the values now to load the data for the chapters and verses
+		updateChapterVerseValues();
+
 		m_chapters->setCurrentText(lastChapter);
 		m_startVerses->setCurrentText(lastStartVerse);
 		m_endVerses->setCurrentText(lastEndVerse);
 	}
 	else
 	{
+		updateChapterVerseValues();
 		updateSaveVerse();
 	}
-	updateChapterVerseValues();
 
 	// we also need to save all info about the last verse
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
