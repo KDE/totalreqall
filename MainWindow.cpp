@@ -65,7 +65,7 @@ void MainWindow::cleanUpMemorizer()
 
 void MainWindow::showAboutDlg()
 {
-	QMessageBox::about(this, tr("About"), TotalReqall::appName + " version " + TotalReqall::version);
+	QMessageBox::about(this, tr("About"), TotalReqall::appName + " version " + TotalReqall::appVersion.toString());
 }
 
 void MainWindow::resizeToFit()
