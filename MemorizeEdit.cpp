@@ -6,6 +6,7 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
     : QTextEdit{ parent }
 {
 	setAcceptRichText(false);
+	setPlaceholderText(tr("Type the first letter of each word..."));
 
 	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
 	// instead of "word1\nword2")
