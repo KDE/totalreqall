@@ -2,6 +2,7 @@
 
 #include <QSettings>
 #include <QDebug>
+#include <QLabel>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
@@ -12,7 +13,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
       m_displayVerseBtn{ new QPushButton },
-      m_verseDisplayBox{ new QLabel{ "" } },
+      m_verseDisplayBox{ new QTextEdit{ "" } },
       m_bible{ new Bible }
 {
 	// set up the first combo box manually and scrape the other 2
@@ -83,7 +84,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_displayVerseBtn->setText(tr("Display verse"));
 	connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
 
-	m_verseDisplayBox->setWordWrap(true);
+	m_verseDisplayBox->setReadOnly(true);
 
 	auto colon = new QLabel{ ":" };
 	colon->setAlignment(Qt::AlignHCenter);
@@ -245,13 +246,8 @@ void ChooseReferenceWidget::runMemorizer()
 
 void ChooseReferenceWidget::displayVerse()
 {
-	auto oldWidth = width();
-	auto oldDisplayBoxWidth = m_verseDisplayBox->width();
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
 	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
-	m_verseDisplayBox->resize(oldDisplayBoxWidth, m_verseDisplayBox->heightForWidth(oldDisplayBoxWidth));
-	resize(oldWidth, heightForWidth(oldWidth));
-	emit resizeNeeded();
 }

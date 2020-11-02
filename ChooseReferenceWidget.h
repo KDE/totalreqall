@@ -6,7 +6,7 @@
 #include <QObject>
 #include <QWidget>
 #include <QComboBox>
-#include <QLabel>
+#include <QTextEdit>
 #include <QPushButton>
 #include <QGridLayout>
 #include <QStringList>
@@ -21,7 +21,6 @@ public:
 
 signals:
 	void signalRunMemorizer(const QString &);
-	void resizeNeeded();
 
 private slots:
 	void updateChapterVerseValues();
@@ -40,7 +39,7 @@ private:
 	QComboBox *m_endVerses;
 	QPushButton *m_runMemorizerBtn;
 	QPushButton *m_displayVerseBtn;
-	QLabel *m_verseDisplayBox;
+	QTextEdit *m_verseDisplayBox;
 
 	QStringList m_bookList;
 
