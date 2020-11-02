@@ -10,6 +10,15 @@ matrix:
           packages:
             - qt5-default
             - qt5-qmake
+      # here's my personal CD setup
+      after-success:
+        - chmod +x ../packages/deb-build.sh
+        - ../packages/deb-build.sh
+        # - cp TotalReqall ../packages/deb/bin/totalreqall
+        # - dpkg-deb --build ../packages/deb totalreqall.deb
+        # - mv totalreqall.deb ../docs/binaries
+        # - git commit totalreqall.deb -m "Deb file for build $TRAVIS_BUILD_NUMBER"
+        # - git push
             
     - os: osx
       osx_image: xcode12.1
