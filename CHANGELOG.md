@@ -1,5 +1,24 @@
 # CHANGELOG.md
 
+# 0.3.0 (11/2/2020)
+## What's new
+- Added [GitHub Pages](https://lorendb.github.io)
+- Window centers in screen at startup
+- On startup, the window size is restored to the last set size
+- On startup, the last verse selected is displayed
+- Verse combos now in format "Book Chapter:StartVerse-EndVerse"
+- Added global application/organization info (with QCoreApplication)
+
+## Changes
+- The verse display box is now a read-only QTextEdit
+- The memorize dialog no longer automatically closes; instead, press a button to continue
+- The MemorizeEdit now ignores keys such as Alt, Control, and Page Up
+- Arrow keys now work as expected in MemorizeEdit
+- The Bible now waits 1 minute before freeing data (instead of 30 seconds)
+
+## Bugfixes
+- The window width now remains constant when displaying a verse
+
 # 0.2.0 (10/31/2020)
 ## What's new
 - Added ability to memorize multiple verses at once
