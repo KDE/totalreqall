@@ -2,9 +2,9 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
-#include <QGridLayout>
 #include <QPushButton>
-#include <QGroupBox>
+#include <QTabWidget>
+#include <QCheckBox>
 
 class SettingsDialog : public QDialog
 {
@@ -14,12 +14,24 @@ public:
 
 signals:
 
-private:
-	QPushButton *m_reset;
-//	QGroupBox *m_chooseRefWidgetCtrls;
-//	QGroupBox *m_mainWindowCtrls;
-	QGridLayout *m_layout;
+private slots:
+	void ok();
+	void apply();
 
+private:
+	QTabWidget *m_tabs;
+
+	QWidget *m_saveControls;
+	QCheckBox *m_shouldSaveRef;	
+	QCheckBox *m_shouldSaveWindowSize;
+	// TODO: add option for default ref to load
+
+	QWidget *m_other;
+	QPushButton *m_reset;
+
+	QPushButton *m_ok;
+	QPushButton *m_apply;
+	QPushButton *m_cancel;
 };
 
 #endif // SETTINGSDIALOG_H

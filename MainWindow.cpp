@@ -87,8 +87,12 @@ void MainWindow::setStatusMessage(QString message)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
 	QSettings settings;
-	settings.setValue("MainWindow/width", event->size().width());
-	settings.setValue("MainWindow/height", event->size().height());
+
+	if (settings.value("MainWindow/saveWinSize", true).toBool())
+	{
+		settings.setValue("MainWindow/width", event->size().width());
+		settings.setValue("MainWindow/height", event->size().height());
+	}
 
 	QWidget::resizeEvent(event);
 }

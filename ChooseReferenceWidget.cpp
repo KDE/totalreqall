@@ -41,29 +41,33 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 
-
 	QSettings settings;
-	auto lastBook = settings.value("ChooseReferenceWidget/lastBook").toString();
-	auto lastChapter = settings.value("ChooseReferenceWidget/lastChapter").toString();
-	auto lastStartVerse = settings.value("ChooseReferenceWidget/lastStartVerse").toString();
-	auto lastEndVerse = settings.value("ChooseReferenceWidget/lastEndVerse").toString();
-
-	if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
+	if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
 	{
-		m_books->setCurrentText(lastBook);
+		auto lastBook = settings.value("ChooseReferenceWidget/lastBook").toString();
+		auto lastChapter = settings.value("ChooseReferenceWidget/lastChapter").toString();
+		auto lastStartVerse = settings.value("ChooseReferenceWidget/lastStartVerse").toString();
+		auto lastEndVerse = settings.value("ChooseReferenceWidget/lastEndVerse").toString();
 
-		// update the values now to load the data for the chapters and verses
-		updateChapterVerseValues();
+		if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
+		{
+			m_books->setCurrentText(lastBook);
 
-		m_chapters->setCurrentText(lastChapter);
-		m_startVerses->setCurrentText(lastStartVerse);
-		m_endVerses->setCurrentText(lastEndVerse);
+			// update the values now to load the data for the chapters and verses
+			updateChapterVerseValues();
+
+			m_chapters->setCurrentText(lastChapter);
+			m_startVerses->setCurrentText(lastStartVerse);
+			m_endVerses->setCurrentText(lastEndVerse);
+		}
+		else
+		{
+			updateChapterVerseValues();
+			updateSaveVerse();
+		}
 	}
 	else
-	{
 		updateChapterVerseValues();
-		updateSaveVerse();
-	}
 
 	// we also need to save all info about the last verse
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
@@ -219,10 +223,13 @@ void ChooseReferenceWidget::updateEndVerseValues()
 void ChooseReferenceWidget::updateSaveVerse()
 {
 	QSettings settings;
-	settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());
-	settings.setValue("ChooseReferenceWidget/lastChapter", m_chapters->currentText());
-	settings.setValue("ChooseReferenceWidget/lastStartVerse", m_startVerses->currentText());
-	settings.setValue("ChooseReferenceWidget/lastEndVerse", m_endVerses->currentText());
+	if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
+	{
+		settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());
+		settings.setValue("ChooseReferenceWidget/lastChapter", m_chapters->currentText());
+		settings.setValue("ChooseReferenceWidget/lastStartVerse", m_startVerses->currentText());
+		settings.setValue("ChooseReferenceWidget/lastEndVerse", m_endVerses->currentText());
+	}
 }
 
 void ChooseReferenceWidget::setUpBible()

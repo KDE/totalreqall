@@ -30,11 +30,14 @@ int main(int argc, char *argv[])
 	mainWindow.setUnifiedTitleAndToolBarOnMac(true);
 
 	QSettings settings;
-	QVariant width = settings.value("MainWindow/width");
-	QVariant height = settings.value("MainWindow/height");
+	if (settings.value("MainWindow/saveWinSize", true).toBool())
+	{
+		QVariant width = settings.value("MainWindow/width");
+		QVariant height = settings.value("MainWindow/height");
 
-	if (!width.isNull() && !height.isNull())
-		mainWindow.resize(width.toInt(), height.toInt());
+		if (!width.isNull() && !height.isNull())
+			mainWindow.resize(width.toInt(), height.toInt());
+	}
 
 	// calling move() before show() doesn't seem to work properly
 	mainWindow.show();
