@@ -66,7 +66,6 @@ void MainWindow::cleanUpMemorizer()
 	delete m_memorizer;
 	setCentralWidget(m_saveCentralWidget);
 	m_saveCentralWidget = nullptr;
-	statusBar()->showMessage(tr("Please choose a verse."));
 }
 
 void MainWindow::showAboutDlg()

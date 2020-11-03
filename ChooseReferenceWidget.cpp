@@ -16,6 +16,9 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_verseDisplayBox{ new QTextEdit{ "" } },
       m_bible{ new Bible }
 {
+	// general setup
+	setStatusTip(tr("Choose a verse"));
+
 	// set up the first combo box manually and scrape the other 2
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
