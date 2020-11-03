@@ -36,6 +36,7 @@ private slots:
 	void showAboutDlg();
 	void resizeToFit();
 	void setStatusMessage(QString);
+	void showSettingsDialog();
 
 };
 #endif // MainWindow_H
