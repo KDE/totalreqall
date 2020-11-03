@@ -22,6 +22,7 @@ SOURCES += \
     MainWindow.cpp \
     MemorizeEdit.cpp \
     MemorizeWidget.cpp \
+    SettingsDialog.cpp \
     main.cpp
 
 HEADERS += \
@@ -30,7 +31,8 @@ HEADERS += \
     ChooseReferenceWidget.h \
     MainWindow.h \
     MemorizeEdit.h \
-    MemorizeWidget.h
+    MemorizeWidget.h \
+    SettingsDialog.h
 
 TRANSLATIONS += \
     TotalReqall_en_US.ts

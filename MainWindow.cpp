@@ -3,6 +3,7 @@
 #include <QSettings>
 
 #include "AppInfo.h"
+#include "SettingsDialog.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent),
@@ -16,10 +17,13 @@ MainWindow::MainWindow(QMainWindow *parent)
 	// file menu
 	QMenu *fileMenu = new QMenu{ tr("&File") };
 
+	QAction *settings = new QAction{ tr("Settings...") };
 	QAction *exit = new QAction{ tr("Exit") };
 
+	connect(settings, &QAction::triggered, this, &MainWindow::showSettingsDialog);
 	connect(exit, &QAction::triggered, this, &MainWindow::close);
 
+	fileMenu->addAction(settings);
 	fileMenu->addAction(exit);
 
 	// help menu
@@ -83,8 +87,19 @@ void MainWindow::setStatusMessage(QString message)
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
 	QSettings settings;
-	settings.setValue("MainWindow/width", event->size().width());
-	settings.setValue("MainWindow/height", event->size().height());
+
+	if (settings.value("MainWindow/saveWinSize", true).toBool())
+	{
+		settings.setValue("MainWindow/width", event->size().width());
+		settings.setValue("MainWindow/height", event->size().height());
+	}
 
 	QWidget::resizeEvent(event);
+}
+
+void MainWindow::showSettingsDialog()
+{
+	SettingsDialog s;
+	s.setModal(true);
+	s.exec();
 }
