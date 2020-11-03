@@ -31,7 +31,11 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	// provide a hint
 	else if (event->key() == Qt::Key::Key_Question)
 	{
-		setText(this->toPlainText() + m_words[0] + " ");
+		// Make sure that we don't put a space after a newline.
+		QString text{ this->toPlainText() + m_words[0] };
+		if (text.at(text.length() - 1) != "\n")
+			text += " ";
+		setText(text);
 		moveCursor(QTextCursor::MoveOperation::End);
 
 		// Delete this word.
@@ -80,7 +84,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		// Was the correct letter typed?
 		if (event->key() == firstChar.toUpper().unicode())
 		{
-			setText(this->toPlainText() + m_words[0] + " ");
+			QString text{ this->toPlainText() + m_words[0] };
+			if (text.at(text.length() - 1) != "\n")
+				text += " ";
+			setText(text);
 			moveCursor(QTextCursor::MoveOperation::End);
 
 			// Delete this word.
