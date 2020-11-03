@@ -38,4 +38,5 @@ MemorizeWidget::~MemorizeWidget()
 void MemorizeWidget::editDone()
 {
 	m_endSession->setText(tr("Continue"));
+	m_endSession->setFocus();
 }

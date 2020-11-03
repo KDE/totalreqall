@@ -102,7 +102,6 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 			// make sure the cursor remains at the end
 			moveCursor(QTextCursor::MoveOperation::End);
 		}
-		clearFocus();
 		emit messageToUser(tr("Done!"));
 		emit done();
 	}
