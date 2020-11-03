@@ -7,6 +7,7 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 {
 	setAcceptRichText(false);
 	setPlaceholderText(tr("Type the first letter of each word..."));
+	setTabChangesFocus(true);
 
 	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
 	// instead of "word1\nword2")
@@ -55,8 +56,6 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	{
 		moveCursor(QTextCursor::MoveOperation::Down);
 	}
-
-	// TODO: handle TAB focus switching properly
 
 	// skip all keys but the letters and numbers
 	else if (!((event->key() >= 0x30 && event->key() <= 0x39) || (event->key() >= 0x41 && event->key() <= 0x5a)))
