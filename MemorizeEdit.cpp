@@ -84,14 +84,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		// Was the correct letter typed?
 		if (event->key() == firstChar.toUpper().unicode())
 		{
-<<<<<<< HEAD
 			QString text{ this->toPlainText() + m_words[0] };
 			if (text.at(text.length() - 1) != "\n")
 				text += " ";
 			setText(text);
-=======
-			setText(this->toPlainText() + m_words[0] + " ");
->>>>>>> b3cede5... Fix error in spaces between words
 			moveCursor(QTextCursor::MoveOperation::End);
 
 			// Delete this word.
