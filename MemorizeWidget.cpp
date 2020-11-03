@@ -3,6 +3,7 @@
 #include <map>
 
 #include <QGridLayout>
+#include <QHBoxLayout>
 #include <QDebug>
 #include <QStringList>
 
@@ -24,8 +25,11 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 	connect(m_memorizeEdit, &MemorizeEdit::messageToUser, this, &MemorizeWidget::newStatus);
 
 	// ...and add them to the layout
+	auto btnRow = new QHBoxLayout;
+	btnRow->insertStretch(0);
+	btnRow->insertWidget(1, m_endSession);
 	m_layout->addWidget(m_memorizeEdit, 0, 0);
-	m_layout->addWidget(m_endSession, 1, 0);
+	m_layout->addLayout(btnRow, 1, 0);
 
     // now we can set the layout
 	this->setLayout(m_layout);
