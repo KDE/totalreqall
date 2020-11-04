@@ -43,23 +43,16 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		emit messageToUser("Hint provided.");
 	}
 
-	// handle arrow keys properly
-	else if (event->key() == Qt::Key::Key_Left)
-	{
-		moveCursor(QTextCursor::MoveOperation::Left);
-	}
-	else if (event->key() == Qt::Key::Key_Right)
-	{
-		moveCursor(QTextCursor::MoveOperation::Right);
-	}
-	else if (event->key() == Qt::Key::Key_Up)
-	{
-		moveCursor(QTextCursor::MoveOperation::Up);
-	}
-	else if (event->key() == Qt::Key::Key_Down)
-	{
-		moveCursor(QTextCursor::MoveOperation::Down);
-	}
+	// let Qt handle text navigation events
+	else if (event->key() == Qt::Key::Key_Left
+	         || event->key() == Qt::Key::Key_Right
+	         || event->key() == Qt::Key::Key_Up
+	         || event->key() == Qt::Key::Key_Down
+	         || event->key() == Qt::Key::Key_End
+	         || event->key() == Qt::Key::Key_Home
+	         || event->key() == Qt::Key::Key_PageUp
+	         || event->key() == Qt::Key::Key_PageDown)
+		QTextEdit::keyPressEvent(event);
 
 	// skip all keys but the letters and numbers
 	else if (!((event->key() >= 0x30 && event->key() <= 0x39) || (event->key() >= 0x41 && event->key() <= 0x5a)))
