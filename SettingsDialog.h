@@ -21,12 +21,11 @@ private slots:
 private:
 	QTabWidget *m_tabs;
 
-	QWidget *m_saveControls;
 	QCheckBox *m_shouldSaveRef;	
 	QCheckBox *m_shouldSaveWindowSize;
+	QCheckBox *m_swapRefChooserBtns;
 	// TODO: add option for default ref to load
 
-	QWidget *m_other;
 	QPushButton *m_reset;
 
 	QPushButton *m_ok;

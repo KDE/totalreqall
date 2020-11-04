@@ -45,12 +45,13 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 
 	QSettings settings;
-	if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
+	settings.beginGroup("ChooseReferenceWidget");
+	if (settings.value("saveLastRef", true).toBool())
 	{
-		auto lastBook = settings.value("ChooseReferenceWidget/lastBook").toString();
-		auto lastChapter = settings.value("ChooseReferenceWidget/lastChapter").toString();
-		auto lastStartVerse = settings.value("ChooseReferenceWidget/lastStartVerse").toString();
-		auto lastEndVerse = settings.value("ChooseReferenceWidget/lastEndVerse").toString();
+		auto lastBook = settings.value("lastBook").toString();
+		auto lastChapter = settings.value("lastChapter").toString();
+		auto lastStartVerse = settings.value("lastStartVerse").toString();
+		auto lastEndVerse = settings.value("lastEndVerse").toString();
 
 		if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
 		{
@@ -104,11 +105,22 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_layout->addWidget(m_startVerses, 0, 3);
 	m_layout->addWidget(dash, 0, 4);
 	m_layout->addWidget(m_endVerses, 0, 5);
-	m_layout->addWidget(m_runMemorizerBtn, 1, 0);
-	m_layout->addWidget(m_displayVerseBtn, 1, 1);
+
+	if (settings.value("swapButtons", false).toBool())
+	{
+		m_layout->addWidget(m_displayVerseBtn, 1, 0);
+		m_layout->addWidget(m_runMemorizerBtn, 1, 1);
+	}
+	else
+	{
+		m_layout->addWidget(m_runMemorizerBtn, 1, 0);
+		m_layout->addWidget(m_displayVerseBtn, 1, 1);
+	}
 	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 6);
 
 	this->setLayout(m_layout);
+
+	settings.endGroup(); // ChooseReferenceWidget
 }
 
 void ChooseReferenceWidget::updateChapterVerseValues()
