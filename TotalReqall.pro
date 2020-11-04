@@ -38,7 +38,8 @@ TRANSLATIONS += \
     TotalReqall_en_US.ts
 
 RESOURCES += \
-    bible.qrc
+    bible.qrc \
+    icons.qrc
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

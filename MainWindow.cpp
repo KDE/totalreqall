@@ -1,6 +1,7 @@
 #include "MainWindow.h"
 
 #include <QSettings>
+#include <QIcon>
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
@@ -9,6 +10,7 @@ MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent),
       m_refChooser{ new ChooseReferenceWidget }
 {
+	setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
 	connect(m_refChooser, &ChooseReferenceWidget::signalRunMemorizer, this, &MainWindow::runMemorizer);
 
 	setCentralWidget(m_refChooser);
