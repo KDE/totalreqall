@@ -36,12 +36,11 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 	saveLayout->addWidget(m_shouldSaveRef, 0, 0);
 	saveLayout->addWidget(m_shouldSaveWindowSize, 1, 0);
 	m_saveControls->setLayout(saveLayout);
-//	m_saveControls->setTitle(tr("Saved data"));
 
-	auto otherLayout = new QGridLayout;
-	otherLayout->addWidget(m_reset, 0, 0);
+	auto otherLayout = new QHBoxLayout;
+	otherLayout->insertWidget(0, m_reset);
+	otherLayout->insertStretch(1);
 	m_other->setLayout(otherLayout);
-//	m_other->setTitle(tr("Other settings"));
 
 	auto okCancelLayout = new QHBoxLayout;
 	okCancelLayout->insertStretch(0);
