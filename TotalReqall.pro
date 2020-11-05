@@ -48,6 +48,11 @@ win32
     RC_ICONS += resources/icons/TotalReqall.ico
 }
 
+macx
+{
+    ICON += resources/icons/TotalReqall.icns
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
