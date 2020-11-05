@@ -43,8 +43,8 @@ RESOURCES += \
     bible.qrc \
     icons.qrc
 
-win32:VERSION = 0.3.0.0
-else:VERSION = 0.3.0
+win32:VERSION = 0.4.0.0
+else:VERSION = 0.4.0
 
 win32
 {

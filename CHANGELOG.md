@@ -1,5 +1,23 @@
 # CHANGELOG.md
 
+# 0.4.0 (11/5/2020)
+## What's new
+- Added settings interface
+- Display verse and Memorize verse buttons can now be swapped
+- Choose between last verse, random verse, or a set verse to load at startup
+- Added icon
+- Added version info to qmake
+- Added option to mark word as wrong and continue if the wrong key is typed
+
+## Changes
+- Removed help label in MemorizeWidget in favor of placeholder text in MemorizeEdit
+- Tab now changes focus in MemorizeWidget
+- Focus changes to "continue" button after the verse has been completely entered
+- Qt now handles text navigation events in MemorizeEdit
+
+## Bugfixes
+- Buttons in the settings and MemorizeWidget no longer are stretched
+
 # 0.3.0 (11/2/2020)
 ## What's new
 - Added [GitHub Pages](https://lorendb.github.io)
