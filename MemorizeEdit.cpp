@@ -2,15 +2,24 @@
 
 #include <string>
 
+#include <QSettings>
+
 MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
     : QTextEdit{ parent }
 {
-	setAcceptRichText(false);
+	QSettings settings;
+	settings.beginGroup("MemorizeEdit");
+
+	// the static_cast is necessary here
+	m_errorAction = static_cast<ErrorAction>(settings.value("errorAction", ErrorAction::Redo).toInt());
+
+	setAcceptRichText(true);
 	setPlaceholderText(tr("Type the first letter of each word..."));
 	setTabChangesFocus(true);
 
 	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
 	// instead of "word1\nword2")
+	// std::string is the easiest way to do this
 	auto temp = memorizeContent.toStdString();
 	for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos; pos = temp.find("\n", pos))
 	{
@@ -20,6 +29,8 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 
 	QString newMemContent{ temp.c_str() };
 	m_words = newMemContent.split(" ", QString::SplitBehavior::SkipEmptyParts);
+
+	settings.endGroup(); // MemorizeEdit
 }
 
 void MemorizeEdit::keyPressEvent(QKeyEvent *event)
@@ -32,10 +43,11 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	else if (event->key() == Qt::Key::Key_Question)
 	{
 		// Make sure that we don't put a space after a newline.
-		QString text{ this->toPlainText() + m_words[0] };
-		if (text.at(text.length() - 1) != "\n")
-			text += " ";
-		setText(text);
+		m_richText += "<span style=\"color:red;\">" + m_words[0];
+		if (m_richText.at(m_richText.length() - 1) != "\n")
+			m_richText += " ";
+		m_richText += "</span>";
+		setHtml(m_richText);
 		moveCursor(QTextCursor::MoveOperation::End);
 
 		// Delete this word.
@@ -77,10 +89,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		// Was the correct letter typed?
 		if (event->key() == firstChar.toUpper().unicode())
 		{
-			QString text{ this->toPlainText() + m_words[0] };
-			if (text.at(text.length() - 1) != "\n")
-				text += " ";
-			setText(text);
+			m_richText += m_words[0];
+			if (m_richText.at(m_richText.length() - 1) != "\n")
+				m_richText += " ";
+			setText(m_richText);
 			moveCursor(QTextCursor::MoveOperation::End);
 
 			// Delete this word.
@@ -89,7 +101,27 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 			emit messageToUser("");
 		}
 		else
-			emit messageToUser(tr("Oops, you messed up! Try again."));
+		{
+			switch (m_errorAction)
+			{
+			case ErrorAction::Redo:
+				emit messageToUser(tr("Oops, you messed up! Try again."));
+				break;
+
+			case ErrorAction::KeepGoing:
+				m_richText += "<span style=\"color:red;\">" + m_words[0];
+				if (m_richText.at(m_richText.length() - 1) != "\n")
+					m_richText += " ";
+				m_richText += "</span>";
+				setHtml(m_richText);
+				moveCursor(QTextCursor::MoveOperation::End);
+				m_words.pop_front();
+				emit messageToUser(tr("Oops, you messed up!"));
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	// we're done with the memorization, clean up and shut down

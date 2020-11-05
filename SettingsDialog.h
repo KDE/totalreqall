@@ -23,6 +23,10 @@ private slots:
 private:
 	QTabWidget *m_tabs;
 
+	QButtonGroup *m_errorActionSettings;
+	QRadioButton *m_redo;
+	QRadioButton *m_keepGoing;
+
 	QButtonGroup *m_verseLoadSettings;
 	QRadioButton *m_saveVerse;
 	QRadioButton *m_randVerse;
@@ -31,7 +35,6 @@ private:
 
 	QCheckBox *m_shouldSaveWindowSize;
 	QCheckBox *m_swapRefChooserBtns;
-	// TODO: add option for default ref to load
 
 	QPushButton *m_reset;
 

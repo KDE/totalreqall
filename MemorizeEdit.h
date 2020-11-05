@@ -6,6 +6,12 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 
+enum ErrorAction
+{
+	Redo = 1,
+	KeepGoing = 2,
+};
+
 class MemorizeEdit : public QTextEdit
 {
 	Q_OBJECT
@@ -21,6 +27,9 @@ protected:
 
 private:
 	QStringList m_words;
+	QString m_richText;
+
+	ErrorAction m_errorAction;
 };
 
 #endif // MEMORIZEEDIT_H

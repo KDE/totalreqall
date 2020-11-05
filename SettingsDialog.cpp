@@ -9,10 +9,14 @@
 
 #include "ChooseReferenceWidget.h"
 #include "SimpleRefChooser.h"
+#include "MemorizeEdit.h"
 
 SettingsDialog::SettingsDialog(QDialog *parent)
     : QDialog{ parent },
       m_tabs{ new QTabWidget },
+      m_errorActionSettings{ new QButtonGroup },
+      m_redo{ new QRadioButton },
+      m_keepGoing{ new QRadioButton },
       m_verseLoadSettings{ new QButtonGroup },
       m_saveVerse{ new QRadioButton },
       m_randVerse{ new QRadioButton },
@@ -27,11 +31,31 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 {
 	this->setWindowTitle(tr("Settings"));
 
+	m_tabs->setUsesScrollButtons(false);
+
 	// get our settings object
 	QSettings settings;
 
 	// set up the widgets
-	m_reset->setText(tr("&Reset all settings..."));
+	m_redo->setText(tr("&Retype the word"));
+	m_keepGoing->setText(tr("Mark the word as incorrect and &keep going"));
+
+	m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
+	m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
+	m_errorActionSettings->button(settings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())->setChecked(true);
+
+	m_saveVerse->setText(tr("Load &last verse"));
+	m_randVerse->setText(tr("Load &random verse"));
+	m_setVerse->setText(tr("Load a &set verse"));
+	m_chooseSetVerse->setText(tr("&Choose verse..."));
+
+	// only let the user choose the default reference if the user has selected to load it
+	m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
+
+	m_verseLoadSettings->addButton(m_saveVerse, VerseLoadOption::Saved);
+	m_verseLoadSettings->addButton(m_randVerse, VerseLoadOption::Random);
+	m_verseLoadSettings->addButton(m_setVerse, VerseLoadOption::Set);
+	m_verseLoadSettings->button(settings.value("ChooseReferenceWidget/verseLoadOption", 1).toInt())->setChecked(true);
 
 	m_shouldSaveWindowSize->setText(tr("Save last set window size"));
 	m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
@@ -40,19 +64,28 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 	m_swapRefChooserBtns->setChecked(settings.value("ChooseReferenceWidget/swapButtons", false).toBool());
 	m_swapRefChooserBtns->setToolTip(tr("This will take effect after a restart."));
 
-	m_saveVerse->setText(tr("Load &last verse"));
-	m_randVerse->setText(tr("Load &random verse"));
-	m_setVerse->setText(tr("Load a &set verse"));
-	m_chooseSetVerse->setText(tr("&Choose verse..."));
-
-	m_verseLoadSettings->addButton(m_saveVerse, VerseLoadOption::Saved);
-	m_verseLoadSettings->addButton(m_randVerse, VerseLoadOption::Random);
-	m_verseLoadSettings->addButton(m_setVerse, VerseLoadOption::Set);
-	m_verseLoadSettings->button(settings.value("ChooseReferenceWidget/verseLoadOption", 1).toInt())->setChecked(true);
+	m_reset->setText(tr("&Reset all settings..."));
 
 	m_ok->setText(tr("OK"));
 	m_apply->setText(tr("Apply"));
 	m_cancel->setText(tr("Cancel"));
+
+	// Memorization tab
+	auto errorActionGroupLayout = new QVBoxLayout;
+	errorActionGroupLayout->addWidget(m_redo);
+	errorActionGroupLayout->addWidget(m_keepGoing);
+	errorActionGroupLayout->addStretch();
+
+	auto errorActionGroup = new QGroupBox;
+	errorActionGroup->setTitle(tr("Set action when the wrong key is typed"));
+	errorActionGroup->setLayout(errorActionGroupLayout);
+
+	auto memorizationLayout = new QVBoxLayout;
+	memorizationLayout->addWidget(errorActionGroup);
+	memorizationLayout->addStretch();
+
+	auto memorization = new QWidget;
+	memorization->setLayout(memorizationLayout);
 
 	// Display tab
 	auto displayLayout = new QVBoxLayout;
@@ -118,11 +151,13 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 		}
 		settings.endGroup();
 	});
+	connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
 	connect(m_ok, &QPushButton::clicked, this, &SettingsDialog::ok);
 	connect(m_apply, &QPushButton::clicked, this, &SettingsDialog::apply);
 	connect(m_cancel, &QPushButton::clicked, this, &SettingsDialog::reject);
 
 	// add the widgets
+	m_tabs->addTab(memorization, tr("&Memorization"));
 	m_tabs->addTab(display, tr("&Display"));
 	m_tabs->addTab(startup, tr("&Startup"));
 	m_tabs->addTab(other, tr("&Other settings"));
@@ -143,6 +178,10 @@ void SettingsDialog::ok()
 void SettingsDialog::apply()
 {
 	QSettings settings;
+
+	settings.beginGroup("MemorizeEdit");
+	settings.setValue("errorAction", m_errorActionSettings->checkedId());
+	settings.endGroup(); // MemorizeEdit
 
 	settings.beginGroup("ChooseReferenceWidget");
 
