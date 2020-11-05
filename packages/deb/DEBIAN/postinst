@@ -1,4 +1,0 @@
-#!/bin/bash
-
-chmod +x /bin/totalreqall
-exit 0
