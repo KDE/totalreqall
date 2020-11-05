@@ -92,6 +92,29 @@ int Bible::scrapeVersesPerChapter(const QString &bookName, const QString &chapte
 	return numVerses;
 }
 
+QString Bible::getVerseStringFromRef(const QString &reference, const int extraVerses)
+{
+	readData();
+	int startPos = m_bibleData.indexOf(reference, 0);
+	int endPos = m_bibleData.indexOf("\n", startPos);
+
+	// convert to std::string so we can get the substr() function
+	std::string data = m_bibleData.toStdString();
+	std::string temp = data.substr(startPos + reference.size() + 1, (endPos - startPos) - reference.size());
+
+	// tack on the extra verses
+	for (int i = 0; i < extraVerses; ++i)
+	{
+		startPos = m_bibleData.indexOf("\t", endPos);
+		endPos = m_bibleData.indexOf("\n", startPos);
+		temp += data.substr(startPos + 1, (endPos - startPos));
+	}
+
+	// back to QString
+	QString verse = temp.c_str();
+	return verse;
+}
+
 void Bible::readData()
 {
 	if (m_bibleData.size() == 0)
@@ -115,28 +138,5 @@ void Bible::freeData()
 	m_bibleData = "";
 	m_bibleData.shrink_to_fit();
 	m_freeTimer->stop();
-}
-
-QString Bible::getVerseStringFromRef(const QString &reference, const int extraVerses)
-{
-	readData();
-	int startPos = m_bibleData.indexOf(reference, 0);
-	int endPos = m_bibleData.indexOf("\n", startPos);
-
-	// convert to std::string so we can get the substr() function
-	std::string data = m_bibleData.toStdString();
-	std::string temp = data.substr(startPos + reference.size() + 1, (endPos - startPos) - reference.size());
-
-	// tack on the extra verses
-	for (int i = 0; i < extraVerses; ++i)
-	{
-		startPos = m_bibleData.indexOf("\t", endPos);
-		endPos = m_bibleData.indexOf("\n", startPos);
-		temp += data.substr(startPos + 1, (endPos - startPos));
-	}
-
-	// back to QString
-	QString verse = temp.c_str();
-	return verse;
 }
 

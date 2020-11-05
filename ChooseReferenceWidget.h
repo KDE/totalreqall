@@ -13,6 +13,13 @@
 
 #include "Bible.h"
 
+enum VerseLoadOption
+{
+	Saved = 1,
+	Random = 2,
+	Set = 3,
+};
+
 class ChooseReferenceWidget : public QWidget
 {
 	Q_OBJECT
@@ -44,9 +51,6 @@ private:
 	QStringList m_bookList;
 
 	Bible *m_bible;
-
-	void setUpBible();
-	void freeBible();
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

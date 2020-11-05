@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QTabWidget>
 #include <QCheckBox>
+#include <QRadioButton>
+#include <QButtonGroup>
 
 class SettingsDialog : public QDialog
 {
@@ -21,7 +23,12 @@ private slots:
 private:
 	QTabWidget *m_tabs;
 
-	QCheckBox *m_shouldSaveRef;	
+	QButtonGroup *m_verseLoadSettings;
+	QRadioButton *m_saveVerse;
+	QRadioButton *m_randVerse;
+	QRadioButton *m_setVerse;
+	QPushButton *m_chooseSetVerse;
+
 	QCheckBox *m_shouldSaveWindowSize;
 	QCheckBox *m_swapRefChooserBtns;
 	// TODO: add option for default ref to load

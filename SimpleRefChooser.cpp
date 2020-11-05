@@ -1,29 +1,30 @@
-#include "ChooseReferenceWidget.h"
+#include "SimpleRefChooser.h"
 
-#include <QSettings>
-#include <QDebug>
 #include <QLabel>
-#include <QRandomGenerator>
+#include <QHBoxLayout>
 
-ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
-    : QWidget(parent),
-      m_layout{ new QGridLayout{ this } },
-      m_books{ new QComboBox },
-      m_chapters{ new QComboBox },
-      m_startVerses{ new QComboBox },
-      m_endVerses{ new QComboBox },
-      m_runMemorizerBtn{ new QPushButton },
-      m_displayVerseBtn{ new QPushButton },
-      m_verseDisplayBox{ new QTextEdit{ "" } },
-      m_bible{ new Bible }
+SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const QString &chapter, const QString &startVerse, const QString &endVerse)
+    : QDialog{ parent },
+    m_layout{ new QGridLayout{ this } },
+    m_books{ new QComboBox },
+    m_chapters{ new QComboBox },
+    m_startVerses{ new QComboBox },
+    m_endVerses{ new QComboBox },
+    m_ok{ new QPushButton },
+    m_cancel{ new QPushButton },
+    m_bible{ new Bible }
 {
-	// general setup
-	setStatusTip(tr("Choose a verse"));
+	m_ok->setText(tr("OK"));
+	m_cancel->setText(tr("Cancel"));
+
+	connect(m_ok, &QPushButton::clicked, this, &SimpleRefChooser::accept);
+	connect(m_cancel, &QPushButton::clicked, this, &SimpleRefChooser::reject);
 
 	// set up the first combo box manually and scrape the other 2
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
-	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
+	QStringList bookList ;
+	bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
 	      << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
 	      << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
 	      << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
@@ -37,7 +38,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	      << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
 	      << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
 	      << "Revelation";
-	m_books->insertItems(0, m_bookList);
+	m_books->insertItems(0, bookList);
 
 	// connect the combos
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
@@ -45,78 +46,27 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 
-	QSettings settings;
-	settings.beginGroup("ChooseReferenceWidget");
-
-	// these are out here because apparently you can't create variables in a switch
-	auto lastBook = settings.value("lastBook").toString();
-	auto lastChapter = settings.value("lastChapter").toString();
-	auto lastStartVerse = settings.value("lastStartVerse").toString();
-	auto lastEndVerse = settings.value("lastEndVerse").toString();
-
-	switch (settings.value("verseLoadOption", 1).toInt())
-	{
-	case VerseLoadOption::Saved:
-
-		if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
-		{
-			m_books->setCurrentText(lastBook);
-
-			// update the values now to load the data for the chapters and verses
-			updateChapterVerseValues();
-
-			m_chapters->setCurrentText(lastChapter);
-			m_startVerses->setCurrentText(lastStartVerse);
-			m_endVerses->setCurrentText(lastEndVerse);
-		}
-		else
-		{
-			updateChapterVerseValues();
-			updateSaveVerse();
-		}
-		break;
-
-	case VerseLoadOption::Random:
-		updateChapterVerseValues();
-		m_books->setCurrentIndex(QRandomGenerator::global()->generate() % m_books->count());
-		m_chapters->setCurrentIndex(QRandomGenerator::global()->generate() % m_chapters->count());
-		m_startVerses->setCurrentIndex(QRandomGenerator::global()->generate() % m_startVerses->count());
-
-		// only display one verse
-		m_endVerses->setCurrentIndex(m_startVerses->currentIndex());
-		break;
-
-	case VerseLoadOption::Set:
-		m_books->setCurrentText(settings.value("defaultBook", "Genesis").toString());
-		updateChapterVerseValues();
-		m_chapters->setCurrentText(settings.value("defaultChapter", "1").toString());
-		m_startVerses->setCurrentText(settings.value("defaultStartVerse", "1").toString());
-		m_endVerses->setCurrentText(settings.value("defaultEndVerse", "1").toString());
-		break;
-
-	default:
-		break;
-	}
-
 	// we also need to save all info about the last verse
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+	if (book != "" && chapter != "" && startVerse != "" && endVerse != "")
+	{
+		m_books->setCurrentText(book);
+		m_chapters->setCurrentText(chapter);
+		m_startVerses->setCurrentText(startVerse);
+		m_endVerses->setCurrentText(endVerse);
+	}
+
+	updateChapterVerseValues();
+
 	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
 	// viewing the chapters for Psalms if you think this is unnecessary!)
 	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 	m_startVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
 	m_endVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-
-	m_runMemorizerBtn->setText(tr("Memorize verse"));
-	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
-
-	m_displayVerseBtn->setText(tr("Display verse"));
-	connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
-
-	m_verseDisplayBox->setReadOnly(true);
 
 	auto colon = new QLabel{ ":" };
 	colon->setAlignment(Qt::AlignHCenter);
@@ -131,24 +81,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_layout->addWidget(dash, 0, 4);
 	m_layout->addWidget(m_endVerses, 0, 5);
 
-	if (settings.value("swapButtons", false).toBool())
-	{
-		m_layout->addWidget(m_displayVerseBtn, 1, 0);
-		m_layout->addWidget(m_runMemorizerBtn, 1, 1);
-	}
-	else
-	{
-		m_layout->addWidget(m_runMemorizerBtn, 1, 0);
-		m_layout->addWidget(m_displayVerseBtn, 1, 1);
-	}
-	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 6);
+	auto buttonRow = new QHBoxLayout;
+	buttonRow->addStretch();
+	buttonRow->addWidget(m_ok);
+	buttonRow->addWidget(m_cancel);
+
+	m_layout->addLayout(buttonRow, 1, 0, 1, 6);
 
 	this->setLayout(m_layout);
-
-	settings.endGroup(); // ChooseReferenceWidget
 }
 
-void ChooseReferenceWidget::updateChapterVerseValues()
+void SimpleRefChooser::updateChapterVerseValues()
 {
 	// prevent lots of signals from being emitted
 	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
@@ -188,7 +131,7 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 	connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
-void ChooseReferenceWidget::updateVerseValues()
+void SimpleRefChooser::updateVerseValues()
 {
 	// prevent lots of signals from being emitted
 	disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
@@ -244,7 +187,7 @@ void ChooseReferenceWidget::updateVerseValues()
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
-void ChooseReferenceWidget::updateEndVerseValues()
+void SimpleRefChooser::updateEndVerseValues()
 {
 	// prevent lots of signals from being emitted
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
@@ -260,30 +203,10 @@ void ChooseReferenceWidget::updateEndVerseValues()
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
-void ChooseReferenceWidget::updateSaveVerse()
+void SimpleRefChooser::updateSaveVerse()
 {
-	QSettings settings;
-	if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
-	{
-		settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());
-		settings.setValue("ChooseReferenceWidget/lastChapter", m_chapters->currentText());
-		settings.setValue("ChooseReferenceWidget/lastStartVerse", m_startVerses->currentText());
-		settings.setValue("ChooseReferenceWidget/lastEndVerse", m_endVerses->currentText());
-	}
-}
-
-void ChooseReferenceWidget::runMemorizer()
-{
-	QString reference{ "%1 %2:%3" };
-	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
-	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference, extraVerses));
-}
-
-void ChooseReferenceWidget::displayVerse()
-{
-	QString reference{ "%1 %2:%3" };
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
-	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
+	m_book = m_books->currentText();
+	m_chapter = m_chapters->currentText();
+	m_startVerse = m_startVerses->currentText();
+	m_endVerse = m_endVerses->currentText();
 }
