@@ -4,6 +4,7 @@
 #include <QSettings>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QGroupBox>
 
 #include "ChooseReferenceWidget.h"
@@ -49,17 +50,15 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 	m_verseLoadSettings->addButton(m_setVerse, VerseLoadOption::Set);
 	m_verseLoadSettings->button(settings.value("ChooseReferenceWidget/verseLoadOption", 1).toInt())->setChecked(true);
 
-	// this isn't implemented yet
-//	m_verseLoadSettings->button(VerseLoadOption::Random)->setDisabled(true);
-
 	m_ok->setText(tr("OK"));
 	m_apply->setText(tr("Apply"));
 	m_cancel->setText(tr("Cancel"));
 
 	// Display tab
-	auto displayLayout = new QGridLayout;
-	displayLayout->addWidget(m_swapRefChooserBtns, 0, 0);
-	displayLayout->addWidget(m_shouldSaveWindowSize, 1, 0);
+	auto displayLayout = new QVBoxLayout;
+	displayLayout->addWidget(m_swapRefChooserBtns);
+	displayLayout->addWidget(m_shouldSaveWindowSize);
+	displayLayout->addStretch();
 	auto display = new QWidget;
 	display->setLayout(displayLayout);
 
@@ -74,8 +73,9 @@ SettingsDialog::SettingsDialog(QDialog *parent)
 	loadVerseGroup->setTitle(tr("Set what verse to load on startup"));
 	loadVerseGroup->setLayout(loadVerseGroupLayout);
 
-	auto startupLayout = new QGridLayout;
-	startupLayout->addWidget(loadVerseGroup, 0, 0);
+	auto startupLayout = new QVBoxLayout;
+	startupLayout->addWidget(loadVerseGroup);
+	startupLayout->addStretch();
 
 	auto startup = new QWidget;
 	startup->setLayout(startupLayout);
