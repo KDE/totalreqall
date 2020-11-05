@@ -14,8 +14,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
       m_displayVerseBtn{ new QPushButton },
-      m_verseDisplayBox{ new QTextEdit{ "" } },
-      m_bible{ new Bible }
+      m_verseDisplayBox{ new QTextEdit{ "" } }
 {
 	// general setup
 	setStatusTip(tr("Choose a verse"));
@@ -156,7 +155,7 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 
 	// first take care of the chapter
 	// get data to insert
-	int chapters = m_bible->scrapeChaptersPerBook(m_books->currentText());
+	int chapters = m_bible.scrapeChaptersPerBook(m_books->currentText());
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto old = (m_chapters->currentIndex() == -1) ? 0 : m_chapters->currentIndex();
@@ -197,7 +196,7 @@ void ChooseReferenceWidget::updateVerseValues()
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
 	// get data to insert
-	int verses = m_bible->scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+	int verses = m_bible.scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto oldStart = (m_startVerses->currentIndex() == -1) ? 0 : m_startVerses->currentIndex();
@@ -277,7 +276,7 @@ void ChooseReferenceWidget::runMemorizer()
 	QString reference{ "%1 %2:%3" };
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
-	emit signalRunMemorizer(m_bible->getVerseStringFromRef(reference, extraVerses));
+	emit signalRunMemorizer(m_bible.getVerseStringFromRef(reference, extraVerses));
 }
 
 void ChooseReferenceWidget::displayVerse()
@@ -285,5 +284,5 @@ void ChooseReferenceWidget::displayVerse()
 	QString reference{ "%1 %2:%3" };
 	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-	m_verseDisplayBox->setText(m_bible->getVerseStringFromRef(reference, extraVerses));
+	m_verseDisplayBox->setText(m_bible.getVerseStringFromRef(reference, extraVerses));
 }

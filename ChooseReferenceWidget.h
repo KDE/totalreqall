@@ -50,7 +50,7 @@ private:
 
 	QStringList m_bookList;
 
-	Bible *m_bible;
+	Bible m_bible;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

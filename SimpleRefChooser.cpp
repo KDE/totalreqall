@@ -11,8 +11,7 @@ SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const Q
     m_startVerses{ new QComboBox },
     m_endVerses{ new QComboBox },
     m_ok{ new QPushButton },
-    m_cancel{ new QPushButton },
-    m_bible{ new Bible }
+    m_cancel{ new QPushButton }
 {
 	m_ok->setText(tr("OK"));
 	m_cancel->setText(tr("Cancel"));
@@ -99,7 +98,7 @@ void SimpleRefChooser::updateChapterVerseValues()
 
 	// first take care of the chapter
 	// get data to insert
-	int chapters = m_bible->scrapeChaptersPerBook(m_books->currentText());
+	int chapters = m_bible.scrapeChaptersPerBook(m_books->currentText());
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto old = (m_chapters->currentIndex() == -1) ? 0 : m_chapters->currentIndex();
@@ -140,7 +139,7 @@ void SimpleRefChooser::updateVerseValues()
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
 	// get data to insert
-	int verses = m_bible->scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+	int verses = m_bible.scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto oldStart = (m_startVerses->currentIndex() == -1) ? 0 : m_startVerses->currentIndex();
