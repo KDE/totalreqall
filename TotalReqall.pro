@@ -43,6 +43,9 @@ RESOURCES += \
     bible.qrc \
     icons.qrc
 
+win32:VERSION = 0.3.0.0
+else:VERSION = 0.3.0
+
 win32
 {
     RC_ICONS += resources/icons/TotalReqall.ico
@@ -50,7 +53,7 @@ win32
 
 macx
 {
-    ICON += resources/icons/TotalReqall.icns
+    ICON = resources/icons/TotalReqall.icns
 }
 
 # Default rules for deployment.
