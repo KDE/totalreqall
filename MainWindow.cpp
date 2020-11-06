@@ -33,10 +33,18 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
 	QAction *aboutQt = new QAction{ tr("About Qt") };
+	QAction *aboutMaddy = new QAction{ tr("About maddy") };
 	QAction *changelog = new QAction{ tr("Changelog") };
 	QAction *about = new QAction{ tr("About") };
 
-	connect(aboutQt, &QAction::triggered, this, [this](){ QMessageBox::aboutQt(this); });
+	connect(aboutQt, &QAction::triggered, this, [this]() {
+		QMessageBox::aboutQt(this);
+	});
+	connect(aboutMaddy, &QAction::triggered, this, [this]() {
+		QMessageBox::information(this, tr("About maddy"), tr("maddy is a C++ Markdown to HTML <b>header-only</b> parser library.<br><br>"
+		                                                     "<a href=\"https://github.com/progsource/maddy\">"
+		                                                     "https://github.com/progsource/maddy</a>"));
+	});
 	connect(changelog, &QAction::triggered, this, [this]() {
 		ChangelogDialog c{ this };
 		c.exec();
@@ -44,6 +52,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 	connect(about, &QAction::triggered, this, &MainWindow::showAboutDlg);
 
 	helpMenu->addAction(aboutQt);
+	helpMenu->addAction(aboutMaddy);
 	helpMenu->addSeparator();
 	helpMenu->addAction(changelog);
 	helpMenu->addAction(about);
