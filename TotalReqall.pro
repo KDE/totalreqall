@@ -48,8 +48,8 @@ RESOURCES += \
     general.qrc \
     icons.qrc
 
-win32:VERSION = 0.4.0.0
-else:VERSION = 0.4.0
+win32:VERSION = 0.4.1.0
+else:VERSION = 0.4.1
 
 win32
 {
