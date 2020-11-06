@@ -89,7 +89,8 @@ void MainWindow::cleanUpMemorizer()
 
 void MainWindow::showAboutDlg()
 {
-	QMessageBox::about(this, tr("About"), TotalReqall::appName + " version " + TotalReqall::appVersion.toString());
+	QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
+	                   + tr("<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
 }
 
 void MainWindow::resizeToFit()
