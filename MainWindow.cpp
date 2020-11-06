@@ -5,6 +5,7 @@
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
+#include "ChangelogDialog.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent),
@@ -32,12 +33,19 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
 	QAction *aboutQt = new QAction{ tr("About Qt") };
+	QAction *changelog = new QAction{ tr("Changelog") };
 	QAction *about = new QAction{ tr("About") };
 
 	connect(aboutQt, &QAction::triggered, this, [this](){ QMessageBox::aboutQt(this); });
+	connect(changelog, &QAction::triggered, this, [this]() {
+		ChangelogDialog c{ this };
+		c.exec();
+	});
 	connect(about, &QAction::triggered, this, &MainWindow::showAboutDlg);
 
 	helpMenu->addAction(aboutQt);
+	helpMenu->addSeparator();
+	helpMenu->addAction(changelog);
 	helpMenu->addAction(about);
 
 	// add all menus

@@ -4,6 +4,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 
+INCLUDEPATH += thirdparty/maddy/include
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -18,6 +20,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Files from this project...
 SOURCES += \
     Bible.cpp \
+    ChangelogDialog.cpp \
     ChooseReferenceWidget.cpp \
     MainWindow.cpp \
     MemorizeEdit.cpp \
@@ -29,6 +32,7 @@ SOURCES += \
 HEADERS += \
     AppInfo.h \
     Bible.h \
+    ChangelogDialog.h \
     ChooseReferenceWidget.h \
     MainWindow.h \
     MemorizeEdit.h \
@@ -41,6 +45,7 @@ TRANSLATIONS += \
 
 RESOURCES += \
     bible.qrc \
+    general.qrc \
     icons.qrc
 
 win32:VERSION = 0.4.0.0
