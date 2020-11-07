@@ -18,14 +18,11 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 	setTabChangesFocus(true);
 
 	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
-	// instead of "word1\nword2")
+	// instead of "word1\nword2") and also change the "\n" to a "<br>" to play right with the HTML text
 	// std::string is the easiest way to do this
 	auto temp = memorizeContent.toStdString();
 	for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos; pos = temp.find("\n", pos))
-	{
-		temp.replace(pos, 1, "\n ");
-		pos += 2; // get past the \n we just inserted
-	}
+		temp.replace(pos, 1, "<br> ");
 
 	QString newMemContent{ temp.c_str() };
 	m_words = newMemContent.split(" ", QString::SplitBehavior::SkipEmptyParts);
@@ -128,10 +125,15 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	if (m_words.length() < 1)
 	{
 		// remove the "\n" at the end so that the box doesn't scroll down and hide some text
-		if (this->toPlainText().endsWith("\n"))
+		if (m_richText.endsWith("<br> "))
 		{
-			this->setPlainText(this->toPlainText().remove(this->toPlainText().length() - 1, 1));
+			this->setHtml(m_richText.remove(m_richText.length() - 5, 5));
 			// make sure the cursor remains at the end
+			moveCursor(QTextCursor::MoveOperation::End);
+		}
+		else if (m_richText.endsWith("<br> </span>"))
+		{
+			this->setHtml(m_richText.remove(m_richText.length() - 12, 12));
 			moveCursor(QTextCursor::MoveOperation::End);
 		}
 		emit messageToUser(tr("Done!"));
