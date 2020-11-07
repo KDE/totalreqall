@@ -1,0 +1,2 @@
+# Screenshots
+![Initial screen](./resources/Startup.png) ![Displaying a verse](./resources/DisplayVerse.png) ![Memorizing a verse](./resources/Memorizing.png) ![Wrong key typed](./resources/Errors.png) ![Done memorizing](./resources/DoneMemorizing.png) ![Settings - Memorization tab](./resources/SettingsMemorization.png) ![Settings - Display tab](./resources/SettingsDisplay.png) ![Settings - Startup tab](./resources/SettingsStartup.png) ![Settings - Other tab](./resources/SettingsOther.png)
