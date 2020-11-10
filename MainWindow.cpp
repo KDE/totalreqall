@@ -90,6 +90,7 @@ void MainWindow::cleanUpMemorizer()
 void MainWindow::showAboutDlg()
 {
 	QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
+	                   + tr("<br>Copyright © 2020 Loren Burkholder.")
 	                   + tr("<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
 }
 
