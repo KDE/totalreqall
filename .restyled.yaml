@@ -1,0 +1,23 @@
+enabled: true
+
+exclude:
+  - "thirdparty/**/*"
+  - "resources/**/*"
+  - "bible.txt"
+
+commit_template: |
+  Restyled by ${restyler.name}
+
+request_review:
+  origin:
+    - author
+    - owner
+  forked:
+    - author
+    - owner
+
+restylers_version: stable
+
+restylers:
+  - astyle
+    arguments: "--options=.astylerc"

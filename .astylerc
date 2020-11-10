@@ -1,0 +1,19 @@
+# Note: I am using the long names for easy readability
+
+style=allman
+indent=force-tab
+attach-closing-while
+indent-namespaces
+indent-preproc-block
+indent-preproc-define
+indent-col1-comments
+break-blocks
+pad-oper
+pad-header
+align-pointer=name
+break-one-line-headers
+remove-braces
+attach-return-type
+attach-return-type-decl
+close-templates
+remove-comment-prefix
