@@ -33,6 +33,7 @@ ChangelogDialog::ChangelogDialog(QWidget *parent)
 
 	auto changelogView = new QTextBrowser();
 	changelogView->setHtml(html);
+	changelogView->setOpenExternalLinks(true);
 
 	auto ok = new QPushButton;
 	ok->setText(tr("OK"));
