@@ -6,15 +6,15 @@
 #include <QRandomGenerator>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
-    : QWidget(parent),
-      m_layout{ new QGridLayout{ this } },
-      m_books{ new QComboBox },
-      m_chapters{ new QComboBox },
-      m_startVerses{ new QComboBox },
-      m_endVerses{ new QComboBox },
-      m_runMemorizerBtn{ new QPushButton },
-      m_displayVerseBtn{ new QPushButton },
-      m_verseDisplayBox{ new QTextBrowser }
+	: QWidget(parent),
+	  m_layout{ new QGridLayout{ this } },
+m_books{ new QComboBox },
+m_chapters{ new QComboBox },
+m_startVerses{ new QComboBox },
+m_endVerses{ new QComboBox },
+m_runMemorizerBtn{ new QPushButton },
+m_displayVerseBtn{ new QPushButton },
+m_verseDisplayBox{ new QTextBrowser }
 {
 	// general setup
 	setStatusTip(tr("Choose a verse"));
@@ -23,19 +23,19 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
 	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
-	      << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
-	      << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
-	      << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
-	      << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
-	      << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
-	      << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
-	      << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
-	      << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
-	      << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
-	      << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
-	      << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
-	      << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
-	      << "Revelation";
+			   << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
+			   << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
+			   << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
+			   << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
+			   << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
+			   << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
+			   << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
+			   << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
+			   << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
+			   << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
+			   << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
+			   << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
+			   << "Revelation";
 	m_books->insertItems(0, m_bookList);
 
 	// connect the combos
@@ -73,6 +73,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 			updateChapterVerseValues();
 			updateSaveVerse();
 		}
+
 		break;
 
 	case VerseLoadOption::Random:
@@ -140,6 +141,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 		m_layout->addWidget(m_runMemorizerBtn, 1, 0);
 		m_layout->addWidget(m_displayVerseBtn, 1, 1);
 	}
+
 	m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 6);
 
 	this->setLayout(m_layout);
@@ -165,12 +167,14 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 
 	// insert the new data
 	QStringList chapList;
+
 	for (int i = 0; i < chapters; ++i)
 	{
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
 		chapList.push_back(temp); // + 1 to ensure that we insert at the end
 	}
+
 	m_chapters->insertItems(0, chapList);
 
 	// this triggers a call to updateVerseValues()
@@ -209,6 +213,7 @@ void ChooseReferenceWidget::updateVerseValues()
 	// insert the new data
 	QStringList startVerseList;
 	QStringList endVerseList;
+
 	for (int i = 0; i < verses; ++i)
 	{
 		QString temp{ "%1" };
@@ -216,6 +221,7 @@ void ChooseReferenceWidget::updateVerseValues()
 		startVerseList.push_back(temp);
 		endVerseList.push_back(temp);
 	}
+
 	m_startVerses->insertItems(0, startVerseList);
 	m_endVerses->insertItems(0, endVerseList);
 
@@ -262,6 +268,7 @@ void ChooseReferenceWidget::updateEndVerseValues()
 void ChooseReferenceWidget::updateSaveVerse()
 {
 	QSettings settings;
+
 	if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
 	{
 		settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());

@@ -8,11 +8,11 @@
 #include <QStringList>
 
 MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
-    : QWidget{ parent },
-      m_layout{ new QGridLayout{ this } },
-      m_endSession{ new QPushButton },
-      m_memorizeEdit{ new MemorizeEdit{ memorizeContent } },
-      m_endMemorizerTimer{ new QTimer }
+	: QWidget{ parent },
+	  m_layout{ new QGridLayout{ this } },
+m_endSession{ new QPushButton },
+m_memorizeEdit{ new MemorizeEdit{ memorizeContent } },
+m_endMemorizerTimer{ new QTimer }
 {
 	// clear the status bar
 	emit newStatus("");
@@ -31,7 +31,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 	m_layout->addWidget(m_memorizeEdit, 0, 0);
 	m_layout->addLayout(btnRow, 1, 0);
 
-    // now we can set the layout
+	// now we can set the layout
 	this->setLayout(m_layout);
 }
 

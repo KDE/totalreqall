@@ -12,22 +12,22 @@
 #include "MemorizeEdit.h"
 
 SettingsDialog::SettingsDialog(QWidget *parent)
-    : QDialog{ parent },
-      m_tabs{ new QTabWidget },
-      m_errorActionSettings{ new QButtonGroup },
-      m_redo{ new QRadioButton },
-      m_keepGoing{ new QRadioButton },
-      m_verseLoadSettings{ new QButtonGroup },
-      m_saveVerse{ new QRadioButton },
-      m_randVerse{ new QRadioButton },
-      m_setVerse{ new QRadioButton },
-      m_chooseSetVerse{ new QPushButton },
-      m_shouldSaveWindowSize{ new QCheckBox },
-      m_swapRefChooserBtns{ new QCheckBox },
-      m_reset{ new QPushButton },
-      m_ok{ new QPushButton },
-      m_apply{ new QPushButton },
-      m_cancel{ new QPushButton }
+	: QDialog{ parent },
+	  m_tabs{ new QTabWidget },
+m_errorActionSettings{ new QButtonGroup },
+m_redo{ new QRadioButton },
+m_keepGoing{ new QRadioButton },
+m_verseLoadSettings{ new QButtonGroup },
+m_saveVerse{ new QRadioButton },
+m_randVerse{ new QRadioButton },
+m_setVerse{ new QRadioButton },
+m_chooseSetVerse{ new QPushButton },
+m_shouldSaveWindowSize{ new QCheckBox },
+m_swapRefChooserBtns{ new QCheckBox },
+m_reset{ new QPushButton },
+m_ok{ new QPushButton },
+m_apply{ new QPushButton },
+m_cancel{ new QPushButton }
 {
 	this->setWindowTitle(tr("Settings"));
 
@@ -127,21 +127,24 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	okCancelLayout->insertWidget(3, m_cancel);
 
 	// connect the widgets
-	connect(m_reset, &QPushButton::clicked, this, [this]() {
+	connect(m_reset, &QPushButton::clicked, this, [this]()
+	{
 		if (QMessageBox::question(this, tr("Confirm reset"), tr("Are you sure you want to reset all settings? This will take effect immediately."))
-		        == QMessageBox::StandardButton::Yes)
+				== QMessageBox::StandardButton::Yes)
 		{
 			QSettings settings;
 			settings.clear();
 		}
 	});
-	connect(m_chooseSetVerse, &QPushButton::clicked, this, [this]() {
+	connect(m_chooseSetVerse, &QPushButton::clicked, this, [this]()
+	{
 		QSettings settings;
 		settings.beginGroup("ChooseReferenceWidget");
 		SimpleRefChooser chooser{ this, settings.value("defaultBook", "").toString(),
-			                    settings.value("defaultChapter", "").toString(),
-			                    settings.value("defaultStartVerse", "").toString(),
-			                    settings.value("defaultEndVerse", "").toString() };
+								  settings.value("defaultChapter", "").toString(),
+								  settings.value("defaultStartVerse", "").toString(),
+								  settings.value("defaultEndVerse", "").toString() };
+
 		if (chooser.exec() == QDialog::DialogCode::Accepted)
 		{
 			settings.setValue("defaultBook", chooser.getBook());
@@ -149,6 +152,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 			settings.setValue("defaultStartVerse", chooser.getStartVerse());
 			settings.setValue("defaultEndVerse", chooser.getEndVerse());
 		}
+
 		settings.endGroup();
 	});
 	connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
@@ -198,5 +202,5 @@ void SettingsDialog::apply()
 	settings.endGroup(); // MainWindow
 
 	// TODO: disable the apply button when settings haven't been changed
-//	m_apply->setDisabled(true);
+	//	m_apply->setDisabled(true);
 }

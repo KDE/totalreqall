@@ -5,7 +5,7 @@
 #include <QSettings>
 
 MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
-    : QTextEdit{ parent }
+	: QTextEdit{ parent }
 {
 	QSettings settings;
 	settings.beginGroup("MemorizeEdit");
@@ -21,6 +21,7 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 	// instead of "word1\nword2") and also change the "\n" to a "<br>" to play right with the HTML text
 	// std::string is the easiest way to do this
 	auto temp = memorizeContent.toStdString();
+
 	for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos; pos = temp.find("\n", pos))
 		temp.replace(pos, 1, "<br> ");
 
@@ -41,8 +42,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	{
 		// Make sure that we don't put a space after a newline.
 		m_richText += "<span style=\"color:red;\">" + m_words[0];
+
 		if (m_richText.at(m_richText.length() - 1) != "\n")
 			m_richText += " ";
+
 		m_richText += "</span>";
 		setHtml(m_richText);
 		moveCursor(QTextCursor::MoveOperation::End);
@@ -54,13 +57,13 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 
 	// let Qt handle text navigation events
 	else if (event->key() == Qt::Key::Key_Left
-	         || event->key() == Qt::Key::Key_Right
-	         || event->key() == Qt::Key::Key_Up
-	         || event->key() == Qt::Key::Key_Down
-	         || event->key() == Qt::Key::Key_End
-	         || event->key() == Qt::Key::Key_Home
-	         || event->key() == Qt::Key::Key_PageUp
-	         || event->key() == Qt::Key::Key_PageDown)
+			 || event->key() == Qt::Key::Key_Right
+			 || event->key() == Qt::Key::Key_Up
+			 || event->key() == Qt::Key::Key_Down
+			 || event->key() == Qt::Key::Key_End
+			 || event->key() == Qt::Key::Key_Home
+			 || event->key() == Qt::Key::Key_PageUp
+			 || event->key() == Qt::Key::Key_PageDown)
 		QTextEdit::keyPressEvent(event);
 
 	// skip all keys but the letters and numbers
@@ -74,6 +77,7 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		// having to input punctuation (e.g. for the string "...but" type "b"
 		// instead of ".")
 		QChar firstChar;
+
 		for (int i = 0; i < m_words[0].length(); ++i)
 		{
 			if (m_words[0][i].isLetterOrNumber())
@@ -87,8 +91,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 		if (event->key() == firstChar.toUpper().unicode())
 		{
 			m_richText += m_words[0];
+
 			if (m_richText.at(m_richText.length() - 1) != "\n")
 				m_richText += " ";
+
 			setText(m_richText);
 			moveCursor(QTextCursor::MoveOperation::End);
 
@@ -107,14 +113,17 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 
 			case ErrorAction::KeepGoing:
 				m_richText += "<span style=\"color:red;\">" + m_words[0];
+
 				if (m_richText.at(m_richText.length() - 1) != "\n")
 					m_richText += " ";
+
 				m_richText += "</span>";
 				setHtml(m_richText);
 				moveCursor(QTextCursor::MoveOperation::End);
 				m_words.pop_front();
 				emit messageToUser(tr("Oops, you messed up!"));
 				break;
+
 			default:
 				break;
 			}
@@ -136,6 +145,7 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 			this->setHtml(m_richText.remove(m_richText.length() - 12, 12));
 			moveCursor(QTextCursor::MoveOperation::End);
 		}
+
 		emit messageToUser(tr("Done!"));
 		emit done();
 	}

@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
 	mainWindow.setUnifiedTitleAndToolBarOnMac(true);
 
 	QSettings settings;
+
 	if (settings.value("MainWindow/saveWinSize", true).toBool())
 	{
 		QVariant width = settings.value("MainWindow/width");

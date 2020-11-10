@@ -9,8 +9,8 @@
 #include "ChangelogDialog.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
-    : QMainWindow(parent),
-      m_refChooser{ new ChooseReferenceWidget }
+	: QMainWindow(parent),
+	  m_refChooser{ new ChooseReferenceWidget }
 {
 	setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
 	connect(m_refChooser, &ChooseReferenceWidget::signalRunMemorizer, this, &MainWindow::runMemorizer);
@@ -24,7 +24,8 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QAction *settings = new QAction{ tr("Settings...") };
 	QAction *exit = new QAction{ tr("Exit") };
 
-	connect(settings, &QAction::triggered, this, [this]() {
+	connect(settings, &QAction::triggered, this, [this]()
+	{
 		SettingsDialog s{ this };
 		s.exec();
 	});
@@ -41,22 +42,26 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QAction *changelog = new QAction{ tr("Changelog") };
 	QAction *about = new QAction{ tr("About") };
 
-	connect(aboutQt, &QAction::triggered, this, [this]() {
+	connect(aboutQt, &QAction::triggered, this, [this]()
+	{
 		QMessageBox::aboutQt(this);
 	});
-	connect(aboutMaddy, &QAction::triggered, this, [this]() {
+	connect(aboutMaddy, &QAction::triggered, this, [this]()
+	{
 		QMessageBox::information(this, tr("About maddy"), tr("maddy is a C++ Markdown to HTML <b>header-only</b> parser library.<br><br>"
-		                                                     "<a href=\"https://github.com/progsource/maddy\">"
-		                                                     "https://github.com/progsource/maddy</a>"));
+								 "<a href=\"https://github.com/progsource/maddy\">"
+								 "https://github.com/progsource/maddy</a>"));
 	});
-	connect(changelog, &QAction::triggered, this, [this]() {
+	connect(changelog, &QAction::triggered, this, [this]()
+	{
 		ChangelogDialog c{ this };
 		c.exec();
 	});
-	connect(about, &QAction::triggered, this, [this]() {
+	connect(about, &QAction::triggered, this, [this]()
+	{
 		QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
-		                   + tr("<br>Copyright © 2020 Loren Burkholder."
-		                        "<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
+						   + tr("<br>Copyright © 2020 Loren Burkholder."
+								"<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
 	});
 
 	helpMenu->addAction(aboutQt);

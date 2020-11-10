@@ -10,7 +10,7 @@
 #include "maddy/parser.h"
 
 ChangelogDialog::ChangelogDialog(QWidget *parent)
-    : QDialog{ parent }
+	: QDialog{ parent }
 {
 	QFile changelog{ ":/CHANGELOG.md" };
 	changelog.open(QIODevice::ReadOnly | QIODevice::Text);

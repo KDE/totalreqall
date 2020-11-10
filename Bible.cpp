@@ -8,9 +8,9 @@
 #include <QDebug>
 
 Bible::Bible(QObject *parent)
-    : QObject(parent),
-      m_bibleFile { new QFile{ ":/resources/bible.txt" } },
-      m_freeTimer{ new QTimer }
+	: QObject(parent),
+	  m_bibleFile { new QFile{ ":/resources/bible.txt" } },
+m_freeTimer{ new QTimer }
 {
 	// the timer shouldn't repeat over and over
 	m_freeTimer->setSingleShot(true);
