@@ -103,11 +103,11 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
-	// ... and make sure that the combo boxes don't display ellipses (try removing this and then
-	// viewing the chapters for Psalms if you think this is unnecessary!)
-	m_chapters->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	m_startVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
-	m_endVerses->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	// ... and make sure that the combo boxes are large enough (try removing this and then
+	// viewing the verses for Psalms 119 if you think this is unnecessary!)
+	m_chapters->setMinimumContentsLength(3);
+	m_startVerses->setMinimumContentsLength(3);
+	m_endVerses->setMinimumContentsLength(3);
 
 	m_runMemorizerBtn->setText(tr("Memorize verse"));
 	connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
