@@ -23,7 +23,10 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QAction *settings = new QAction{ tr("Settings...") };
 	QAction *exit = new QAction{ tr("Exit") };
 
-	connect(settings, &QAction::triggered, this, &MainWindow::showSettingsDialog);
+	connect(settings, &QAction::triggered, this, [this]() {
+		SettingsDialog s{ this };
+		s.exec();
+	});
 	connect(exit, &QAction::triggered, this, &MainWindow::close);
 
 	fileMenu->addAction(settings);
@@ -49,7 +52,11 @@ MainWindow::MainWindow(QMainWindow *parent)
 		ChangelogDialog c{ this };
 		c.exec();
 	});
-	connect(about, &QAction::triggered, this, &MainWindow::showAboutDlg);
+	connect(about, &QAction::triggered, this, [this]() {
+		QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
+		                   + tr("<br>Copyright © 2020 Loren Burkholder."
+		                        "<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
+	});
 
 	helpMenu->addAction(aboutQt);
 	helpMenu->addAction(aboutMaddy);
@@ -87,18 +94,6 @@ void MainWindow::cleanUpMemorizer()
 	m_saveCentralWidget = nullptr;
 }
 
-void MainWindow::showAboutDlg()
-{
-	QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
-	                   + tr("<br>Copyright © 2020 Loren Burkholder.")
-	                   + tr("<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
-}
-
-void MainWindow::resizeToFit()
-{
-	resize(sizeHint());
-}
-
 void MainWindow::setStatusMessage(QString message)
 {
 	this->statusBar()->showMessage(message);
@@ -115,11 +110,4 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 	}
 
 	QWidget::resizeEvent(event);
-}
-
-void MainWindow::showSettingsDialog()
-{
-	SettingsDialog s;
-	s.setModal(true);
-	s.exec();
 }
