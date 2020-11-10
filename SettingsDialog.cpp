@@ -11,7 +11,7 @@
 #include "SimpleRefChooser.h"
 #include "MemorizeEdit.h"
 
-SettingsDialog::SettingsDialog(QDialog *parent)
+SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog{ parent },
       m_tabs{ new QTabWidget },
       m_errorActionSettings{ new QButtonGroup },
