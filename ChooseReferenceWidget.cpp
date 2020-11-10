@@ -14,7 +14,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
       m_displayVerseBtn{ new QPushButton },
-      m_verseDisplayBox{ new QTextEdit{ "" } }
+      m_verseDisplayBox{ new QTextBrowser }
 {
 	// general setup
 	setStatusTip(tr("Choose a verse"));
@@ -115,7 +115,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	m_displayVerseBtn->setText(tr("Display verse"));
 	connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
 
-	m_verseDisplayBox->setReadOnly(true);
+	m_verseDisplayBox->setFocusPolicy(Qt::ClickFocus);
 
 	auto colon = new QLabel{ ":" };
 	colon->setAlignment(Qt::AlignHCenter);

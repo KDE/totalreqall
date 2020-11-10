@@ -10,6 +10,7 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QStringList>
+#include <QTextBrowser>
 
 #include "Bible.h"
 
@@ -46,7 +47,7 @@ private:
 	QComboBox *m_endVerses;
 	QPushButton *m_runMemorizerBtn;
 	QPushButton *m_displayVerseBtn;
-	QTextEdit *m_verseDisplayBox;
+	QTextBrowser *m_verseDisplayBox;
 
 	QStringList m_bookList;
 
