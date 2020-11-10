@@ -1,7 +1,7 @@
 #include "ChangelogDialog.h"
 
 #include <QPushButton>
-#include <QTextEdit>
+#include <QTextBrowser>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFile>
@@ -31,9 +31,7 @@ ChangelogDialog::ChangelogDialog(QWidget *parent)
 
 	this->setWindowTitle(tr("Changelog"));
 
-	auto changelogView = new QTextEdit;
-	changelogView->setReadOnly(true);
-	changelogView->setTextInteractionFlags(Qt::TextSelectableByKeyboard | Qt::TextSelectableByMouse);
+	auto changelogView = new QTextBrowser();
 	changelogView->setHtml(html);
 
 	auto ok = new QPushButton;
