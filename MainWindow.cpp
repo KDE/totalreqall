@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 
+#include <QApplication>
 #include <QSettings>
 #include <QIcon>
 
@@ -78,6 +79,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::runMemorizer(const QString &verse)
 {
+	m_saveFocusWidget = QApplication::focusWidget();
 	m_saveCentralWidget = takeCentralWidget();
 	m_memorizer = new MemorizeWidget{ verse };
 	setCentralWidget(m_memorizer);
@@ -91,7 +93,9 @@ void MainWindow::cleanUpMemorizer()
 {
 	delete m_memorizer;
 	setCentralWidget(m_saveCentralWidget);
+	m_saveFocusWidget->setFocus();
 	m_saveCentralWidget = nullptr;
+	m_saveFocusWidget = nullptr;
 }
 
 void MainWindow::setStatusMessage(QString message)

@@ -28,6 +28,7 @@ private:
 	ChooseReferenceWidget *m_refChooser;
 	// when a central widget needs removed but not deleted
 	QWidget *m_saveCentralWidget = nullptr;
+	QWidget *m_saveFocusWidget = nullptr;
 	MemorizeWidget *m_memorizer = nullptr;
     
 private slots:
