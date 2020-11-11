@@ -3,6 +3,7 @@
 #include <QApplication>
 #include <QSettings>
 #include <QIcon>
+#include <QDesktopServices>
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
@@ -37,11 +38,15 @@ MainWindow::MainWindow(QMainWindow *parent)
 	// help menu
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
+	QAction *contents = new QAction{ tr("Contents...") };
 	QAction *aboutQt = new QAction{ tr("About Qt") };
 	QAction *aboutMaddy = new QAction{ tr("About maddy") };
 	QAction *changelog = new QAction{ tr("Changelog") };
 	QAction *about = new QAction{ tr("About") };
 
+	connect(contents, &QAction::triggered, this, []() {
+		QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
+	});
 	connect(aboutQt, &QAction::triggered, this, [this]()
 	{
 		QMessageBox::aboutQt(this);
@@ -64,6 +69,8 @@ MainWindow::MainWindow(QMainWindow *parent)
 								"<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
 	});
 
+	helpMenu->addAction(contents);
+	helpMenu->addSeparator();
 	helpMenu->addAction(aboutQt);
 	helpMenu->addAction(aboutMaddy);
 	helpMenu->addSeparator();
