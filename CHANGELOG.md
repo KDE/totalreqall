@@ -1,3 +1,20 @@
+## 0.5.0 (11/10/2020)
+### What's new
+- When a verse is being memorized for the first time in a session, 3 memorization passes are made, each giving the user fewer and fewer hints; after this initial memorization, one pass is made for each memorization of the verse
+- Added content to website:
+    - Screenshots page
+    - Help page
+
+### Changes
+- Added link to webpage in About box
+- Added copyright notice to About box
+- Added link to Help page in Help menu
+- Changelog and verse displays now use QTextBrowser
+- Changelog display no longer attempts to open links within the dialog; instead, it opens them in an external browser
+- Verse display box no longer is in the tab focus chain
+- Button focus in ChooseReferenceWidget is preserved while the MemorizeWidget is run
+- Combo boxes now set to fixed widths to prevent display of ellipses
+
 ## 0.4.1 (11/6/2020)
 ### What's new
 - Changelog view added to Help menu
