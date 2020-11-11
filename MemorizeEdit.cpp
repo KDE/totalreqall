@@ -4,8 +4,9 @@
 
 #include <QSettings>
 
-MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
-	: QTextEdit{ parent }
+MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWidget *parent)
+    : QTextEdit{ parent },
+      m_difficulty{ difficulty }
 {
 	QSettings settings;
 	settings.beginGroup("MemorizeEdit");
@@ -14,8 +15,8 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 	m_errorAction = static_cast<ErrorAction>(settings.value("errorAction", ErrorAction::Redo).toInt());
 
 	setAcceptRichText(true);
-	setPlaceholderText(tr("Type the first letter of each word..."));
 	setTabChangesFocus(true);
+	setReadOnly(true);
 
 	// add a space after each newline so that words break appropriately at newlines (e.g. "word1\n" "word2"
 	// instead of "word1\nword2") and also change the "\n" to a "<br>" to play right with the HTML text
@@ -27,6 +28,9 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, QWidget *parent)
 
 	QString newMemContent{ temp.c_str() };
 	m_words = newMemContent.split(" ", QString::SplitBehavior::SkipEmptyParts);
+
+	m_numWords = m_words.size();
+	setHtml(formattedEndString(m_difficulty));
 
 	settings.endGroup(); // MemorizeEdit
 }
@@ -47,24 +51,14 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 			m_richText += " ";
 
 		m_richText += "</span>";
-		setHtml(m_richText);
-		moveCursor(QTextCursor::MoveOperation::End);
 
-		// Delete this word.
+		// Delete this word now so that calculations don't get messed up in formattedEndString()
 		m_words.pop_front();
+
+		setHtml(m_richText + formattedEndString(m_difficulty));
+
 		emit messageToUser("Hint provided.");
 	}
-
-	// let Qt handle text navigation events
-	else if (event->key() == Qt::Key::Key_Left
-			 || event->key() == Qt::Key::Key_Right
-			 || event->key() == Qt::Key::Key_Up
-			 || event->key() == Qt::Key::Key_Down
-			 || event->key() == Qt::Key::Key_End
-			 || event->key() == Qt::Key::Key_Home
-			 || event->key() == Qt::Key::Key_PageUp
-			 || event->key() == Qt::Key::Key_PageDown)
-		QTextEdit::keyPressEvent(event);
 
 	// skip all keys but the letters and numbers
 	else if (!((event->key() >= 0x30 && event->key() <= 0x39) || (event->key() >= 0x41 && event->key() <= 0x5a)))
@@ -95,11 +89,10 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 			if (m_richText.at(m_richText.length() - 1) != "\n")
 				m_richText += " ";
 
-			setText(m_richText);
-			moveCursor(QTextCursor::MoveOperation::End);
-
-			// Delete this word.
+			// Delete this word now so that calculations don't get messed up in formattedEndString()
 			m_words.pop_front();
+
+			setHtml(m_richText + formattedEndString(m_difficulty));
 
 			emit messageToUser("");
 		}
@@ -118,9 +111,9 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 					m_richText += " ";
 
 				m_richText += "</span>";
-				setHtml(m_richText);
-				moveCursor(QTextCursor::MoveOperation::End);
 				m_words.pop_front();
+				setHtml(m_richText + formattedEndString(m_difficulty));
+
 				emit messageToUser(tr("Oops, you messed up!"));
 				break;
 
@@ -135,18 +128,44 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
 	{
 		// remove the "\n" at the end so that the box doesn't scroll down and hide some text
 		if (m_richText.endsWith("<br> "))
-		{
 			this->setHtml(m_richText.remove(m_richText.length() - 5, 5));
-			// make sure the cursor remains at the end
-			moveCursor(QTextCursor::MoveOperation::End);
-		}
 		else if (m_richText.endsWith("<br> </span>"))
-		{
 			this->setHtml(m_richText.remove(m_richText.length() - 12, 12));
-			moveCursor(QTextCursor::MoveOperation::End);
-		}
 
 		emit messageToUser(tr("Done!"));
 		emit done();
 	}
+}
+
+QString MemorizeEdit::formattedEndString(Difficulty difficulty)
+{
+	QString formatted;
+	int numWordsUsed = 0;
+
+	switch (difficulty)
+	{
+	case Difficulty::Easy:
+		formatted = "<span style=\"color:#8b8b8b;\">" + m_words.join(" ") + "</span>";
+		break;
+
+	case Difficulty::Medium:
+		numWordsUsed = m_numWords - m_words.length();
+
+		for (int i = numWordsUsed; i < m_numWords; ++i)
+		{
+			if (i % 2 == 0)
+				formatted += "<span style=\"color:#8b8b8b;\">" + m_words[i - numWordsUsed] + " </span>";
+			else
+				formatted += "<span style=\"color:#00000000;\">" + m_words[i - numWordsUsed] + " </span>";
+		}
+		break;
+
+	case Difficulty::Hard:
+		formatted = "";
+		break;
+
+	default:
+		break;
+	}
+	return formatted;
 }

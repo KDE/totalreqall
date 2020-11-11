@@ -12,11 +12,18 @@ enum ErrorAction
 	KeepGoing = 2,
 };
 
+enum Difficulty
+{
+	Easy = 0,
+	Medium = 1,
+	Hard = 2,
+};
+
 class MemorizeEdit : public QTextEdit
 {
 	Q_OBJECT
 public:
-	MemorizeEdit(QString &, QWidget * = nullptr);
+	MemorizeEdit(QString &, Difficulty, QWidget * = nullptr);
 
 signals:
 	void done();
@@ -26,10 +33,15 @@ protected:
 	virtual void keyPressEvent(QKeyEvent *);
 
 private:
+	QString formattedEndString(Difficulty);
+
 	QStringList m_words;
+	int m_numWords;
+
 	QString m_richText;
 
 	ErrorAction m_errorAction;
+	Difficulty m_difficulty;
 };
 
 #endif // MEMORIZEEDIT_H

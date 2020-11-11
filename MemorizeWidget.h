@@ -10,6 +10,7 @@
 #include <QGridLayout>
 #include <QTimer>
 #include <QPushButton>
+#include <QSet>
 
 #include "MemorizeEdit.h"
 
@@ -27,13 +28,19 @@ signals:
 
 private slots:
 	void editDone();
+	void nextLevel();
 
 private:
     QGridLayout *m_layout;
 	QPushButton *m_endSession;
 	MemorizeEdit *m_memorizeEdit;
 
+	Difficulty m_difficulty;
+	QString m_content;
+
 	QTimer *m_endMemorizerTimer = nullptr;
+
+	static QSet<QString> s_memorizedContent;
 };
 
 #endif // MEMORIZEWIDGET_H
