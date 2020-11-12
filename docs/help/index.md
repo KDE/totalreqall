@@ -1,6 +1,6 @@
 # TotalReqall Help
 
-# Choosing a verse
+## Choosing a verse
 Use the first two combo boxes to select a book and chapter. Now use the third combo box from the left to select the verse that you want to start at. Use the fourth combo box to select the verse to memorize through. If you only want to memorize one verse, set the third and fourth combo boxes to the same value. Click *Display verse* if you want to view the verse before memorizing it.
 
 ## Memorizing
