@@ -20,9 +20,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # Files from this project...
 SOURCES += \
     Bible.cpp \
-    ChangelogDialog.cpp \
     ChooseReferenceWidget.cpp \
     MainWindow.cpp \
+    MarkdownDialog.cpp \
     MemorizeEdit.cpp \
     MemorizeWidget.cpp \
     SettingsDialog.cpp \
@@ -32,9 +32,9 @@ SOURCES += \
 HEADERS += \
     AppInfo.h \
     Bible.h \
-    ChangelogDialog.h \
     ChooseReferenceWidget.h \
     MainWindow.h \
+    MarkdownDialog.h \
     MemorizeEdit.h \
     MemorizeWidget.h \
     SettingsDialog.h \

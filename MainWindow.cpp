@@ -4,10 +4,14 @@
 #include <QSettings>
 #include <QIcon>
 #include <QDesktopServices>
+#include <QFile>
+#include <QTextStream>
+
+#include "maddy/parser.h"
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
-#include "ChangelogDialog.h"
+#include "MarkdownDialog.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
 	: QMainWindow(parent),
@@ -39,12 +43,35 @@ MainWindow::MainWindow(QMainWindow *parent)
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
 	QAction *contents = new QAction{ tr("Contents...") };
+	QAction *onlineHelp = new QAction{ tr("Online help...") };
 	QAction *aboutQt = new QAction{ tr("About Qt") };
 	QAction *aboutMaddy = new QAction{ tr("About maddy") };
 	QAction *changelog = new QAction{ tr("Changelog") };
 	QAction *about = new QAction{ tr("About") };
 
-	connect(contents, &QAction::triggered, this, []() {
+	connect(contents, &QAction::triggered, this, [this]() {
+		QFile helpFile{ ":/docs/help/index.md" };
+		helpFile.open(QIODevice::ReadOnly | QIODevice::Text);
+		QTextStream ts{ &helpFile };
+
+		QString data;
+		data.reserve(helpFile.size());
+		data = ts.readAll();
+
+		std::stringstream stream{ data.toStdString() };
+		maddy::Parser parser;
+
+		// pointer because we don't want to clog up the memory with lots of text
+		std::string *parsed = new std::string;
+		*parsed = parser.Parse(stream);
+		QString html{ parsed->c_str() };
+		delete parsed;
+
+		// not modal so that the user can read the help and use the program at the same time
+		MarkdownDialog dlg{ this, tr("Help"), html, false };
+		dlg.exec();
+	});
+	connect(onlineHelp, &QAction::triggered, this, []() {
 		QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
 	});
 	connect(aboutQt, &QAction::triggered, this, [this]()
@@ -59,8 +86,25 @@ MainWindow::MainWindow(QMainWindow *parent)
 	});
 	connect(changelog, &QAction::triggered, this, [this]()
 	{
-		ChangelogDialog c{ this };
-		c.exec();
+		QFile changelog{ ":/CHANGELOG.md" };
+		changelog.open(QIODevice::ReadOnly | QIODevice::Text);
+		QTextStream ts{ &changelog };
+
+		QString data;
+		data.reserve(changelog.size());
+		data = ts.readAll();
+
+		std::stringstream stream{ data.toStdString() };
+		maddy::Parser parser;
+
+		std::string *parsed = new std::string;
+		*parsed = parser.Parse(stream);
+		QString html{ parsed->c_str() };
+		delete parsed;
+
+		// this can be modal
+		MarkdownDialog dlg{ this, tr("Changelog"), html };
+		dlg.exec();
 	});
 	connect(about, &QAction::triggered, this, [this]()
 	{
@@ -70,6 +114,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 	});
 
 	helpMenu->addAction(contents);
+	helpMenu->addAction(onlineHelp);
 	helpMenu->addSeparator();
 	helpMenu->addAction(aboutQt);
 	helpMenu->addAction(aboutMaddy);
