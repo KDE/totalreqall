@@ -27,6 +27,7 @@ SOURCES += \
     MemorizeWidget.cpp \
     SettingsDialog.cpp \
     SimpleRefChooser.cpp \
+    WelcomePage.cpp \
     main.cpp
 
 HEADERS += \
@@ -38,7 +39,8 @@ HEADERS += \
     MemorizeEdit.h \
     MemorizeWidget.h \
     SettingsDialog.h \
-    SimpleRefChooser.h
+    SimpleRefChooser.h \
+    WelcomePage.h
 
 TRANSLATIONS += \
     TotalReqall_en_US.ts

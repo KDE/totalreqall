@@ -39,31 +39,33 @@ include_directories(
 
 if(ANDROID)
   add_library(TotalReqall SHARED
-    Bible.cpp
-    ChooseReferenceWidget.cpp
-    MainWindow.cpp
-    MarkdownDialog.cpp
-    MemorizeEdit.cpp
-    MemorizeWidget.cpp
-    SettingsDialog.cpp
-    SimpleRefChooser.cpp
-    main.cpp
-	  ${QRC_FILES}
-	  ${TS_FILES}
+	Bible.cpp
+	ChooseReferenceWidget.cpp
+	MainWindow.cpp
+	MarkdownDialog.cpp
+	MemorizeEdit.cpp
+	MemorizeWidget.cpp
+	SettingsDialog.cpp
+	SimpleRefChooser.cpp
+	WelcomePage.cpp
+	main.cpp
+	${QRC_FILES}
+	${TS_FILES}
   )
 else()
   add_executable(TotalReqall
-    Bible.cpp
-    ChooseReferenceWidget.cpp
-    MainWindow.cpp
-    MarkdownDialog.cpp
-    MemorizeEdit.cpp
-    MemorizeWidget.cpp
-    SettingsDialog.cpp
-    SimpleRefChooser.cpp
-    main.cpp
-	  ${QRC_FILES}
-    ${TS_FILES}
+	Bible.cpp
+	ChooseReferenceWidget.cpp
+	MainWindow.cpp
+	MarkdownDialog.cpp
+	MemorizeEdit.cpp
+	MemorizeWidget.cpp
+	SettingsDialog.cpp
+	SimpleRefChooser.cpp
+	WelcomePage.cpp
+	main.cpp
+	${QRC_FILES}
+	${TS_FILES}
   )
 endif()
 

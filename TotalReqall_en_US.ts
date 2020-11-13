@@ -244,4 +244,27 @@
         <translation type="unfinished"></translation>
     </message>
 </context>
+<context>
+    <name>WelcomePage</name>
+    <message>
+        <source>Bible verse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memorize a verse or verses from the Bible.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose what to memorize.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter some custom content to memorize.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
 </TS>
