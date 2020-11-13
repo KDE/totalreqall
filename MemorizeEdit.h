@@ -6,13 +6,13 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 
-enum ErrorAction
+enum ErrorAction : int
 {
 	Redo = 1,
 	KeepGoing = 2,
 };
 
-enum Difficulty
+enum Difficulty : int
 {
 	Easy = 0,
 	Medium = 1,

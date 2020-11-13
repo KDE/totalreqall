@@ -14,7 +14,7 @@
 
 #include "Bible.h"
 
-enum VerseLoadOption
+enum VerseLoadOption : short
 {
 	Saved = 1,
 	Random = 2,
