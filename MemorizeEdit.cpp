@@ -3,6 +3,7 @@
 #include <string>
 
 #include <QSettings>
+#include <QRandomGenerator>
 
 MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWidget *parent)
     : QTextEdit{ parent },
@@ -141,6 +142,8 @@ QString MemorizeEdit::formattedEndString(Difficulty difficulty)
 {
 	QString formatted;
 	int numWordsUsed = 0;
+	// static because we don't want to switch which words are displayed halfway through memorization
+	static int mediumDifficultyOffset = QRandomGenerator::global()->generate() % 2;
 
 	switch (difficulty)
 	{
@@ -153,7 +156,7 @@ QString MemorizeEdit::formattedEndString(Difficulty difficulty)
 
 		for (int i = numWordsUsed; i < m_numWords; ++i)
 		{
-			if (i % 2 == 0)
+			if (i % 2 == mediumDifficultyOffset)
 				formatted += "<span style=\"color:#8b8b8b;\">" + m_words[i - numWordsUsed] + " </span>";
 			else
 				formatted += "<span style=\"color:#00000000;\">" + m_words[i - numWordsUsed] + " </span>";
