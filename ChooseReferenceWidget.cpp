@@ -5,16 +5,20 @@
 #include <QLabel>
 #include <QRandomGenerator>
 
+#include <swmgr.h>
+#include <swmodule.h>
+#include <versekey.h>
+
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	: QWidget(parent),
 	  m_layout{ new QGridLayout{ this } },
-m_books{ new QComboBox },
-m_chapters{ new QComboBox },
-m_startVerses{ new QComboBox },
-m_endVerses{ new QComboBox },
-m_runMemorizerBtn{ new QPushButton },
-m_displayVerseBtn{ new QPushButton },
-m_verseDisplayBox{ new QTextBrowser }
+      m_books{ new QComboBox },
+      m_chapters{ new QComboBox },
+      m_startVerses{ new QComboBox },
+      m_endVerses{ new QComboBox },
+      m_runMemorizerBtn{ new QPushButton },
+      m_displayVerseBtn{ new QPushButton },
+      m_verseDisplayBox{ new QTextBrowser }
 {
 	// general setup
 	setStatusTip(tr("Choose a verse"));
@@ -289,7 +293,36 @@ void ChooseReferenceWidget::runMemorizer()
 void ChooseReferenceWidget::displayVerse()
 {
 	QString reference{ "%1 %2:%3" };
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
+//	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-	m_verseDisplayBox->setText(m_bible.getVerseStringFromRef(reference, extraVerses));
+
+//	if (m_endVerses->currentIndex() > m_startVerses->currentIndex())
+//		reference.append(QString("-%1").arg(m_endVerses->currentText()));
+
+	sword::SWMgr mgr;
+	sword::SWModule *kjv = mgr.getModule("KJV");
+	QString content;
+
+	for (int i = 0; i <= extraVerses; ++i)
+	{
+		sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(),
+			                            QString{ "%1" }.arg(m_startVerses->currentText().toInt() + i)).toStdString().c_str() };
+		kjv->setKey(key);
+		content.append(kjv->renderText() + "<br>");
+	}
+
+//	auto start = new sword::SWKey{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText()).toStdString().c_str() };
+//	auto end = new sword::SWKey{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_endVerses->currentText()).toStdString().c_str() };
+
+//	sword::VerseKey verses;
+//	verses.setLowerBound(start);
+//	verses.setUpperBound(end);
+
+	m_verseDisplayBox->setHtml(content);
+
+	// This could be useful for stripping out tags
+//	m_verseDisplayBox->setText(m_verseDisplayBox->toPlainText());
+//	kjv->renderText();
+
+//	m_verseDisplayBox->setText(m_bible.getVerseStringFromRef(reference, extraVerses));
 }

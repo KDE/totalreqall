@@ -60,7 +60,15 @@ macx
     ICON = resources/icons/TotalReqall.icns
 }
 
+linux
+{
+    INCLUDEPATH += \
+        /usr/include/sword/
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+unix:!macx: LIBS += -lsword
