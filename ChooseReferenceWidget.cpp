@@ -8,6 +8,8 @@
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
+#include <osisplain.h>
+#include <markupfiltmgr.h>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	: QWidget(parent),
@@ -286,8 +288,20 @@ void ChooseReferenceWidget::runMemorizer()
 {
 	QString reference{ "%1 %2:%3" };
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
-	emit signalRunMemorizer(m_bible.getVerseStringFromRef(reference, extraVerses));
+//	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
+
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *kjv = mgr.getModule("KJV");
+	QString content;
+
+	for (int i = 0; i <= extraVerses; ++i)
+	{
+		sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(),
+			                            QString{ "%1" }.arg(m_startVerses->currentText().toInt() + i)).toStdString().c_str() };
+		kjv->setKey(key);
+		content.append(kjv->renderText() + "\n");
+	}
+	emit signalRunMemorizer(content);
 }
 
 void ChooseReferenceWidget::displayVerse()
@@ -311,18 +325,5 @@ void ChooseReferenceWidget::displayVerse()
 		content.append(kjv->renderText() + "<br>");
 	}
 
-//	auto start = new sword::SWKey{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText()).toStdString().c_str() };
-//	auto end = new sword::SWKey{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_endVerses->currentText()).toStdString().c_str() };
-
-//	sword::VerseKey verses;
-//	verses.setLowerBound(start);
-//	verses.setUpperBound(end);
-
 	m_verseDisplayBox->setHtml(content);
-
-	// This could be useful for stripping out tags
-//	m_verseDisplayBox->setText(m_verseDisplayBox->toPlainText());
-//	kjv->renderText();
-
-//	m_verseDisplayBox->setText(m_bible.getVerseStringFromRef(reference, extraVerses));
 }
