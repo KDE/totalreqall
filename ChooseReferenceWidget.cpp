@@ -12,8 +12,8 @@
 #include <markupfiltmgr.h>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
-	: QWidget(parent),
-	  m_layout{ new QGridLayout{ this } },
+    : QWidget(parent),
+      m_layout{ new QGridLayout{ this } },
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
       m_startVerses{ new QComboBox },
@@ -29,19 +29,19 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// maybe the books could be scraped as well but this way seems easier ATM
 	// TODO: add tr() to each of these
 	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
-			   << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
-			   << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
-			   << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
-			   << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
-			   << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
-			   << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
-			   << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
-			   << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
-			   << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
-			   << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
-			   << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
-			   << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
-			   << "Revelation";
+	           << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
+	           << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
+	           << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
+	           << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
+	           << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
+	           << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
+	           << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
+	           << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
+	           << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
+	           << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
+	           << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
+	           << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
+	           << "Revelation";
 	m_books->insertItems(0, m_bookList);
 
 	// connect the combos
@@ -294,13 +294,15 @@ void ChooseReferenceWidget::runMemorizer()
 	sword::SWModule *kjv = mgr.getModule("KJV");
 	QString content;
 
+	sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText()).toStdString().c_str() };
+	kjv->setKey(key);
+
 	for (int i = 0; i <= extraVerses; ++i)
 	{
-		sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(),
-			                            QString{ "%1" }.arg(m_startVerses->currentText().toInt() + i)).toStdString().c_str() };
-		kjv->setKey(key);
 		content.append(kjv->renderText() + "\n");
+		kjv->increment();
 	}
+
 	emit signalRunMemorizer(content);
 }
 
@@ -317,12 +319,13 @@ void ChooseReferenceWidget::displayVerse()
 	sword::SWModule *kjv = mgr.getModule("KJV");
 	QString content;
 
+	sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText()).toStdString().c_str() };
+	kjv->setKey(key);
+
 	for (int i = 0; i <= extraVerses; ++i)
 	{
-		sword::SWKey key{ reference.arg(m_books->currentText(), m_chapters->currentText(),
-			                            QString{ "%1" }.arg(m_startVerses->currentText().toInt() + i)).toStdString().c_str() };
-		kjv->setKey(key);
 		content.append(kjv->renderText() + "<br>");
+		kjv->increment();
 	}
 
 	m_verseDisplayBox->setHtml(content);
