@@ -115,6 +115,10 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: master
+          BRANCH: gh-pages
           FOLDER: deploy
-          TARGET_FOLDER: docs/wasm
+          TARGET_FOLDER: wasm
+
+          # let's use a different profile info
+          GIT_DEPLOY_NAME: GitHub Actions runner
+          GIT_DEPLOY_EMAIL: github@github.com
