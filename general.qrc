@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>CHANGELOG.md</file>
-        <file>docs/help/index.md</file>
     </qresource>
 </RCC>
