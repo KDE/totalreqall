@@ -129,7 +129,4 @@ jobs:
           BRANCH: gh-pages
           FOLDER: deploy
           TARGET_FOLDER: wasm
-
-          # let's use a different profile info
-          GIT_DEPLOY_NAME: GitHub Actions runner
-          GIT_DEPLOY_EMAIL: github@github.com
+          
