@@ -101,8 +101,26 @@ jobs:
           make
           cd ..
 
-      - name: Upload WASM artifact
-        uses: actions/upload-artifact@v2
+      - name: Prepare deployment
+        if: success()
+        run: | # the svg line is to get the Qt logo
+          mkdir deploy
+          cp build/*.html deploy/
+          cp build/*.wasm deploy/
+          cp build/*.js deploy/
+          cp build/*.svg deploy/
+
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: JamesIves/github-pages-deploy-action@3.7.1
         with:
-          name: wasm-build
-          path: build/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: master
+          FOLDER: deploy
+          TARGET_FOLDER: docs/wasm
+
+      # - name: Upload WASM artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: wasm-build
+      #     path: build/
