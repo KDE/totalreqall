@@ -118,9 +118,3 @@ jobs:
           BRANCH: master
           FOLDER: deploy
           TARGET_FOLDER: docs/wasm
-
-      # - name: Upload WASM artifact
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: wasm-build
-      #     path: build/
