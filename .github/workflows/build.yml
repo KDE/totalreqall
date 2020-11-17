@@ -94,6 +94,17 @@ jobs:
         with:
           submodules: 'recursive'
 
+      - name: Add optimizations # we want to have a super-optimized deployed app
+        run: |
+          mv TotalReqall.pro TotalReqall.pro.bak
+          cat << EOF >> TotalReqall.pro
+          QMAKE_CXXFLAGS_RELEASE -= -O2
+          QMAKE_CXXFLAGS_RELEASE += -O3
+          QMAKE_LFLAGS_RELEASE -= 0O
+          EOF
+          cat < TotalReqall.pro.bak >> TotalReqall.pro
+          rm TotalReqall.pro.bak
+
       - name: Build
         run: |
           mkdir build && cd build
