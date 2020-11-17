@@ -1,0 +1,108 @@
+name: Build
+
+on: push
+
+jobs:
+  linux:
+    name: Linux desktop
+    runs-on: ubuntu-latest
+    steps:
+      # gotta get Qt set up first
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.9.0
+
+        # grab the source
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          qmake ../TotalReqall.pro
+          make
+          cd ..
+
+  windows:
+    name: Windows desktop
+    runs-on: windows-latest
+    steps:
+      # gotta get Qt set up first
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.9.0
+        
+      # get the build environment set up
+      - name: Add msbuild to PATH
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+
+        # grab the source
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          qmake ../TotalReqall.pro
+          nmake
+
+  macos:
+    name: macOS desktop
+    runs-on: macos-latest
+    steps:
+      # gotta get Qt set up first
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.9.0
+
+        # grab the source
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          qmake ../TotalReqall.pro
+          make
+          cd ..
+
+  wasm:
+    name: WebAssembly
+    runs-on: ubuntu-latest
+    steps:
+      # gotta get Qt set up first
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v2.9.0
+        with:
+          version: '5.13.1' # 5.13.0 was the first with official WASM support
+          arch: wasm_32
+
+      # set up emscripten for WASM builds
+      - name: Install emsdk
+        uses: mymindstorm/setup-emsdk@v7
+        # needed to make Qt work
+        # the sdk-*-64bit are an old naming convention
+        with:
+          version: sdk-fastcomp-1.38.30-64bit
+
+        # grab the source
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
+      - name: Build
+        run: |
+          mkdir build && cd build
+          qmake ../TotalReqall.pro
+          make
+          cd ..
+
+      - name: Upload WASM artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: wasm-build
+          path: build/
