@@ -12,8 +12,6 @@
 #include <QStringList>
 #include <QTextBrowser>
 
-#include "Bible.h"
-
 enum VerseLoadOption : short
 {
 	Saved = 1,
@@ -50,8 +48,6 @@ private:
 	QTextBrowser *m_verseDisplayBox;
 
 	QStringList m_bookList;
-
-	Bible m_bible;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

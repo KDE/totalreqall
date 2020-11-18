@@ -25,23 +25,15 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	// general setup
 	setStatusTip(tr("Choose a verse"));
 
-	// set up the first combo box manually and scrape the other 2
-	// maybe the books could be scraped as well but this way seems easier ATM
-	// TODO: add tr() to each of these
-	m_bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
-	           << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
-	           << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
-	           << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
-	           << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
-	           << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
-	           << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
-	           << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
-	           << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
-	           << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
-	           << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
-	           << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
-	           << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
-	           << "Revelation";
+	// get the values for the books (chapters and verses will come later)
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	while (!key->popError())
+	{
+		m_bookList << key->getBookName();
+		key->setBook(key->getBook() + 1);
+	}
 	m_books->insertItems(0, m_bookList);
 
 	// connect the combos
@@ -161,9 +153,15 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
 	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+	// set up sword
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	key->setBookName(m_books->currentText().toStdString().c_str());
+
 	// first take care of the chapter
 	// get data to insert
-	int chapters = m_bible.scrapeChaptersPerBook(m_books->currentText());
+	int chapters = key->getChapterMax();
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto old = (m_chapters->currentIndex() == -1) ? 0 : m_chapters->currentIndex();
@@ -205,8 +203,15 @@ void ChooseReferenceWidget::updateVerseValues()
 	disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+	// set up sword
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	key->setBookName(m_books->currentText().toStdString().c_str());
+	key->setChapter(m_chapters->currentText().toInt());
+
 	// get data to insert
-	int verses = m_bible.scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+	int verses = key->getVerseMax();
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto oldStart = (m_startVerses->currentIndex() == -1) ? 0 : m_startVerses->currentIndex();
@@ -288,7 +293,6 @@ void ChooseReferenceWidget::runMemorizer()
 {
 	QString reference{ "%1 %2:%3" };
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
-//	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 
 	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
 	sword::SWModule *kjv = mgr.getModule("KJV");
@@ -309,13 +313,9 @@ void ChooseReferenceWidget::runMemorizer()
 void ChooseReferenceWidget::displayVerse()
 {
 	QString reference{ "%1 %2:%3" };
-//	reference = reference.arg(m_books->currentText(), m_chapters->currentText(), m_startVerses->currentText());
 	int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ? (m_endVerses->currentIndex() - m_startVerses->currentIndex()) : 0;
 
-//	if (m_endVerses->currentIndex() > m_startVerses->currentIndex())
-//		reference.append(QString("-%1").arg(m_endVerses->currentText()));
-
-	sword::SWMgr mgr;
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
 	sword::SWModule *kjv = mgr.getModule("KJV");
 	QString content;
 
