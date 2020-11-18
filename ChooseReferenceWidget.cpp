@@ -222,19 +222,17 @@ void ChooseReferenceWidget::updateVerseValues()
 	m_endVerses->clear();
 
 	// insert the new data
-	QStringList startVerseList;
-	QStringList endVerseList;
+	QStringList verseList;
 
 	for (int i = 0; i < verses; ++i)
 	{
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
-		startVerseList.push_back(temp);
-		endVerseList.push_back(temp);
+		verseList.push_back(temp);
 	}
 
-	m_startVerses->insertItems(0, startVerseList);
-	m_endVerses->insertItems(0, endVerseList);
+	m_startVerses->insertItems(0, verseList);
+	m_endVerses->insertItems(0, verseList);
 
 	// make sure that the old index is still valid
 	// - 1 because count isn't zero numbered but the index is
