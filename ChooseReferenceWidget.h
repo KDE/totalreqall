@@ -9,7 +9,6 @@
 #include <QTextEdit>
 #include <QPushButton>
 #include <QGridLayout>
-#include <QStringList>
 #include <QTextBrowser>
 
 enum VerseLoadOption : short
@@ -46,8 +45,6 @@ private:
 	QPushButton *m_runMemorizerBtn;
 	QPushButton *m_displayVerseBtn;
 	QTextBrowser *m_verseDisplayBox;
-
-	QStringList m_bookList;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

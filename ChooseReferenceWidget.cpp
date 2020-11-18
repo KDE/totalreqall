@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QLabel>
 #include <QRandomGenerator>
+#include <QStringList>
 
 #include <swmgr.h>
 #include <swmodule.h>
@@ -28,12 +29,13 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
 	sword::SWModule *module = mgr.getModule("KJV");
 	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	QStringList bookList;
 	while (!key->popError())
 	{
-		m_bookList << key->getBookName();
+		bookList << key->getBookName();
 		key->setBook(key->getBook() + 1);
 	}
-	m_books->insertItems(0, m_bookList);
+	m_books->insertItems(0, bookList);
 
 	// connect the combos
 	connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
