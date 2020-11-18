@@ -6,10 +6,10 @@
 #include <QRandomGenerator>
 #include <QStringList>
 
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
-#include <markupfiltmgr.h>
+#include <sword/swmgr.h>
+#include <sword/swmodule.h>
+#include <sword/versekey.h>
+#include <sword/markupfiltmgr.h>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
