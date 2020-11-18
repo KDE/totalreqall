@@ -8,7 +8,6 @@
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
-#include <osisplain.h>
 #include <markupfiltmgr.h>
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
