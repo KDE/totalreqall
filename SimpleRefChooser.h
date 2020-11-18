@@ -7,8 +7,6 @@
 #include <QComboBox>
 #include <QPushButton>
 
-#include "Bible.h"
-
 class SimpleRefChooser : public QDialog
 {
 	Q_OBJECT
@@ -39,8 +37,6 @@ private:
 	QComboBox *m_endVerses;
 	QPushButton *m_ok;
 	QPushButton *m_cancel;
-
-	Bible m_bible;
 };
 
 #endif // SIMPLEREFCHOOSER_H

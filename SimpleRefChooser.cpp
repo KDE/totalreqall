@@ -2,16 +2,22 @@
 
 #include <QLabel>
 #include <QHBoxLayout>
+#include <QStringList>
+
+#include <swmgr.h>
+#include <swmodule.h>
+#include <versekey.h>
+#include <markupfiltmgr.h>
 
 SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const QString &chapter, const QString &startVerse, const QString &endVerse)
 	: QDialog{ parent },
 	  m_layout{ new QGridLayout{ this } },
-m_books{ new QComboBox },
-m_chapters{ new QComboBox },
-m_startVerses{ new QComboBox },
-m_endVerses{ new QComboBox },
-m_ok{ new QPushButton },
-m_cancel{ new QPushButton }
+      m_books{ new QComboBox },
+      m_chapters{ new QComboBox },
+      m_startVerses{ new QComboBox },
+      m_endVerses{ new QComboBox },
+      m_ok{ new QPushButton },
+      m_cancel{ new QPushButton }
 {
 	m_ok->setText(tr("OK"));
 	m_cancel->setText(tr("Cancel"));
@@ -19,24 +25,16 @@ m_cancel{ new QPushButton }
 	connect(m_ok, &QPushButton::clicked, this, &SimpleRefChooser::accept);
 	connect(m_cancel, &QPushButton::clicked, this, &SimpleRefChooser::reject);
 
-	// set up the first combo box manually and scrape the other 2
-	// maybe the books could be scraped as well but this way seems easier ATM
-	// TODO: add tr() to each of these
-	QStringList bookList ;
-	bookList << "Genesis" << "Exodus" << "Leviticus" << "Numbers" << "Deuteronomy"
-			 << "Joshua" << "Judges" << "Ruth" << "1 Samuel" << "2 Samuel"
-			 << "1 Kings" << "2 Kings" << "1 Chronicles" << "2 Chronicles" << "Ezra"
-			 << "Nehemiah" << "Esther" << "Job" << "Psalms" << "Proverbs"
-			 << "Ecclesiastes" << "Song of Solomon" << "Isaiah" << "Jeremiah"
-			 << "Lamentations" << "Ezekiel" << "Daniel" << "Hosea" << "Joel" << "Amos"
-			 << "Obadiah" << "Jonah" << "Micah" << "Nahum" << "Habakkuk"
-			 << "Zephaniah" << "Haggai" << "Zechariah" << "Malachi" << "Matthew"
-			 << "Mark" << "Luke" << "John" << "Acts" << "Romans" << "1 Corinthians"
-			 << "2 Corinthians" << "Galatians" << "Ephesians" << "Philippians"
-			 << "Colossians" << "1 Thessalonians" << "2 Thessalonians" << "1 Timothy"
-			 << "2 Timothy" << "Titus" << "Philemon" << "Hebrews" << "James"
-			 << "1 Peter" << "2 Peter" << "1 John" << "2 John" << "3 John" << "Jude"
-			 << "Revelation";
+	// get the values for the books (chapters and verses will come later)
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	QStringList bookList;
+	while (!key->popError())
+	{
+		bookList << key->getBookName();
+		key->setBook(key->getBook() + 1);
+	}
 	m_books->insertItems(0, bookList);
 
 	// connect the combos
@@ -96,9 +94,15 @@ void SimpleRefChooser::updateChapterVerseValues()
 	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
 	disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+	// set up sword
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	key->setBookName(m_books->currentText().toStdString().c_str());
+
 	// first take care of the chapter
 	// get data to insert
-	int chapters = m_bible.scrapeChaptersPerBook(m_books->currentText());
+	int chapters = key->getChapterMax();
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto old = (m_chapters->currentIndex() == -1) ? 0 : m_chapters->currentIndex();
@@ -140,8 +144,15 @@ void SimpleRefChooser::updateVerseValues()
 	disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 	disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+	// set up sword
+	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+	sword::SWModule *module = mgr.getModule("KJV");
+	sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+	key->setBookName(m_books->currentText().toStdString().c_str());
+	key->setChapter(m_chapters->currentText().toInt());
+
 	// get data to insert
-	int verses = m_bible.scrapeVersesPerChapter(m_books->currentText(), m_chapters->currentText());
+	int verses = key->getVerseMax();
 
 	// make sure that we do not set the current index to -1, use the first item instead
 	auto oldStart = (m_startVerses->currentIndex() == -1) ? 0 : m_startVerses->currentIndex();
@@ -152,19 +163,17 @@ void SimpleRefChooser::updateVerseValues()
 	m_endVerses->clear();
 
 	// insert the new data
-	QStringList startVerseList;
-	QStringList endVerseList;
+	QStringList verseList;
 
 	for (int i = 0; i < verses; ++i)
 	{
 		QString temp{ "%1" };
 		temp = temp.arg(i + 1);
-		startVerseList.push_back(temp);
-		endVerseList.push_back(temp);
+		verseList.push_back(temp);
 	}
 
-	m_startVerses->insertItems(0, startVerseList);
-	m_endVerses->insertItems(0, endVerseList);
+	m_startVerses->insertItems(0, verseList);
+	m_endVerses->insertItems(0, verseList);
 
 	// make sure that the old index is still valid
 	// - 1 because count isn't zero numbered but the index is
