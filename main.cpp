@@ -1,5 +1,5 @@
-// main.cpp: purpose of this file should be obvious
-// Copyright 2020 Loren Burkholder.
+// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com
+// SPDX-License-Identifier: BSD-2-Clause
 
 #include <QApplication>
 #include <QPushButton>
