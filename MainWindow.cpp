@@ -26,41 +26,58 @@ MainWindow::MainWindow(QMainWindow *parent)
 	// file menu
 	QMenu *fileMenu = new QMenu{ tr("&File") };
 
+	// settings action
 	QAction *settings = new QAction{ tr("Settings...") };
-	QAction *exit = new QAction{ tr("Exit") };
-
 	connect(settings, &QAction::triggered, this, [this]()
 	{
 		SettingsDialog s{ this };
 		s.exec();
 	});
-	connect(exit, &QAction::triggered, this, &MainWindow::close);
-
 	fileMenu->addAction(settings);
+
+	// exit action
+#ifndef Q_OS_WASM // Skip this on WASM
+	QAction *exit = new QAction{ tr("Exit") };
+	connect(exit, &QAction::triggered, this, &MainWindow::close);
 	fileMenu->addAction(exit);
+#endif
 
 	// help menu
 	QMenu *helpMenu = new QMenu{ tr("&Help") };
 
+	// online help
 	QAction *onlineHelp = new QAction{ tr("Online help...") };
-	QAction *aboutQt = new QAction{ tr("About Qt") };
-	QAction *aboutMaddy = new QAction{ tr("About maddy") };
-	QAction *changelog = new QAction{ tr("Changelog") };
-	QAction *about = new QAction{ tr("About") };
-
 	connect(onlineHelp, &QAction::triggered, this, []() {
 		QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
 	});
+	helpMenu->addAction(onlineHelp);
+
+	// out of the help, into the about libraries
+	helpMenu->addSeparator();
+
+	// about Qt
+	QAction *aboutQt = new QAction{ tr("About Qt") };
 	connect(aboutQt, &QAction::triggered, this, [this]()
 	{
 		QMessageBox::aboutQt(this);
 	});
+	helpMenu->addAction(aboutQt);
+
+	// about maddy
+	QAction *aboutMaddy = new QAction{ tr("About maddy") };
 	connect(aboutMaddy, &QAction::triggered, this, [this]()
 	{
 		QMessageBox::information(this, tr("About maddy"), tr("maddy is a C++ Markdown to HTML <b>header-only</b> parser library.<br><br>"
-								 "<a href=\"https://github.com/progsource/maddy\">"
-								 "https://github.com/progsource/maddy</a>"));
+		                         "<a href=\"https://github.com/progsource/maddy\">"
+		                         "https://github.com/progsource/maddy</a>"));
 	});
+	helpMenu->addAction(aboutMaddy);
+
+	// now into the about the program section
+	helpMenu->addSeparator();
+
+	// changelog
+	QAction *changelog = new QAction{ tr("Changelog") };
 	connect(changelog, &QAction::triggered, this, [this]()
 	{
 		QFile changelog{ ":/CHANGELOG.md" };
@@ -86,19 +103,16 @@ MainWindow::MainWindow(QMainWindow *parent)
 		else
 			QMessageBox::information(this, tr("Couldn't load file"), tr("The file ") + changelog.fileName() + tr(" could not be opened."));
 	});
+	helpMenu->addAction(changelog);
+
+	// about this program
+	QAction *about = new QAction{ tr("About") };
 	connect(about, &QAction::triggered, this, [this]()
 	{
 		QMessageBox::about(this, tr("About"), TotalReqall::appName + tr(" version ") + TotalReqall::appVersion.toString()
 						   + tr("<br>Copyright © 2020 Loren Burkholder."
 								"<br><br><a href=\"https://lorendb.github.io/TotalReqall\">https://lorendb.github.io/TotalReqall</a>"));
 	});
-
-	helpMenu->addAction(onlineHelp);
-	helpMenu->addSeparator();
-	helpMenu->addAction(aboutQt);
-	helpMenu->addAction(aboutMaddy);
-	helpMenu->addSeparator();
-	helpMenu->addAction(changelog);
 	helpMenu->addAction(about);
 
 	// add all menus
