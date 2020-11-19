@@ -25,7 +25,7 @@ public:
 	explicit ChooseReferenceWidget(QWidget *parent = nullptr);
 
 signals:
-	void signalRunMemorizer(const QString &);
+	void startMemorizer(const QString &);
 
 private slots:
 	void updateChapterVerseValues();

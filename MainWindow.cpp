@@ -18,7 +18,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 	  m_refChooser{ new ChooseReferenceWidget }
 {
 	setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
-	connect(m_refChooser, &ChooseReferenceWidget::signalRunMemorizer, this, &MainWindow::runMemorizer);
+	connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
 
 	setCentralWidget(m_refChooser);
 

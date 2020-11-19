@@ -306,7 +306,7 @@ void ChooseReferenceWidget::runMemorizer()
 		kjv->increment();
 	}
 
-	emit signalRunMemorizer(content);
+	emit startMemorizer(content);
 }
 
 void ChooseReferenceWidget::displayVerse()
