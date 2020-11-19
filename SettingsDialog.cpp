@@ -13,21 +13,21 @@
 
 SettingsDialog::SettingsDialog(QWidget *parent)
 	: QDialog{ parent },
-	  m_tabs{ new QTabWidget },
-m_errorActionSettings{ new QButtonGroup },
-m_redo{ new QRadioButton },
-m_keepGoing{ new QRadioButton },
-m_verseLoadSettings{ new QButtonGroup },
-m_saveVerse{ new QRadioButton },
-m_randVerse{ new QRadioButton },
-m_setVerse{ new QRadioButton },
-m_chooseSetVerse{ new QPushButton },
-m_shouldSaveWindowSize{ new QCheckBox },
-m_swapRefChooserBtns{ new QCheckBox },
-m_reset{ new QPushButton },
-m_ok{ new QPushButton },
-m_apply{ new QPushButton },
-m_cancel{ new QPushButton }
+      m_tabs{ new QTabWidget },
+      m_errorActionSettings{ new QButtonGroup },
+      m_redo{ new QRadioButton },
+      m_keepGoing{ new QRadioButton },
+      m_verseLoadSettings{ new QButtonGroup },
+      m_saveVerse{ new QRadioButton },
+      m_randVerse{ new QRadioButton },
+      m_setVerse{ new QRadioButton },
+      m_chooseSetVerse{ new QPushButton },
+      m_shouldSaveWindowSize{ new QCheckBox },
+      m_swapRefChooserBtns{ new QCheckBox },
+      m_reset{ new QPushButton },
+      m_ok{ new QPushButton },
+      m_apply{ new QPushButton },
+      m_cancel{ new QPushButton }
 {
 	this->setWindowTitle(tr("Settings"));
 
