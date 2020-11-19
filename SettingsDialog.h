@@ -27,6 +27,7 @@ private:
 	QRadioButton *m_redo;
 	QRadioButton *m_keepGoing;
 
+#ifndef Q_OS_WASM // nothing in this block is applicable for WASM
 	QButtonGroup *m_verseLoadSettings;
 	QRadioButton *m_saveVerse;
 	QRadioButton *m_randVerse;
@@ -35,6 +36,7 @@ private:
 
 	QCheckBox *m_shouldSaveWindowSize;
 	QCheckBox *m_swapRefChooserBtns;
+#endif // Q_OS_WASM
 
 	QPushButton *m_reset;
 

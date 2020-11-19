@@ -17,6 +17,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_errorActionSettings{ new QButtonGroup },
       m_redo{ new QRadioButton },
       m_keepGoing{ new QRadioButton },
+#ifndef Q_OS_WASM // skip the unecessary stuff
       m_verseLoadSettings{ new QButtonGroup },
       m_saveVerse{ new QRadioButton },
       m_randVerse{ new QRadioButton },
@@ -24,6 +25,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_chooseSetVerse{ new QPushButton },
       m_shouldSaveWindowSize{ new QCheckBox },
       m_swapRefChooserBtns{ new QCheckBox },
+#endif // Q_OS_WASM
       m_reset{ new QPushButton },
       m_ok{ new QPushButton },
       m_apply{ new QPushButton },
@@ -44,6 +46,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
 	m_errorActionSettings->button(settings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())->setChecked(true);
 
+#ifndef Q_OS_WASM // skip the unecessary stuff
 	m_saveVerse->setText(tr("Load &last verse"));
 	m_randVerse->setText(tr("Load &random verse"));
 	m_setVerse->setText(tr("Load a &set verse"));
@@ -63,6 +66,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	m_swapRefChooserBtns->setText(tr("Swap Memorize and Display buttons"));
 	m_swapRefChooserBtns->setChecked(settings.value("ChooseReferenceWidget/swapButtons", false).toBool());
 	m_swapRefChooserBtns->setToolTip(tr("This will take effect after a restart."));
+#endif // Q_OS_WASM
 
 	m_reset->setText(tr("&Reset all settings..."));
 
@@ -87,6 +91,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	auto memorization = new QWidget;
 	memorization->setLayout(memorizationLayout);
 
+#ifndef Q_OS_WASM // skip the unecessary stuff
 	// Display tab
 	auto displayLayout = new QVBoxLayout;
 	displayLayout->addWidget(m_swapRefChooserBtns);
@@ -112,6 +117,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
 	auto startup = new QWidget;
 	startup->setLayout(startupLayout);
+#endif // Q_OS_WASM
 
 	// Other tab
 	auto otherLayout = new QHBoxLayout;
@@ -136,6 +142,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 			settings.clear();
 		}
 	});
+
+#ifndef Q_OS_WASM // skip the unecessary stuff
 	connect(m_chooseSetVerse, &QPushButton::clicked, this, [this]()
 	{
 		QSettings settings;
@@ -156,14 +164,20 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 		settings.endGroup();
 	});
 	connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
+#endif // Q_OS_WASM
+
 	connect(m_ok, &QPushButton::clicked, this, &SettingsDialog::ok);
 	connect(m_apply, &QPushButton::clicked, this, &SettingsDialog::apply);
 	connect(m_cancel, &QPushButton::clicked, this, &SettingsDialog::reject);
 
 	// add the widgets
 	m_tabs->addTab(memorization, tr("&Memorization"));
+
+#ifndef Q_OS_WASM // these tabs aren't needed with the stuff skipped in WASM
 	m_tabs->addTab(display, tr("&Display"));
 	m_tabs->addTab(startup, tr("&Startup"));
+#endif // Q_OS_WASM
+
 	m_tabs->addTab(other, tr("&Other settings"));
 
 	auto layout = new QGridLayout;
@@ -187,6 +201,8 @@ void SettingsDialog::apply()
 	settings.setValue("errorAction", m_errorActionSettings->checkedId());
 	settings.endGroup(); // MemorizeEdit
 
+
+#ifndef Q_OS_WASM // skip the unecessary stuff
 	settings.beginGroup("ChooseReferenceWidget");
 
 	// warn the user that a restart is needed
@@ -200,6 +216,7 @@ void SettingsDialog::apply()
 	settings.beginGroup("MainWindow");
 	settings.setValue("saveWinSize", m_shouldSaveWindowSize->isChecked());
 	settings.endGroup(); // MainWindow
+#endif // Q_OS_WASM
 
 	// TODO: disable the apply button when settings haven't been changed
 	//	m_apply->setDisabled(true);
