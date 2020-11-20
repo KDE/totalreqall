@@ -1,12 +1,11 @@
-# TotalReqall [![Build status](https://travis-ci.com/LorenDB/TotalReqall.svg?branch=master)](https://travis-ci.com/github/LorenDB/TotalReqall)
-
-A program for memorizing the Bible and other works. Written in C++ with Qt.
+# TotalReqall
+A program for memorizing the Bible and other works. Written in C++ with Qt. Now using the Sword library.
 
 ## Usage
 Start the program and choose a book, chapter, and verse. If you want to familiarize yourself with the verse, click "Display verse". Otherwise, click "Memorize verse" to memorize it.
 
 ## Installing
-When downloading the code, make sure you've downloaded all submodules as well. If not, run `git submodule init` and `git submodule update` in the code directory. Then open the project in Qt Creator and press Ctrl-R (or otherwise run the program).
+When downloading the code, make sure you've downloaded all submodules as well. If not, run `git submodule init` and `git submodule update` in the code directory. You will also need to install the Sword library (on Ubuntu 20.04: `sudo apt install libsword-1.8.1`). Then open the project in Qt Creator and press Ctrl-R (or otherwise run the program).
 
 ## I love this project. How can I help?
 Just make a pull request. All PRs will be reviewed, even if they are not accepted.
