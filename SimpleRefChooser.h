@@ -10,6 +10,8 @@
 #include <QComboBox>
 #include <QPushButton>
 
+// This class is like the ChooseReferenceWidget, but provides just the bare-bones widget
+// with the combos for the reference selection.
 class SimpleRefChooser : public QDialog
 {
 	Q_OBJECT
