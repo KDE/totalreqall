@@ -49,8 +49,8 @@ if(ANDROID)
     SettingsDialog.cpp
     SimpleRefChooser.cpp
     main.cpp
-	${QRC_FILES}
-	${TS_FILES}
+	  ${QRC_FILES}
+	  ${TS_FILES}
   )
 else()
   add_executable(TotalReqall
@@ -63,7 +63,7 @@ else()
     SettingsDialog.cpp
     SimpleRefChooser.cpp
     main.cpp
-	${QRC_FILES}
+	  ${QRC_FILES}
     ${TS_FILES}
   )
 endif()
