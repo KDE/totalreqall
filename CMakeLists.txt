@@ -34,7 +34,6 @@ set(QRC_FILES
 )
 
 include_directories(
-	thirdparty/maddy/include
 	/usr/include/sword # TODO: make this work on all platforms
 )
 
@@ -68,6 +67,6 @@ else()
   )
 endif()
 
-target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword)
+target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword cmark)
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})

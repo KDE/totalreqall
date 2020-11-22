@@ -58,19 +58,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>About maddy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>maddy is a C++ Markdown to HTML &lt;b&gt;header-only&lt;/b&gt; parser library.&lt;br&gt;&lt;br&gt;&lt;a href=&quot;https://github.com/progsource/maddy&quot;&gt;https://github.com/progsource/maddy&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -10,7 +10,7 @@
 #include <QFile>
 #include <QTextStream>
 
-#include "maddy/parser.h"
+#include <cmark.h>
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
@@ -66,16 +66,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 	});
 	helpMenu->addAction(aboutQt);
 
-	// about maddy
-	QAction *aboutMaddy = new QAction{ tr("About maddy") };
-	connect(aboutMaddy, &QAction::triggered, this, [this]()
-	{
-		QMessageBox::information(this, tr("About maddy"), tr("maddy is a C++ Markdown to HTML <b>header-only</b> parser library.<br><br>"
-		                         "<a href=\"https://github.com/progsource/maddy\">"
-		                         "https://github.com/progsource/maddy</a>"));
-	});
-	helpMenu->addAction(aboutMaddy);
-
 	// now into the about the program section
 	helpMenu->addSeparator();
 
@@ -92,13 +82,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 			data.reserve(changelog.size());
 			data = ts.readAll();
 
-			std::stringstream stream{ data.toStdString() };
-			maddy::Parser parser;
-
-			std::string *parsed = new std::string;
-			*parsed = parser.Parse(stream);
-			QString html{ parsed->c_str() };
-			delete parsed;
+			QString html = cmark_markdown_to_html(data.toStdString().c_str(), data.length(), 0);
 
 			MarkdownDialog dlg{ this, tr("Changelog"), html };
 			dlg.exec();
