@@ -5,7 +5,7 @@ A program for memorizing the Bible and other works. Written in C++ with Qt. Now 
 Start the program and choose a book, chapter, and verse. If you want to familiarize yourself with the verse, click "Display verse". Otherwise, click "Memorize verse" to memorize it.
 
 ## Installing
-When downloading the code, make sure you've downloaded all submodules as well. If not, run `git submodule init` and `git submodule update` in the code directory. You will also need to install the Sword library (on Ubuntu 20.04: `sudo apt install libsword-1.8.1`). Then open the project in Qt Creator and press Ctrl-R (or otherwise run the program).
+You will need to install the Sword and cmark libraries, including the development files. Then build with cmake.
 
 ## I love this project. How can I help?
 Just make a pull request. All PRs will be reviewed, even if they are not accepted.
