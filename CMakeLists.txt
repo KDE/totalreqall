@@ -28,7 +28,6 @@ find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
 set(TS_FILES TotalReqall_en_US.ts)
 set(QRC_FILES
-	bible.qrc
 	general.qrc
 	icons.qrc
 )
@@ -39,7 +38,6 @@ include_directories(
 
 if(ANDROID)
   add_library(TotalReqall SHARED
-    Bible.cpp
     ChooseReferenceWidget.cpp
     MainWindow.cpp
     MarkdownDialog.cpp
@@ -48,12 +46,11 @@ if(ANDROID)
     SettingsDialog.cpp
     SimpleRefChooser.cpp
     main.cpp
-	  ${QRC_FILES}
-	  ${TS_FILES}
+	${QRC_FILES}
+	${TS_FILES}
   )
 else()
   add_executable(TotalReqall
-    Bible.cpp
     ChooseReferenceWidget.cpp
     MainWindow.cpp
     MarkdownDialog.cpp
@@ -62,8 +59,8 @@ else()
     SettingsDialog.cpp
     SimpleRefChooser.cpp
     main.cpp
-	  ${QRC_FILES}
-    ${TS_FILES}
+	${QRC_FILES}
+	${TS_FILES}
   )
 endif()
 
