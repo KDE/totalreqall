@@ -11,7 +11,6 @@
 #include "MainWindow.h"
 #include "MemorizeWidget.h"
 #include "ChooseReferenceWidget.h"
-#include "Bible.h"
 
 inline QPoint centerWindowOnScreen(int, int);
 

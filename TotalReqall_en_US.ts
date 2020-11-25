@@ -2,21 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="TotalReqall_en_US">
 <context>
-    <name>Bible</name>
-    <message>
-        <source>Failed to open :/resources/bible.txt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Loading Bible</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Freeing Bible</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChooseReferenceWidget</name>
     <message>
         <source>Choose a verse</source>
