@@ -105,9 +105,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 	// add all menus
 	this->menuBar()->addMenu(fileMenu);
 	this->menuBar()->addMenu(helpMenu);
-
-	// set up the status bar
-	this->statusBar()->showMessage(tr("Please choose a verse."));
 }
 
 MainWindow::~MainWindow()

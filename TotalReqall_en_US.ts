@@ -70,10 +70,6 @@
         <source>&lt;br&gt;Copyright © 2020 Loren Burkholder.&lt;br&gt;&lt;br&gt;&lt;a href=&quot;https://lorendb.github.io/TotalReqall&quot;&gt;https://lorendb.github.io/TotalReqall&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Please choose a verse.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MarkdownDialog</name>
