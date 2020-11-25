@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QDialogButtonBox>
 
 #include "ChooseReferenceWidget.h"
 #include "SimpleRefChooser.h"
@@ -29,10 +30,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_shouldSaveWindowSize{ new QCheckBox },
       m_swapRefChooserBtns{ new QCheckBox },
 #endif // Q_OS_WASM
-      m_reset{ new QPushButton },
-      m_ok{ new QPushButton },
-      m_apply{ new QPushButton },
-      m_cancel{ new QPushButton }
+      m_reset{ new QPushButton }
 {
 	this->setWindowTitle(tr("Settings"));
 
@@ -72,10 +70,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 #endif // Q_OS_WASM
 
 	m_reset->setText(tr("&Reset all settings..."));
-
-	m_ok->setText(tr("OK"));
-	m_apply->setText(tr("Apply"));
-	m_cancel->setText(tr("Cancel"));
 
 	// Memorization tab
 	auto errorActionGroupLayout = new QVBoxLayout;
@@ -129,12 +123,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	auto other = new QWidget;
 	other->setLayout(otherLayout);
 
-	auto okCancelLayout = new QHBoxLayout;
-	okCancelLayout->insertStretch(0);
-	okCancelLayout->insertWidget(1, m_ok);
-	okCancelLayout->insertWidget(2, m_apply);
-	okCancelLayout->insertWidget(3, m_cancel);
-
 	// connect the widgets
 	connect(m_reset, &QPushButton::clicked, this, [this]()
 	{
@@ -169,9 +157,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 	connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
 #endif // Q_OS_WASM
 
-	connect(m_ok, &QPushButton::clicked, this, &SettingsDialog::ok);
-	connect(m_apply, &QPushButton::clicked, this, &SettingsDialog::apply);
-	connect(m_cancel, &QPushButton::clicked, this, &SettingsDialog::reject);
+	auto buttonBox = new QDialogButtonBox{ QDialogButtonBox::StandardButton::Ok | QDialogButtonBox::Apply | QDialogButtonBox::StandardButton::Cancel };
+	connect(buttonBox->button(QDialogButtonBox::StandardButton::Ok), &QPushButton::clicked, this, &SettingsDialog::ok);
+	connect(buttonBox->button(QDialogButtonBox::StandardButton::Apply), &QPushButton::clicked, this, &SettingsDialog::apply);
+	connect(buttonBox->button(QDialogButtonBox::StandardButton::Cancel), &QPushButton::clicked, this, &SettingsDialog::reject);
 
 	// add the widgets
 	m_tabs->addTab(memorization, tr("&Memorization"));
@@ -185,7 +174,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
 	auto layout = new QGridLayout;
 	layout->addWidget(m_tabs, 0, 0);
-	layout->addLayout(okCancelLayout, 1, 0);
+	layout->addWidget(buttonBox, 1, 0);
 
 	setLayout(layout);
 }

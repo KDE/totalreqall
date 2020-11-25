@@ -42,10 +42,6 @@ private:
 #endif // Q_OS_WASM
 
 	QPushButton *m_reset;
-
-	QPushButton *m_ok;
-	QPushButton *m_apply;
-	QPushButton *m_cancel;
 };
 
 #endif // SETTINGSDIALOG_H

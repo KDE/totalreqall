@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QHBoxLayout>
 #include <QStringList>
+#include <QDialogButtonBox>
 
 #include <swmgr.h>
 #include <swmodule.h>
@@ -24,9 +25,6 @@ SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const Q
 {
 	m_ok->setText(tr("OK"));
 	m_cancel->setText(tr("Cancel"));
-
-	connect(m_ok, &QPushButton::clicked, this, &SimpleRefChooser::accept);
-	connect(m_cancel, &QPushButton::clicked, this, &SimpleRefChooser::reject);
 
 	// get the values for the books (chapters and verses will come later)
 	sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
@@ -73,6 +71,10 @@ SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const Q
 	auto dash = new QLabel{ "-" };
 	dash->setAlignment(Qt::AlignHCenter);
 
+	auto buttonBox = new QDialogButtonBox{ QDialogButtonBox::StandardButton::Ok | QDialogButtonBox::StandardButton::Cancel };
+	connect(buttonBox->button(QDialogButtonBox::StandardButton::Ok), &QPushButton::clicked, this, &SimpleRefChooser::accept);
+	connect(buttonBox->button(QDialogButtonBox::StandardButton::Cancel), &QPushButton::clicked, this, &SimpleRefChooser::reject);
+
 	// set up the layout
 	m_layout->addWidget(m_books, 0, 0);
 	m_layout->addWidget(m_chapters, 0, 1);
@@ -80,13 +82,7 @@ SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const Q
 	m_layout->addWidget(m_startVerses, 0, 3);
 	m_layout->addWidget(dash, 0, 4);
 	m_layout->addWidget(m_endVerses, 0, 5);
-
-	auto buttonRow = new QHBoxLayout;
-	buttonRow->addStretch();
-	buttonRow->addWidget(m_ok);
-	buttonRow->addWidget(m_cancel);
-
-	m_layout->addLayout(buttonRow, 1, 0, 1, 6);
+	m_layout->addWidget(buttonBox, 1, 0, 1, 6);
 
 	this->setLayout(m_layout);
 }
