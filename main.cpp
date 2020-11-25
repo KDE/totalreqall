@@ -23,14 +23,9 @@ int main(int argc, char *argv[])
 	QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
 
 	QApplication a(argc, argv);
-
 	MainWindow mainWindow;
 
-	// TODO: Somebody with a Mac should figure out whether this is needed
-	mainWindow.setUnifiedTitleAndToolBarOnMac(true);
-
 	QSettings settings;
-
 	if (settings.value("MainWindow/saveWinSize", true).toBool())
 	{
 		QVariant width = settings.value("MainWindow/width");
