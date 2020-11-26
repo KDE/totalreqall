@@ -54,23 +54,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Changelog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t load file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

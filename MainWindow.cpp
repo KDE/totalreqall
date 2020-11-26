@@ -78,7 +78,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 	});
 	helpMenu->addAction(onlineHelp);
 
-	// out of the help, into the about libraries
+	// out of the help, into the about section
 	helpMenu->addSeparator();
 
 	// about Qt
@@ -88,32 +88,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 		QMessageBox::aboutQt(this);
 	});
 	helpMenu->addAction(aboutQt);
-
-	// now into the about the program section
-	helpMenu->addSeparator();
-
-	// changelog
-	QAction *changelog = new QAction{ tr("Changelog") };
-	connect(changelog, &QAction::triggered, this, [this]()
-	{
-		QFile changelog{ ":/CHANGELOG.md" };
-		if (changelog.open(QIODevice::ReadOnly | QIODevice::Text))
-		{
-			QTextStream ts{ &changelog };
-
-			QString data;
-			data.reserve(changelog.size());
-			data = ts.readAll();
-
-			QString html = cmark_markdown_to_html(data.toStdString().c_str(), data.length(), 0);
-
-			MarkdownDialog dlg{ this, tr("Changelog"), html };
-			dlg.exec();
-		}
-		else
-			QMessageBox::information(this, tr("Couldn't load file"), tr("The file ") + changelog.fileName() + tr(" could not be opened."));
-	});
-	helpMenu->addAction(changelog);
 
 	// about this program
 	QAction *about = new QAction{ tr("About") };
