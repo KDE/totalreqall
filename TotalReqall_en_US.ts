@@ -54,23 +54,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Changelog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>About</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t load file</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>The file </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source> could not be opened.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -79,13 +63,6 @@
     </message>
     <message>
         <source>&lt;br&gt;Copyright © 2020 Loren Burkholder.&lt;br&gt;&lt;br&gt;&lt;a href=&quot;https://lorendb.github.io/TotalReqall&quot;&gt;https://lorendb.github.io/TotalReqall&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MarkdownDialog</name>
-    <message>
-        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
