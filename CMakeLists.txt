@@ -41,6 +41,7 @@ if(ANDROID)
   add_library(TotalReqall SHARED
 	Bible.cpp
 	ChooseReferenceWidget.cpp
+	CustomContentAdder.cpp
 	MainWindow.cpp
 	MarkdownDialog.cpp
 	MemorizeEdit.cpp
@@ -56,6 +57,7 @@ else()
   add_executable(TotalReqall
 	Bible.cpp
 	ChooseReferenceWidget.cpp
+	CustomContentAdder.cpp
 	MainWindow.cpp
 	MarkdownDialog.cpp
 	MemorizeEdit.cpp

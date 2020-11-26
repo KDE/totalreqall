@@ -15,7 +15,6 @@ WelcomePage::WelcomePage(QWidget *parent)
 	auto bible = new QCommandLinkButton{ tr("Bible verse"), tr("Memorize a verse or verses from the Bible.")};
 	auto custom = new QCommandLinkButton{ tr("Custom"),
 	        tr("Enter some custom content to memorize.")};
-	custom->setDisabled(true);
 
 	connect(bible, &QCommandLinkButton::clicked, this, &WelcomePage::bibleClicked);
 	connect(custom, &QCommandLinkButton::clicked, this, &WelcomePage::customClicked);

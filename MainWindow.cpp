@@ -15,20 +15,29 @@
 #include "AppInfo.h"
 #include "SettingsDialog.h"
 #include "MarkdownDialog.h"
-#include "WelcomePage.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
 	: QMainWindow(parent),
-	  m_refChooser{ new ChooseReferenceWidget }
+      m_refChooser{ new ChooseReferenceWidget },
+      m_welcomePage{ new WelcomePage },
+      m_contentAdder{ new CustomContentAdder }
 {
 	setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
 	connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
 
-	auto w = new WelcomePage;
-	setCentralWidget(w);
-	connect(w, &WelcomePage::bibleClicked, this, [this]() {
-		delete takeCentralWidget();
+	setCentralWidget(m_welcomePage);
+	connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this]() {
+		takeCentralWidget();
 		setCentralWidget(m_refChooser);
+	});
+	connect(m_welcomePage, &WelcomePage::customClicked, this, [this]() {
+		takeCentralWidget();
+		setCentralWidget(m_contentAdder);
+	});
+
+	connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
+		takeCentralWidget();
+		setCentralWidget(m_welcomePage);
 	});
 
 	// set up the menus
