@@ -107,10 +107,6 @@
 <context>
     <name>QApplication</name>
     <message>
-        <source>TotalReqall Bible Memory</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>TotalReqall</source>
         <translation type="unfinished"></translation>
     </message>

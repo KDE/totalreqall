@@ -11,7 +11,7 @@
 namespace TotalReqall
 {
     const QVersionNumber appVersion{ 0, 5, 0 };
-	const QString appName{ QApplication::tr("TotalReqall Bible Memory") };
+	const QString appName{ QApplication::tr("TotalReqall") };
 	const QString organizationName{ QApplication::tr("TotalReqall") };
 	const QString organizationDomain{ "lorendb.github.io" };
 }
