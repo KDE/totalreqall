@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com
+// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com>
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include "MainWindow.h"
@@ -18,12 +18,35 @@
 
 MainWindow::MainWindow(QMainWindow *parent)
 	: QMainWindow(parent),
-	  m_refChooser{ new ChooseReferenceWidget }
+      m_refChooser{ new ChooseReferenceWidget },
+      m_welcomePage{ new WelcomePage },
+      m_contentAdder{ new CustomContentAdder }
 {
 	setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
 	connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
 
-	setCentralWidget(m_refChooser);
+	setCentralWidget(m_welcomePage);
+	connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this]() {
+		takeCentralWidget();
+		setCentralWidget(m_refChooser);
+	});
+	connect(m_welcomePage, &WelcomePage::customClicked, this, [this]() {
+		takeCentralWidget();
+		setCentralWidget(m_contentAdder);
+	});
+
+	connect(m_contentAdder, &CustomContentAdder::ok, this, [this]() {
+		m_saveCentralWidget = takeCentralWidget();
+		m_memorizer = new MemorizeWidget{ m_contentAdder->getContent() };
+		setCentralWidget(m_memorizer);
+		m_memorizer->focusMemorizer();
+		connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
+		connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);
+	});
+	connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
+		takeCentralWidget();
+		setCentralWidget(m_welcomePage);
+	});
 
 	// set up the menus
 	// file menu
@@ -105,6 +128,11 @@ MainWindow::MainWindow(QMainWindow *parent)
 	// add all menus
 	this->menuBar()->addMenu(fileMenu);
 	this->menuBar()->addMenu(helpMenu);
+
+	// make this widget sized decently because the welcome page makes the window extremely small, which leads to uncomfortable usage
+	// of the ChooseReferenceWidget and the CustomContentAdder later on
+	// these sizes are pulled from my measurements of the default size of a ChooseReferenceWidget, which I thought had a nice default size
+	this->resize(415, 315);
 }
 
 MainWindow::~MainWindow()
@@ -115,9 +143,10 @@ void MainWindow::runMemorizer(const QString &verse)
 {
 	m_saveFocusWidget = QApplication::focusWidget();
 	m_saveCentralWidget = takeCentralWidget();
+
 	m_memorizer = new MemorizeWidget{ verse };
-	setCentralWidget(m_memorizer);
 	m_memorizer->focusMemorizer();
+	setCentralWidget(m_memorizer);
 
 	connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
 	connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);
@@ -126,10 +155,16 @@ void MainWindow::runMemorizer(const QString &verse)
 void MainWindow::cleanUpMemorizer()
 {
 	delete m_memorizer;
+	m_memorizer = nullptr;
+
 	setCentralWidget(m_saveCentralWidget);
-	m_saveFocusWidget->setFocus();
 	m_saveCentralWidget = nullptr;
-	m_saveFocusWidget = nullptr;
+
+	if (m_saveFocusWidget != nullptr)
+	{
+		m_saveFocusWidget->setFocus();
+		m_saveFocusWidget = nullptr;
+	}
 }
 
 void MainWindow::setStatusMessage(QString message)

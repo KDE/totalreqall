@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com
+// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com>
 // SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef MainWindow_H
@@ -15,6 +15,8 @@
 
 #include "ChooseReferenceWidget.h"
 #include "MemorizeWidget.h"
+#include "WelcomePage.h"
+#include "CustomContentAdder.h"
 
 class MainWindow : public QMainWindow
 {
@@ -29,6 +31,9 @@ protected:
 
 private:
 	ChooseReferenceWidget *m_refChooser;
+	WelcomePage *m_welcomePage;
+	CustomContentAdder *m_contentAdder;
+
 	// when a central widget needs removed but not deleted
 	QWidget *m_saveCentralWidget = nullptr;
 	QWidget *m_saveFocusWidget = nullptr;
