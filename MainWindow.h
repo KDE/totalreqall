@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com
+// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com>
 // SPDX-License-Identifier: BSD-2-Clause
 
 #ifndef MainWindow_H
