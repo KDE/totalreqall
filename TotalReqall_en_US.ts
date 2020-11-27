@@ -93,13 +93,6 @@
     </message>
 </context>
 <context>
-    <name>QApplication</name>
-    <message>
-        <source>TotalReqall</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>SettingsDialog</name>
     <message>
         <source>Settings</source>

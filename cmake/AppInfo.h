@@ -4,16 +4,15 @@
 #ifndef APPINFO_H
 #define APPINFO_H
 
-#include <QApplication> // for tr()
 #include <QString>
 #include <QVersionNumber>
 
 namespace TotalReqall
 {
-    const QVersionNumber appVersion{ 0, 5, 0 };
-    const QString appName{ QApplication::tr("TotalReqall") };
-    const QString organizationName{ QApplication::tr("TotalReqall") };
-    const QString organizationDomain{ "lorendb.github.io" };
+    const QVersionNumber appVersion{ ${CPACK_PACKAGE_VERSION_MAJOR}, ${CPACK_PACKAGE_VERSION_MINOR}, ${CPACK_PACKAGE_VERSION_PATCH} };
+	const QString appName{ "TotalReqall" };
+	const QString organizationName{ "KDE" };
+	const QString organizationDomain{ "org.kde.totalreqall" };
 } // namespace TotalReqall
 
 #endif // APPINFO_H

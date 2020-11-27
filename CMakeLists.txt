@@ -11,7 +11,13 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CPACK_PACKAGE_VERSION_MAJOR "0")
+set(CPACK_PACKAGE_VERSION_MINOR "5")
+set(CPACK_PACKAGE_VERSION_PATCH "0")
+
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+
+configure_file(cmake/AppInfo.h AppInfo.h)
 
 set(SRC_FILES
 	ChooseReferenceWidget.cpp
@@ -40,6 +46,6 @@ add_executable(TotalReqall
 	${TS_FILES}
 )
 
-target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword cmark)
+target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword)
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
