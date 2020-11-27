@@ -4,26 +4,26 @@
 #ifndef CUSTOMCONTENTADDER_H
 #define CUSTOMCONTENTADDER_H
 
-#include <QWidget>
-#include <QTextEdit>
 #include <QLineEdit>
+#include <QTextEdit>
+#include <QWidget>
 
 class CustomContentAdder : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit CustomContentAdder(QWidget *parent = nullptr);
+    explicit CustomContentAdder(QWidget *parent = nullptr);
 
-	QString getTitle();
-	QString getContent();
+    QString getTitle();
+    QString getContent();
 
 signals:
-	void ok();
-	void cancel();
+    void ok();
+    void cancel();
 
 private:
-	QLineEdit *m_title;
-	QTextEdit *m_content;
+    QLineEdit *m_title;
+    QTextEdit *m_content;
 };
 
 #endif // CUSTOMCONTENTADDER_H

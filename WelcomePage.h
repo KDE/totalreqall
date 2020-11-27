@@ -8,14 +8,13 @@
 
 class WelcomePage : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit WelcomePage(QWidget *parent = nullptr);
+    explicit WelcomePage(QWidget *parent = nullptr);
 
 signals:
-	void bibleClicked();
-	void customClicked();
-
+    void bibleClicked();
+    void customClicked();
 };
 
 #endif // WELCOMEPAGE_H

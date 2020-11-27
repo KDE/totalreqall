@@ -4,45 +4,43 @@
 #ifndef MainWindow_H
 #define MainWindow_H
 
+#include "ChooseReferenceWidget.h"
+#include "CustomContentAdder.h"
+#include "MemorizeWidget.h"
+#include "WelcomePage.h"
 #include <QAction>
+#include <QGridLayout>
+#include <QMainWindow>
 #include <QMenu>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QStatusBar>
 #include <QWidget>
-#include <QMainWindow>
-#include <QGridLayout>
-
-#include "ChooseReferenceWidget.h"
-#include "MemorizeWidget.h"
-#include "WelcomePage.h"
-#include "CustomContentAdder.h"
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-	MainWindow(QMainWindow *parent = nullptr);
-	~MainWindow();
+    MainWindow(QMainWindow *parent = nullptr);
+    ~MainWindow();
 
 protected:
-	virtual void resizeEvent(QResizeEvent *);
+    virtual void resizeEvent(QResizeEvent *);
 
 private:
-	ChooseReferenceWidget *m_refChooser;
-	WelcomePage *m_welcomePage;
-	CustomContentAdder *m_contentAdder;
+    ChooseReferenceWidget *m_refChooser;
+    WelcomePage *m_welcomePage;
+    CustomContentAdder *m_contentAdder;
 
-	// when a central widget needs removed but not deleted
-	QWidget *m_saveCentralWidget = nullptr;
-	QWidget *m_saveFocusWidget = nullptr;
-	MemorizeWidget *m_memorizer = nullptr;
-    
+    // when a central widget needs removed but not deleted
+    QWidget *m_saveCentralWidget = nullptr;
+    QWidget *m_saveFocusWidget = nullptr;
+    MemorizeWidget *m_memorizer = nullptr;
+
 private slots:
-	void runMemorizer(const QString &);
-	void cleanUpMemorizer();
-	void setStatusMessage(QString);
-
+    void runMemorizer(const QString &);
+    void cleanUpMemorizer();
+    void setStatusMessage(QString);
 };
 #endif // MainWindow_H

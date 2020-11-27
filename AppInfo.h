@@ -4,16 +4,16 @@
 #ifndef APPINFO_H
 #define APPINFO_H
 
+#include <QApplication> // for tr()
 #include <QString>
 #include <QVersionNumber>
-#include <QApplication> // for tr()
 
 namespace TotalReqall
 {
     const QVersionNumber appVersion{ 0, 5, 0 };
-	const QString appName{ QApplication::tr("TotalReqall") };
-	const QString organizationName{ QApplication::tr("TotalReqall") };
-	const QString organizationDomain{ "lorendb.github.io" };
-}
+    const QString appName{ QApplication::tr("TotalReqall") };
+    const QString organizationName{ QApplication::tr("TotalReqall") };
+    const QString organizationDomain{ "lorendb.github.io" };
+} // namespace TotalReqall
 
 #endif // APPINFO_H
