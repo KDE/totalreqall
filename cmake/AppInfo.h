@@ -11,8 +11,8 @@ namespace TotalReqall
 {
     const QVersionNumber appVersion{ ${CPACK_PACKAGE_VERSION_MAJOR}, ${CPACK_PACKAGE_VERSION_MINOR}, ${CPACK_PACKAGE_VERSION_PATCH} };
 	const QString appName{ "TotalReqall" };
-	const QString organizationName{ "KDE" };
-	const QString organizationDomain{ "org.kde.totalreqall" };
+	const QString organizationName{ /*"KDE"*/"" };
+	const QString organizationDomain{ /*"org.kde.totalreqall"*/"" };
 } // namespace TotalReqall
 
 #endif // APPINFO_H
