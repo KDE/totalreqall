@@ -4,6 +4,8 @@ project(TotalReqall LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -16,6 +18,7 @@ set(CPACK_PACKAGE_VERSION_MINOR "5")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(sword REQUIRED 1.8.1)
 
 configure_file(cmake/AppInfo.h AppInfo.h)
 
@@ -36,15 +39,14 @@ set(QRC_FILES
 	icons.qrc
 )
 
-include_directories(
-	/usr/include/sword # TODO: make this work on all platforms
-)
-
 add_executable(TotalReqall
 	${SRC_FILES}
 	${QRC_FILES}
 	${TS_FILES}
 )
+
+# Unfortunately, this is required due to some wacky configuration in the Sword headers.
+include_directories("/usr/include/sword")
 
 target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword)
 

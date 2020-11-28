@@ -7,10 +7,10 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QStringList>
-#include <markupfiltmgr.h>
-#include <swmgr.h>
-#include <swmodule.h>
-#include <versekey.h>
+#include <sword/markupfiltmgr.h>
+#include <sword/swmgr.h>
+#include <sword/swmodule.h>
+#include <sword/versekey.h>
 
 SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const QString &chapter,
                                    const QString &startVerse, const QString &endVerse)
