@@ -28,6 +28,7 @@ set(SRC_FILES
 	MainWindow.cpp
 	MemorizeEdit.cpp
 	MemorizeWidget.cpp
+	SavedContentLoader.cpp
 	SettingsDialog.cpp
 	SimpleRefChooser.cpp
 	WelcomePage.cpp

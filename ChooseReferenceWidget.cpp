@@ -113,6 +113,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_endVerses->setMinimumContentsLength(3);
 
     m_runMemorizerBtn->setText(tr("Memorize verse"));
+    connect(m_runMemorizerBtn, &QPushButton::clicked, this, [this]() {
+        QSettings settings;
+        settings.beginGroup("savedContent");
+        settings.beginGroup("verses");
+        settings.setValue(m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                              m_startVerses->currentText(),
+                          m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                              m_endVerses->currentText());
+        settings.endGroup();
+        settings.endGroup();
+    });
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
     m_displayVerseBtn->setText(tr("Display verse"));
@@ -299,7 +310,7 @@ void ChooseReferenceWidget::runMemorizer()
                           0;
 
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *kjv = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule("KJV");
     QString content;
 
     sword::SWKey key{ reference
@@ -307,12 +318,12 @@ void ChooseReferenceWidget::runMemorizer()
                                m_startVerses->currentText())
                           .toStdString()
                           .c_str() };
-    kjv->setKey(key);
+    module->setKey(key);
 
     for (int i = 0; i <= extraVerses; ++i)
     {
-        content.append(kjv->renderText() + "\n");
-        kjv->increment();
+        content.append(module->renderText() + "\n");
+        module->increment();
     }
 
     emit startMemorizer(content);
@@ -326,7 +337,7 @@ void ChooseReferenceWidget::displayVerse()
                           0;
 
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *kjv = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule("KJV");
     QString content;
 
     sword::SWKey key{ reference
@@ -334,12 +345,12 @@ void ChooseReferenceWidget::displayVerse()
                                m_startVerses->currentText())
                           .toStdString()
                           .c_str() };
-    kjv->setKey(key);
+    module->setKey(key);
 
     for (int i = 0; i <= extraVerses; ++i)
     {
-        content.append(kjv->renderText() + "<br>");
-        kjv->increment();
+        content.append(module->renderText() + "<br>");
+        module->increment();
     }
 
     m_verseDisplayBox->setHtml(content);

@@ -13,6 +13,7 @@ public:
     explicit WelcomePage(QWidget *parent = nullptr);
 
 signals:
+    void savedClicked();
     void bibleClicked();
     void customClicked();
 };

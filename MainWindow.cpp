@@ -5,6 +5,7 @@
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
+#include <QActionGroup>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QFile>
@@ -16,40 +17,17 @@ MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent),
       m_refChooser{ new ChooseReferenceWidget },
       m_welcomePage{ new WelcomePage },
-      m_contentAdder{ new CustomContentAdder }
+      m_contentAdder{ new CustomContentAdder },
+      m_savedLoader{ new SavedContentLoader }
 {
     setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
-    connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
-
-    setCentralWidget(m_welcomePage);
-    connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this]() {
-        takeCentralWidget();
-        setCentralWidget(m_refChooser);
-    });
-    connect(m_welcomePage, &WelcomePage::customClicked, this, [this]() {
-        takeCentralWidget();
-        setCentralWidget(m_contentAdder);
-    });
-
-    connect(m_contentAdder, &CustomContentAdder::ok, this, [this]() {
-        m_saveCentralWidget = takeCentralWidget();
-        m_memorizer = new MemorizeWidget{ m_contentAdder->getContent() };
-        setCentralWidget(m_memorizer);
-        m_memorizer->focusMemorizer();
-        connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
-        connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);
-    });
-    connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
-        takeCentralWidget();
-        setCentralWidget(m_welcomePage);
-    });
 
     // set up the menus
     // file menu
-    QMenu *fileMenu = new QMenu{ tr("&File") };
+    auto fileMenu = new QMenu{ tr("&File") };
 
     // settings action
-    QAction *settings = new QAction{ tr("Settings...") };
+    auto settings = new QAction{ tr("Settings...") };
     connect(settings, &QAction::triggered, this, [this]() {
         SettingsDialog s{ this };
         s.exec();
@@ -58,16 +36,36 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     // exit action
 #ifndef Q_OS_WASM // Skip this on WASM
-    QAction *exit = new QAction{ tr("Exit") };
+    auto exit = new QAction{ tr("Exit") };
     connect(exit, &QAction::triggered, this, &MainWindow::close);
     fileMenu->addAction(exit);
 #endif
 
+    // mode menu
+    auto modeMenu = new QMenu{ tr("Mode") };
+
+    auto saved = new QAction{ tr("&Saved") };
+    auto bibleVerse = new QAction{ tr("&Bible verse") };
+    auto custom = new QAction{ tr("&Custom content") };
+
+    saved->setCheckable(true);
+    bibleVerse->setCheckable(true);
+    custom->setCheckable(true);
+
+    auto modeGroup = new QActionGroup{ nullptr };
+    modeGroup->addAction(saved);
+    modeGroup->addAction(bibleVerse);
+    modeGroup->addAction(custom);
+
+    modeMenu->addAction(saved);
+    modeMenu->addAction(bibleVerse);
+    modeMenu->addAction(custom);
+
     // help menu
-    QMenu *helpMenu = new QMenu{ tr("&Help") };
+    auto helpMenu = new QMenu{ tr("&Help") };
 
     // online help
-    QAction *onlineHelp = new QAction{ tr("Online help...") };
+    auto onlineHelp = new QAction{ tr("Online help...") };
     connect(onlineHelp, &QAction::triggered, this, []() {
         QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
     });
@@ -77,14 +75,14 @@ MainWindow::MainWindow(QMainWindow *parent)
     helpMenu->addSeparator();
 
     // about Qt
-    QAction *aboutQt = new QAction{ tr("About Qt") };
+    auto aboutQt = new QAction{ tr("About Qt") };
     connect(aboutQt, &QAction::triggered, this, [this]() {
         QMessageBox::aboutQt(this);
     });
     helpMenu->addAction(aboutQt);
 
     // about this program
-    QAction *about = new QAction{ tr("About") };
+    auto about = new QAction{ tr("About") };
     connect(about, &QAction::triggered, this, [this]() {
         QMessageBox::about(this, tr("About"),
                            TotalReqall::appName + tr(" version ") +
@@ -97,24 +95,67 @@ MainWindow::MainWindow(QMainWindow *parent)
     helpMenu->addAction(about);
 
     // add all menus
-    this->menuBar()->addMenu(fileMenu);
-    this->menuBar()->addMenu(helpMenu);
+    menuBar()->addMenu(fileMenu);
+    menuBar()->addMenu(modeMenu);
+    menuBar()->addMenu(helpMenu);
+
+    connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
+    connect(m_contentAdder, &CustomContentAdder::ok, this, &MainWindow::runMemorizer);
+    connect(m_savedLoader, &SavedContentLoader::contentReady, this, &MainWindow::runMemorizer);
+
+    setCentralWidget(m_welcomePage);
+
+    connect(saved, &QAction::triggered, m_welcomePage, &WelcomePage::savedClicked);
+    connect(m_welcomePage, &WelcomePage::savedClicked, this, [this, saved]() {
+        takeCentralWidget();
+
+        // make sure that all content is displayed
+        m_savedLoader->refresh();
+        setCentralWidget(m_savedLoader);
+        saved->setChecked(true);
+    });
+
+    connect(bibleVerse, &QAction::triggered, m_welcomePage, &WelcomePage::bibleClicked);
+    connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this, bibleVerse]() {
+        takeCentralWidget();
+        setCentralWidget(m_refChooser);
+        bibleVerse->setChecked(true);
+    });
+
+    connect(custom, &QAction::triggered, m_welcomePage, &WelcomePage::customClicked);
+    connect(m_welcomePage, &WelcomePage::customClicked, this, [this, custom]() {
+        takeCentralWidget();
+        setCentralWidget(m_contentAdder);
+        custom->setChecked(true);
+    });
+
+    connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
+        takeCentralWidget();
+        setCentralWidget(m_welcomePage);
+    });
+
+    connect(m_savedLoader, &SavedContentLoader::cancel, this, [this]() {
+        takeCentralWidget();
+        setCentralWidget(m_welcomePage);
+    });
 
     // make this widget sized decently because the welcome page makes the window extremely small,
     // which leads to uncomfortable usage of the ChooseReferenceWidget and the CustomContentAdder
     // later on these sizes are pulled from my measurements of the default size of a
     // ChooseReferenceWidget, which I thought had a nice default size
-    this->resize(415, 315);
+    resize(415, 315);
 }
 
 MainWindow::~MainWindow() {}
 
-void MainWindow::runMemorizer(const QString &verse)
+void MainWindow::runMemorizer(const QString &content)
 {
     m_saveFocusWidget = QApplication::focusWidget();
     m_saveCentralWidget = takeCentralWidget();
 
-    m_memorizer = new MemorizeWidget{ verse };
+    if (m_memorizer != nullptr)
+        delete m_memorizer;
+    m_memorizer = new MemorizeWidget{ content };
     m_memorizer->focusMemorizer();
     setCentralWidget(m_memorizer);
 

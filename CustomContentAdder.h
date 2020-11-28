@@ -18,7 +18,7 @@ public:
     QString getContent();
 
 signals:
-    void ok();
+    void ok(const QString &);
     void cancel();
 
 private:

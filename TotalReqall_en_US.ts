@@ -14,7 +14,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="ChooseReferenceWidget.cpp" line="118"/>
+        <location filename="ChooseReferenceWidget.cpp" line="129"/>
         <source>Display verse</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22,12 +22,12 @@
 <context>
     <name>CustomContentAdder</name>
     <message>
-        <location filename="CustomContentAdder.cpp" line="25"/>
+        <location filename="CustomContentAdder.cpp" line="39"/>
         <source>Title:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="CustomContentAdder.cpp" line="26"/>
+        <location filename="CustomContentAdder.cpp" line="40"/>
         <source>Content:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -35,48 +35,68 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="MainWindow.cpp" line="49"/>
+        <location filename="MainWindow.cpp" line="27"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="52"/>
+        <location filename="MainWindow.cpp" line="30"/>
         <source>Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="61"/>
+        <location filename="MainWindow.cpp" line="39"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="67"/>
+        <location filename="MainWindow.cpp" line="45"/>
+        <source>Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="47"/>
+        <source>&amp;Saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="48"/>
+        <source>&amp;Bible verse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="49"/>
+        <source>&amp;Custom content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="MainWindow.cpp" line="65"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="70"/>
+        <location filename="MainWindow.cpp" line="68"/>
         <source>Online help...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="80"/>
+        <location filename="MainWindow.cpp" line="78"/>
         <source>About Qt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="MainWindow.cpp" line="85"/>
         <location filename="MainWindow.cpp" line="87"/>
-        <location filename="MainWindow.cpp" line="89"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="90"/>
+        <location filename="MainWindow.cpp" line="88"/>
         <source> version </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MainWindow.cpp" line="92"/>
+        <location filename="MainWindow.cpp" line="90"/>
         <source>&lt;br&gt;Copyright © 2020 Loren Burkholder.&lt;br&gt;&lt;br&gt;&lt;a href=&quot;https://lorendb.github.io/TotalReqall&quot;&gt;https://lorendb.github.io/TotalReqall&lt;/a&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -111,6 +131,34 @@
         <location filename="MemorizeWidget.cpp" line="55"/>
         <location filename="MemorizeWidget.cpp" line="79"/>
         <source>Continue</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SavedContentLoader</name>
+    <message>
+        <location filename="SavedContentLoader.cpp" line="42"/>
+        <source>Review</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SavedContentLoader.cpp" line="43"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SavedContentLoader.cpp" line="72"/>
+        <source>Double-click an entry to review it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SavedContentLoader.cpp" line="122"/>
+        <source>Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="SavedContentLoader.cpp" line="123"/>
+        <source>Error: could not find data for </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -238,27 +286,37 @@
 <context>
     <name>WelcomePage</name>
     <message>
-        <location filename="WelcomePage.cpp" line="14"/>
+        <location filename="WelcomePage.cpp" line="15"/>
+        <source>Saved</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="WelcomePage.cpp" line="15"/>
+        <source>Review content that you&apos;ve saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="WelcomePage.cpp" line="16"/>
         <source>Bible verse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="WelcomePage.cpp" line="14"/>
+        <location filename="WelcomePage.cpp" line="16"/>
         <source>Memorize a verse or verses from the Bible.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="WelcomePage.cpp" line="16"/>
+        <location filename="WelcomePage.cpp" line="18"/>
         <source>Custom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="WelcomePage.cpp" line="16"/>
+        <location filename="WelcomePage.cpp" line="18"/>
         <source>Enter some custom content to memorize.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="WelcomePage.cpp" line="22"/>
+        <location filename="WelcomePage.cpp" line="41"/>
         <source>Choose what to memorize.</source>
         <translation type="unfinished"></translation>
     </message>

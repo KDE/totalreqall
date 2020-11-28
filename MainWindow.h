@@ -7,6 +7,7 @@
 #include "ChooseReferenceWidget.h"
 #include "CustomContentAdder.h"
 #include "MemorizeWidget.h"
+#include "SavedContentLoader.h"
 #include "WelcomePage.h"
 #include <QAction>
 #include <QGridLayout>
@@ -32,6 +33,7 @@ private:
     ChooseReferenceWidget *m_refChooser;
     WelcomePage *m_welcomePage;
     CustomContentAdder *m_contentAdder;
+    SavedContentLoader *m_savedLoader;
 
     // when a central widget needs removed but not deleted
     QWidget *m_saveCentralWidget = nullptr;
