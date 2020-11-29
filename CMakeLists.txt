@@ -26,7 +26,6 @@ set(SRC_FILES
 	ChooseReferenceWidget.cpp
 	CustomContentAdder.cpp
 	MainWindow.cpp
-	MemorizeEdit.cpp
 	MemorizeWidget.cpp
 	SavedContentLoader.cpp
 	SettingsDialog.cpp

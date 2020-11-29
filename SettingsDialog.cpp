@@ -4,7 +4,7 @@
 #include "SettingsDialog.h"
 
 #include "ChooseReferenceWidget.h"
-#include "MemorizeEdit.h"
+#include "MemorizeWidget.h"
 #include "SimpleRefChooser.h"
 #include <QDialogButtonBox>
 #include <QGridLayout>

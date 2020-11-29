@@ -104,17 +104,17 @@
 <context>
     <name>MemorizeEdit</name>
     <message>
-        <location filename="MemorizeEdit.cpp" line="110"/>
+        <location filename="MemorizeWidget.cpp" line="117"/>
         <source>Oops, you messed up! Try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MemorizeEdit.cpp" line="123"/>
+        <location filename="MemorizeWidget.cpp" line="130"/>
         <source>Oops, you messed up!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MemorizeEdit.cpp" line="141"/>
+        <location filename="MemorizeWidget.cpp" line="148"/>
         <source>Done!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -122,14 +122,14 @@
 <context>
     <name>MemorizeWidget</name>
     <message>
-        <location filename="MemorizeWidget.cpp" line="31"/>
-        <location filename="MemorizeWidget.cpp" line="64"/>
+        <location filename="MemorizeWidget.cpp" line="207"/>
+        <location filename="MemorizeWidget.cpp" line="240"/>
         <source>Stop memorizing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="MemorizeWidget.cpp" line="55"/>
-        <location filename="MemorizeWidget.cpp" line="79"/>
+        <location filename="MemorizeWidget.cpp" line="231"/>
+        <location filename="MemorizeWidget.cpp" line="255"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
@@ -137,27 +137,27 @@
 <context>
     <name>SavedContentLoader</name>
     <message>
-        <location filename="SavedContentLoader.cpp" line="42"/>
+        <location filename="SavedContentLoader.cpp" line="45"/>
         <source>Review</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SavedContentLoader.cpp" line="43"/>
+        <location filename="SavedContentLoader.cpp" line="46"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SavedContentLoader.cpp" line="72"/>
+        <location filename="SavedContentLoader.cpp" line="75"/>
         <source>Double-click an entry to review it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SavedContentLoader.cpp" line="122"/>
+        <location filename="SavedContentLoader.cpp" line="125"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="SavedContentLoader.cpp" line="123"/>
+        <location filename="SavedContentLoader.cpp" line="126"/>
         <source>Error: could not find data for </source>
         <translation type="unfinished"></translation>
     </message>
