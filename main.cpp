@@ -16,9 +16,9 @@ inline QPoint centerWindowOnScreen(int, int);
 int main(int argc, char *argv[])
 {
     QCoreApplication::setApplicationName(TotalReqall::appName);
-	QCoreApplication::setApplicationVersion(TotalReqall::appVersion.toString());
+    QCoreApplication::setApplicationVersion(TotalReqall::appVersion.toString());
     //    QCoreApplication::setOrganizationName(TotalReqall::organizationName);
-	//    QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
+    //    QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
 
     QApplication a(argc, argv);
     MainWindow mainWindow;

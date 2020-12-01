@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com>>
+// SPDX-FileCopyrightText: 2020 Loren Burkholder <computersemiexpert@outlook.com>
 // SPDX-License-Identifier: BSD-2-Clause
 
 #include "SavedContentLoader.h"
@@ -36,9 +36,27 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     settings.endGroup();
     settings.endGroup();
 
+    auto review = new QPushButton{ QIcon::fromTheme("go-next"), tr("Review") };
+    auto deleteItem = new QPushButton{ QIcon::fromTheme("edit-delete"), tr("Delete") };
+    //	deleteItem->setDisabled(true); // until something is actually selected
+    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), tr("Back") };
+
+    auto deleteLambda = [this, deleteItem](QListWidgetItem *itemToDelete) {
+        QSettings settings;
+        settings.beginGroup("savedContent");
+        settings.remove("verses/" + itemToDelete->text());
+        settings.remove("custom/" + itemToDelete->text());
+        settings.endGroup();
+        m_contentList->removeItemWidget(itemToDelete);
+        refresh();
+
+        if (m_contentList->count() == 0)
+            deleteItem->setDisabled(true);
+    };
+
     m_contentList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_contentList, &QListWidget::customContextMenuRequested, this,
-            [this](const QPoint &pos) {
+            [this, deleteLambda](const QPoint &pos) {
                 QPoint globalPos = m_contentList->mapToGlobal(pos);
 
                 auto rightClickContext = new QMenu;
@@ -51,30 +69,31 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
                 if (action == reviewItem)
                     prepareContent(m_contentList->itemAt(pos));
                 else if (action == deleteItem)
-                {
-                    QSettings settings;
-                    settings.beginGroup("savedContent");
-                    settings.remove("verses/" + m_contentList->itemAt(pos)->text());
-                    settings.remove("custom/" + m_contentList->itemAt(pos)->text());
-                    settings.endGroup();
-                    refresh();
-                }
+                    deleteLambda(m_contentList->itemAt(pos));
             });
 
     connect(m_contentList, &QListWidget::itemDoubleClicked, this,
             &SavedContentLoader::prepareContent);
 
-    auto buttons = new QDialogButtonBox{ QDialogButtonBox::Ok | QDialogButtonBox::Cancel };
-    connect(buttons->button(QDialogButtonBox::Ok), &QPushButton::clicked, this, [this]() {
+    connect(review, &QPushButton::clicked, this, [this]() {
         prepareContent(m_contentList->currentItem());
     });
-    connect(buttons->button(QDialogButtonBox::Cancel), &QPushButton::clicked, this,
-            &SavedContentLoader::cancel);
+    connect(deleteItem, &QPushButton::clicked, this, [this, deleteLambda]() {
+        for (auto item : m_contentList->selectedItems())
+            deleteLambda(item);
+    });
+    connect(back, &QPushButton::clicked, this, &SavedContentLoader::cancel);
+
+    auto buttons = new QHBoxLayout;
+    buttons->addWidget(back);
+    buttons->addStretch();
+    buttons->addWidget(deleteItem);
+    buttons->addWidget(review);
 
     auto layout = new QVBoxLayout;
     layout->addWidget(new QLabel{ tr("Double-click an entry to review it.") });
     layout->addWidget(m_contentList);
-    layout->addWidget(buttons);
+    layout->addLayout(buttons);
 
     setLayout(layout);
 }

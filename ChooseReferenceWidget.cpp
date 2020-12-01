@@ -4,6 +4,7 @@
 #include "ChooseReferenceWidget.h"
 
 #include <QDebug>
+#include <QHBoxLayout>
 #include <QLabel>
 #include <QRandomGenerator>
 #include <QSettings>
@@ -113,6 +114,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_endVerses->setMinimumContentsLength(3);
 
     m_runMemorizerBtn->setText(tr("Memorize verse"));
+    m_runMemorizerBtn->setIcon(QIcon::fromTheme("go-next"));
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, [this]() {
         QSettings settings;
         settings.beginGroup("savedContent");
@@ -125,6 +127,10 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         settings.endGroup();
     });
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
+
+    auto back = new QPushButton{ tr("Back") };
+    back->setIcon(QIcon::fromTheme("go-previous"));
+    connect(back, &QPushButton::clicked, this, &ChooseReferenceWidget::cancel);
 
     m_displayVerseBtn->setText(tr("Display verse"));
     connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
@@ -144,18 +150,15 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_layout->addWidget(dash, 0, 4);
     m_layout->addWidget(m_endVerses, 0, 5);
 
-    if (settings.value("swapButtons", false).toBool())
-    {
-        m_layout->addWidget(m_displayVerseBtn, 1, 0);
-        m_layout->addWidget(m_runMemorizerBtn, 1, 1);
-    }
-    else
-    {
-        m_layout->addWidget(m_runMemorizerBtn, 1, 0);
-        m_layout->addWidget(m_displayVerseBtn, 1, 1);
-    }
+    m_layout->addWidget(m_verseDisplayBox, 1, 0, 1, 6);
 
-    m_layout->addWidget(m_verseDisplayBox, 2, 0, 1, 6);
+    auto buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(back);
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(m_displayVerseBtn);
+    buttonLayout->addWidget(m_runMemorizerBtn);
+
+    m_layout->addLayout(buttonLayout, 2, 0, 1, 6);
 
     this->setLayout(m_layout);
 

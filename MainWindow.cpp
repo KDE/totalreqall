@@ -41,26 +41,6 @@ MainWindow::MainWindow(QMainWindow *parent)
     fileMenu->addAction(exit);
 #endif
 
-    // mode menu
-    auto modeMenu = new QMenu{ tr("Mode") };
-
-    auto saved = new QAction{ tr("&Saved") };
-    auto bibleVerse = new QAction{ tr("&Bible verse") };
-    auto custom = new QAction{ tr("&Custom content") };
-
-    saved->setCheckable(true);
-    bibleVerse->setCheckable(true);
-    custom->setCheckable(true);
-
-    auto modeGroup = new QActionGroup{ nullptr };
-    modeGroup->addAction(saved);
-    modeGroup->addAction(bibleVerse);
-    modeGroup->addAction(custom);
-
-    modeMenu->addAction(saved);
-    modeMenu->addAction(bibleVerse);
-    modeMenu->addAction(custom);
-
     // help menu
     auto helpMenu = new QMenu{ tr("&Help") };
 
@@ -96,7 +76,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     // add all menus
     menuBar()->addMenu(fileMenu);
-    menuBar()->addMenu(modeMenu);
     menuBar()->addMenu(helpMenu);
 
     connect(m_refChooser, &ChooseReferenceWidget::startMemorizer, this, &MainWindow::runMemorizer);
@@ -105,37 +84,39 @@ MainWindow::MainWindow(QMainWindow *parent)
 
     setCentralWidget(m_welcomePage);
 
-    connect(saved, &QAction::triggered, m_welcomePage, &WelcomePage::savedClicked);
-    connect(m_welcomePage, &WelcomePage::savedClicked, this, [this, saved]() {
+    connect(m_welcomePage, &WelcomePage::savedClicked, this, [this]() {
         takeCentralWidget();
 
         // make sure that all content is displayed
         m_savedLoader->refresh();
         setCentralWidget(m_savedLoader);
-        saved->setChecked(true);
     });
 
-    connect(bibleVerse, &QAction::triggered, m_welcomePage, &WelcomePage::bibleClicked);
-    connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this, bibleVerse]() {
+    connect(m_welcomePage, &WelcomePage::bibleClicked, this, [this]() {
         takeCentralWidget();
         setCentralWidget(m_refChooser);
-        bibleVerse->setChecked(true);
     });
 
-    connect(custom, &QAction::triggered, m_welcomePage, &WelcomePage::customClicked);
-    connect(m_welcomePage, &WelcomePage::customClicked, this, [this, custom]() {
+    connect(m_welcomePage, &WelcomePage::customClicked, this, [this]() {
         takeCentralWidget();
         setCentralWidget(m_contentAdder);
-        custom->setChecked(true);
-    });
-
-    connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
-        takeCentralWidget();
-        setCentralWidget(m_welcomePage);
     });
 
     connect(m_savedLoader, &SavedContentLoader::cancel, this, [this]() {
         takeCentralWidget();
+        m_welcomePage->refresh();
+        setCentralWidget(m_welcomePage);
+    });
+
+    connect(m_refChooser, &ChooseReferenceWidget::cancel, this, [this]() {
+        takeCentralWidget();
+        m_welcomePage->refresh();
+        setCentralWidget(m_welcomePage);
+    });
+
+    connect(m_contentAdder, &CustomContentAdder::cancel, this, [this]() {
+        takeCentralWidget();
+        m_welcomePage->refresh();
         setCentralWidget(m_welcomePage);
     });
 

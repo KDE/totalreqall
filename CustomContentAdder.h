@@ -21,6 +21,9 @@ signals:
     void ok(const QString &);
     void cancel();
 
+private slots:
+    void saveItem();
+
 private:
     QLineEdit *m_title;
     QTextEdit *m_content;

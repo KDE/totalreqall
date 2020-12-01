@@ -27,7 +27,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_setVerse{ new QRadioButton },
       m_chooseSetVerse{ new QPushButton },
       m_shouldSaveWindowSize{ new QCheckBox },
-      m_swapRefChooserBtns{ new QCheckBox },
 #endif // Q_OS_WASM
       m_reset{ new QPushButton }
 {
@@ -65,11 +64,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     m_shouldSaveWindowSize->setText(tr("Save last set window size"));
     m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
-
-    m_swapRefChooserBtns->setText(tr("Swap Memorize and Display buttons"));
-    m_swapRefChooserBtns->setChecked(
-        settings.value("ChooseReferenceWidget/swapButtons", false).toBool());
-    m_swapRefChooserBtns->setToolTip(tr("This will take effect after a restart."));
 #endif // Q_OS_WASM
 
     m_reset->setText(tr("&Reset all settings..."));
@@ -94,7 +88,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 #ifndef Q_OS_WASM // skip the unecessary stuff
     // Display tab
     auto displayLayout = new QVBoxLayout;
-    displayLayout->addWidget(m_swapRefChooserBtns);
     displayLayout->addWidget(m_shouldSaveWindowSize);
     displayLayout->addStretch();
     auto display = new QWidget;
@@ -203,12 +196,6 @@ void SettingsDialog::apply()
 #ifndef Q_OS_WASM // skip the unecessary stuff
     settings.beginGroup("ChooseReferenceWidget");
 
-    // warn the user that a restart is needed
-    if (settings.value("swapButtons", false).toBool() != m_swapRefChooserBtns->isChecked())
-        QMessageBox::information(this, tr("Restart program"),
-                                 tr("The buttons will be swapped after the program is restarted."));
-
-    settings.setValue("swapButtons", m_swapRefChooserBtns->isChecked());
     settings.setValue("verseLoadOption", m_verseLoadSettings->checkedId());
     settings.endGroup(); // ChooseReferenceWidget
 

@@ -38,7 +38,6 @@ private:
     QPushButton *m_chooseSetVerse;
 
     QCheckBox *m_shouldSaveWindowSize;
-    QCheckBox *m_swapRefChooserBtns;
 #endif // Q_OS_WASM
 
     QPushButton *m_reset;

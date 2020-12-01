@@ -28,6 +28,7 @@ public:
 
 signals:
     void startMemorizer(const QString &);
+    void cancel();
 
 private slots:
     void updateChapterVerseValues();
