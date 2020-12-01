@@ -5,7 +5,7 @@ A program for memorizing the Bible and other works. Written in C++ with Qt. Now 
 Start the program and choose a book, chapter, and verse. If you want to familiarize yourself with the verse, click "Display verse". Otherwise, click "Memorize verse" to memorize it.
 
 ## Installing
-You will need to install the Sword and cmark libraries, including the development files. Then build with cmake.
+You will need to install the Sword and cmark libraries, including the development files. Also, make sure that you have the KJV Sword module installed (failure to provide the KJV module will cause a segfault on Linux). Then build with cmake.
 
 ## I love this project. How can I help?
 Just make a pull request. All PRs will be reviewed, even if they are not accepted.
