@@ -1,53 +1,47 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+project(totalreqall VERSION 0.5.0)
 
-project(TotalReqall LANGUAGES CXX)
+set(QT_MIN_VERSION "5.10.0")
+set(KF5_REQUIRED_VERSION "5.56.0")
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+find_package(ECM ${KF5_REQUIRED_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 set(CPACK_PACKAGE_VERSION_MAJOR "0")
 set(CPACK_PACKAGE_VERSION_MINOR "5")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
-find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
-find_package(sword REQUIRED 1.8.1)
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDECompilerSettings NO_POLICY_SCOPE)
+include(FeatureSummary)
 
-configure_file(cmake/AppInfo.h AppInfo.h)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
+find_package(sword REQUIRED)
 
-set(SRC_FILES
-	ChooseReferenceWidget.cpp
-	CustomContentAdder.cpp
-	MainWindow.cpp
-	MemorizeWidget.cpp
-	SavedContentLoader.cpp
-	SettingsDialog.cpp
-	SimpleRefChooser.cpp
-	WelcomePage.cpp
-	main.cpp
-)
-set(TS_FILES TotalReqall_en_US.ts)
-set(QRC_FILES
-	general.qrc
-	icons.qrc
-)
+configure_file(AppInfo.h.cmake AppInfo.h)
 
 add_executable(TotalReqall
-	${SRC_FILES}
-	${QRC_FILES}
-	${TS_FILES}
+    ChooseReferenceWidget.cpp
+    CustomContentAdder.cpp
+    MainWindow.cpp
+    MemorizeWidget.cpp
+    SavedContentLoader.cpp
+    SettingsDialog.cpp
+    SimpleRefChooser.cpp
+    WelcomePage.cpp
+    main.cpp
+    general.qrc
+    icons.qrc
 )
 
-# Unfortunately, this is required due to some wacky configuration in the Sword headers.
-include_directories("/usr/include/sword")
+target_link_libraries(TotalReqall
+    Qt5::Widgets
+    sword::sword
+)
 
-target_link_libraries(TotalReqall PRIVATE Qt5::Widgets sword)
+install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILES})
+qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} TotalReqall_en_US.ts)
+
+feature_summary(WHAT ALL INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES)
