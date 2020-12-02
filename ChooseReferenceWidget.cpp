@@ -4,6 +4,7 @@
 #include "ChooseReferenceWidget.h"
 
 #include <QDebug>
+#include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QRandomGenerator>
@@ -16,7 +17,6 @@
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
-      m_layout{ new QGridLayout{ this } },
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
       m_startVerses{ new QComboBox },
@@ -107,6 +107,12 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
     connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
+    // and we want to always display the currently selected verse
+    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+
     // ... and make sure that the combo boxes are large enough (try removing this and then
     // viewing the verses for Psalms 119 if you think this is unnecessary!)
     m_chapters->setMinimumContentsLength(3);
@@ -143,14 +149,15 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     dash->setAlignment(Qt::AlignHCenter);
 
     // set up the layout
-    m_layout->addWidget(m_books, 0, 0);
-    m_layout->addWidget(m_chapters, 0, 1);
-    m_layout->addWidget(colon, 0, 2);
-    m_layout->addWidget(m_startVerses, 0, 3);
-    m_layout->addWidget(dash, 0, 4);
-    m_layout->addWidget(m_endVerses, 0, 5);
+    auto layout = new QGridLayout;
 
-    m_layout->addWidget(m_verseDisplayBox, 1, 0, 1, 6);
+    layout->addWidget(m_books, 0, 0);
+    layout->addWidget(m_chapters, 0, 1);
+    layout->addWidget(colon, 0, 2);
+    layout->addWidget(m_startVerses, 0, 3);
+    layout->addWidget(dash, 0, 4);
+    layout->addWidget(m_endVerses, 0, 5);
+    layout->addWidget(m_verseDisplayBox, 1, 0, 1, 6);
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
@@ -158,9 +165,11 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     buttonLayout->addWidget(m_displayVerseBtn);
     buttonLayout->addWidget(m_runMemorizerBtn);
 
-    m_layout->addLayout(buttonLayout, 2, 0, 1, 6);
+    layout->addLayout(buttonLayout, 2, 0, 1, 6);
 
-    this->setLayout(m_layout);
+    this->setLayout(layout);
+
+    displayVerse();
 
     settings.endGroup(); // ChooseReferenceWidget
 }

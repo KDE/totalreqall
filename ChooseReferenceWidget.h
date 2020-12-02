@@ -5,7 +5,6 @@
 #define CHOOSEREFERENCEWIDGET_H
 
 #include <QComboBox>
-#include <QGridLayout>
 #include <QObject>
 #include <QPushButton>
 #include <QTextBrowser>
@@ -40,7 +39,6 @@ private slots:
     void runMemorizer();
 
 private:
-    QGridLayout *m_layout;
     QComboBox *m_books;
     QComboBox *m_chapters;
     QComboBox *m_startVerses;
