@@ -37,7 +37,7 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     settings.endGroup();
 
     auto review = new QPushButton{ QIcon::fromTheme("go-next"), tr("Review") };
-	auto deleteItem = new QPushButton{ QIcon::fromTheme("edit-delete"), tr("Delete") };
+    auto deleteItem = new QPushButton{ QIcon::fromTheme("edit-delete"), tr("Delete") };
     auto back = new QPushButton{ QIcon::fromTheme("go-previous"), tr("Back") };
 
     auto deleteLambda = [this, deleteItem](QListWidgetItem *itemToDelete) {

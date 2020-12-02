@@ -5,6 +5,8 @@
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
+#include <KAboutData>
+#include <KAboutApplicationDialog>
 #include <QActionGroup>
 #include <QApplication>
 #include <QDesktopServices>
@@ -64,13 +66,15 @@ MainWindow::MainWindow(QMainWindow *parent)
     // about this program
     auto about = new QAction{ tr("About") };
     connect(about, &QAction::triggered, this, [this]() {
-        QMessageBox::about(this, tr("About"),
-                           TotalReqall::appName + tr(" version ") +
-                               TotalReqall::appVersion.toString() +
-                               tr("<br>Copyright © 2020 Loren Burkholder."
-                                  "<br><br><a "
-                                  "href=\"https://lorendb.github.io/TotalReqall\">https://"
-                                  "lorendb.github.io/TotalReqall</a>"));
+        KAboutData aboutData{ "TotalReqall",
+                              tr("TotalReqall"),
+                              TotalReqall::appVersion.toString(),
+                              tr("Memorize the Bible or custom content."),
+                              KAboutLicense::BSDL,
+                              tr("Copyright (C) 2020 Loren Burkholder") };
+		auto kdeAboutAppDlg =
+            new KAboutApplicationDialog{ aboutData, KAboutApplicationDialog::NoOptions, this };
+		kdeAboutAppDlg->exec();
     });
     helpMenu->addAction(about);
 

@@ -18,6 +18,12 @@ include(FeatureSummary)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
 find_package(sword REQUIRED)
+find_package(KF5 ${KF5_DEP_VERSION}
+	REQUIRED COMPONENTS
+	    XmlGui
+		CoreAddons
+)
+
 
 configure_file(AppInfo.h.cmake AppInfo.h)
 
@@ -38,6 +44,8 @@ add_executable(TotalReqall
 target_link_libraries(TotalReqall
     Qt5::Widgets
     sword::sword
+	KF5::CoreAddons
+	KF5::XmlGui
 )
 
 install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})
