@@ -15,8 +15,8 @@
 #include <QSettings>
 #include <QTextStream>
 
-MainWindow::MainWindow(QMainWindow *parent)
-    : QMainWindow(parent),
+MainWindow::MainWindow(KMainWindow *parent)
+    : KMainWindow{ parent },
       m_refChooser{ new ChooseReferenceWidget },
       m_welcomePage{ new WelcomePage },
       m_contentAdder{ new CustomContentAdder },

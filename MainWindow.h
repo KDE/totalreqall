@@ -9,6 +9,7 @@
 #include "MemorizeWidget.h"
 #include "SavedContentLoader.h"
 #include "WelcomePage.h"
+#include <KMainWindow>
 #include <QAction>
 #include <QGridLayout>
 #include <QMainWindow>
@@ -18,12 +19,12 @@
 #include <QStatusBar>
 #include <QWidget>
 
-class MainWindow : public QMainWindow
+class MainWindow : public KMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(QMainWindow *parent = nullptr);
+	MainWindow(KMainWindow *parent = nullptr);
     ~MainWindow();
 
 protected:
