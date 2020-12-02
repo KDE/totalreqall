@@ -3,6 +3,7 @@
 
 #include "ChooseReferenceWidget.h"
 
+#include <KLocalizedString>
 #include <QDebug>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -26,7 +27,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_verseDisplayBox{ new QTextBrowser }
 {
     // general setup
-    setStatusTip(tr("Choose a verse"));
+    setStatusTip(ki18n("Choose a verse").toString());
 
     // get the values for the books (chapters and verses will come later)
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
@@ -119,7 +120,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_startVerses->setMinimumContentsLength(3);
     m_endVerses->setMinimumContentsLength(3);
 
-    m_runMemorizerBtn->setText(tr("Memorize verse"));
+    m_runMemorizerBtn->setText(ki18n("Memorize verse").toString());
     m_runMemorizerBtn->setIcon(QIcon::fromTheme("go-next"));
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, [this]() {
         QSettings settings;
@@ -134,7 +135,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     });
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
-    auto back = new QPushButton{ tr("Back") };
+    auto back = new QPushButton{ ki18n("Back").toString() };
     back->setIcon(QIcon::fromTheme("go-previous"));
     connect(back, &QPushButton::clicked, this, &ChooseReferenceWidget::cancel);
 
@@ -158,7 +159,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
-	buttonLayout->addStretch();
+    buttonLayout->addStretch();
     buttonLayout->addWidget(m_runMemorizerBtn);
 
     layout->addLayout(buttonLayout, 2, 0, 1, 6);

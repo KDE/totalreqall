@@ -22,6 +22,7 @@ find_package(KF5 ${KF5_DEP_VERSION}
 	REQUIRED COMPONENTS
 	    XmlGui
 		CoreAddons
+		I18n
 )
 
 
@@ -46,6 +47,7 @@ target_link_libraries(TotalReqall
     sword::sword
 	KF5::CoreAddons
 	KF5::XmlGui
+	KF5::I18n
 )
 
 install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})

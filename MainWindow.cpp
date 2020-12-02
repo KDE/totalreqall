@@ -5,8 +5,9 @@
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
-#include <KAboutData>
 #include <KAboutApplicationDialog>
+#include <KAboutData>
+#include <KLocalizedString>
 #include <QActionGroup>
 #include <QApplication>
 #include <QDesktopServices>
@@ -26,10 +27,10 @@ MainWindow::MainWindow(KMainWindow *parent)
 
     // set up the menus
     // file menu
-    auto fileMenu = new QMenu{ tr("&File") };
+    auto fileMenu = new QMenu{ ki18n("&File").toString() };
 
     // settings action
-    auto settings = new QAction{ tr("Settings...") };
+    auto settings = new QAction{ ki18n("Settings...").toString() };
     connect(settings, &QAction::triggered, this, [this]() {
         SettingsDialog s{ this };
         s.exec();
@@ -38,16 +39,16 @@ MainWindow::MainWindow(KMainWindow *parent)
 
     // exit action
 #ifndef Q_OS_WASM // Skip this on WASM
-    auto exit = new QAction{ tr("Exit") };
+    auto exit = new QAction{ ki18n("Exit").toString() };
     connect(exit, &QAction::triggered, this, &MainWindow::close);
     fileMenu->addAction(exit);
 #endif
 
     // help menu
-    auto helpMenu = new QMenu{ tr("&Help") };
+    auto helpMenu = new QMenu{ ki18n("&Help").toString() };
 
     // online help
-    auto onlineHelp = new QAction{ tr("Online help...") };
+    auto onlineHelp = new QAction{ ki18n("Online help...").toString() };
     connect(onlineHelp, &QAction::triggered, this, []() {
         QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
     });
@@ -57,24 +58,24 @@ MainWindow::MainWindow(KMainWindow *parent)
     helpMenu->addSeparator();
 
     // about Qt
-    auto aboutQt = new QAction{ tr("About Qt") };
+    auto aboutQt = new QAction{ ki18n("About Qt").toString() };
     connect(aboutQt, &QAction::triggered, this, [this]() {
         QMessageBox::aboutQt(this);
     });
     helpMenu->addAction(aboutQt);
 
     // about this program
-    auto about = new QAction{ tr("About") };
+    auto about = new QAction{ ki18n("About").toString() };
     connect(about, &QAction::triggered, this, [this]() {
         KAboutData aboutData{ "TotalReqall",
-                              tr("TotalReqall"),
+                              ki18n("TotalReqall").toString(),
                               TotalReqall::appVersion.toString(),
-                              tr("Memorize the Bible or custom content."),
+                              ki18n("Memorize the Bible or custom content.").toString(),
                               KAboutLicense::BSDL,
-                              tr("Copyright (C) 2020 Loren Burkholder") };
-		auto kdeAboutAppDlg =
+                              ki18n("Copyright (C) 2020 Loren Burkholder").toString() };
+        auto kdeAboutAppDlg =
             new KAboutApplicationDialog{ aboutData, KAboutApplicationDialog::NoOptions, this };
-		kdeAboutAppDlg->exec();
+        kdeAboutAppDlg->exec();
     });
     helpMenu->addAction(about);
 

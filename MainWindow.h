@@ -24,7 +24,7 @@ class MainWindow : public KMainWindow
     Q_OBJECT
 
 public:
-	MainWindow(KMainWindow *parent = nullptr);
+    MainWindow(KMainWindow *parent = nullptr);
     ~MainWindow();
 
 protected:

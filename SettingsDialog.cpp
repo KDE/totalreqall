@@ -6,6 +6,7 @@
 #include "ChooseReferenceWidget.h"
 #include "MemorizeWidget.h"
 #include "SimpleRefChooser.h"
+#include <KLocalizedString>
 #include <QDialogButtonBox>
 #include <QGridLayout>
 #include <QGroupBox>
@@ -30,7 +31,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 #endif // Q_OS_WASM
       m_reset{ new QPushButton }
 {
-    this->setWindowTitle(tr("Settings"));
+    this->setWindowTitle(ki18n("Settings").toString());
 
     m_tabs->setUsesScrollButtons(false);
 
@@ -38,8 +39,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     QSettings settings;
 
     // set up the widgets
-    m_redo->setText(tr("&Retype the word"));
-    m_keepGoing->setText(tr("Mark the word as incorrect and &keep going"));
+    m_redo->setText(ki18n("&Retype the word").toString());
+    m_keepGoing->setText(ki18n("Mark the word as incorrect and &keep going").toString());
 
     m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
     m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
@@ -48,10 +49,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         ->setChecked(true);
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
-    m_saveVerse->setText(tr("Load &last verse"));
-    m_randVerse->setText(tr("Load &random verse"));
-    m_setVerse->setText(tr("Load a &set verse"));
-    m_chooseSetVerse->setText(tr("&Choose verse..."));
+    m_saveVerse->setText(ki18n("Load &last verse").toString());
+    m_randVerse->setText(ki18n("Load &random verse").toString());
+    m_setVerse->setText(ki18n("Load a &set verse").toString());
+    m_chooseSetVerse->setText(ki18n("&Choose verse...").toString());
 
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
@@ -62,11 +63,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_verseLoadSettings->button(settings.value("ChooseReferenceWidget/verseLoadOption", 1).toInt())
         ->setChecked(true);
 
-    m_shouldSaveWindowSize->setText(tr("Save last set window size"));
+    m_shouldSaveWindowSize->setText(ki18n("Save last set window size").toString());
     m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
 #endif // Q_OS_WASM
 
-    m_reset->setText(tr("&Reset all settings..."));
+    m_reset->setText(ki18n("&Reset all settings...").toString());
 
     // Memorization tab
     auto errorActionGroupLayout = new QVBoxLayout;
@@ -75,7 +76,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     errorActionGroupLayout->addStretch();
 
     auto errorActionGroup = new QGroupBox;
-    errorActionGroup->setTitle(tr("Set action when the wrong key is typed"));
+    errorActionGroup->setTitle(ki18n("Set action when the wrong key is typed").toString());
     errorActionGroup->setLayout(errorActionGroupLayout);
 
     auto memorizationLayout = new QVBoxLayout;
@@ -101,7 +102,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     loadVerseGroupLayout->addWidget(m_chooseSetVerse, 2, 1);
 
     auto loadVerseGroup = new QGroupBox;
-    loadVerseGroup->setTitle(tr("Set what verse to load on startup"));
+    loadVerseGroup->setTitle(ki18n("Set what verse to load on startup").toString());
     loadVerseGroup->setLayout(loadVerseGroupLayout);
 
     auto startupLayout = new QVBoxLayout;
@@ -121,9 +122,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     // connect the widgets
     connect(m_reset, &QPushButton::clicked, this, [this]() {
-        if (QMessageBox::question(this, tr("Confirm reset"),
-                                  tr("Are you sure you want to reset all settings? This will take "
-                                     "effect immediately.")) == QMessageBox::StandardButton::Yes)
+        if (QMessageBox::question(this, ki18n("Confirm reset").toString(),
+                                  ki18n("Are you sure you want to reset all settings? This will "
+                                        "take "
+                                        "effect immediately.")
+                                      .toString()) == QMessageBox::StandardButton::Yes)
         {
             QSettings settings;
             settings.clear();
@@ -163,14 +166,14 @@ SettingsDialog::SettingsDialog(QWidget *parent)
             this, &SettingsDialog::reject);
 
     // add the widgets
-    m_tabs->addTab(memorization, tr("&Memorization"));
+    m_tabs->addTab(memorization, ki18n("&Memorization").toString());
 
 #ifndef Q_OS_WASM // these tabs aren't needed with the stuff skipped in WASM
-    m_tabs->addTab(display, tr("&Display"));
-    m_tabs->addTab(startup, tr("&Startup"));
+    m_tabs->addTab(display, ki18n("&Display").toString());
+    m_tabs->addTab(startup, ki18n("&Startup").toString());
 #endif // Q_OS_WASM
 
-    m_tabs->addTab(other, tr("&Other settings"));
+    m_tabs->addTab(other, ki18n("&Other settings").toString());
 
     auto layout = new QGridLayout;
     layout->addWidget(m_tabs, 0, 0);

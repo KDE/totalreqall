@@ -5,6 +5,7 @@
 #include "ChooseReferenceWidget.h"
 #include "MainWindow.h"
 #include "MemorizeWidget.h"
+#include <KI18n/KLocalizedString>
 #include <QApplication>
 #include <QPoint>
 #include <QPushButton>
@@ -19,6 +20,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(TotalReqall::appVersion.toString());
     //    QCoreApplication::setOrganizationName(TotalReqall::organizationName);
     //    QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
+
+    KLocalizedString::setApplicationDomain(TotalReqall::appName.toStdString().c_str());
 
     QApplication a(argc, argv);
     MainWindow mainWindow;

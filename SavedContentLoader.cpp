@@ -3,6 +3,7 @@
 
 #include "SavedContentLoader.h"
 
+#include <KLocalizedString>
 #include <QAction>
 #include <QDialogButtonBox>
 #include <QLabel>
@@ -36,9 +37,10 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     settings.endGroup();
     settings.endGroup();
 
-    auto review = new QPushButton{ QIcon::fromTheme("go-next"), tr("Review") };
-    auto deleteItem = new QPushButton{ QIcon::fromTheme("edit-delete"), tr("Delete") };
-    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), tr("Back") };
+    auto review = new QPushButton{ QIcon::fromTheme("go-next"), ki18n("Review").toString() };
+    auto deleteItem =
+        new QPushButton{ QIcon::fromTheme("edit-delete"), ki18n("Delete").toString() };
+    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), ki18n("Back").toString() };
 
     auto deleteLambda = [this, deleteItem](QListWidgetItem *itemToDelete) {
         QSettings settings;
@@ -59,8 +61,8 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
                 QPoint globalPos = m_contentList->mapToGlobal(pos);
 
                 auto rightClickContext = new QMenu;
-                auto reviewItem = new QAction{ tr("Review") };
-                auto deleteItem = new QAction{ tr("Delete") };
+                auto reviewItem = new QAction{ ki18n("Review").toString() };
+                auto deleteItem = new QAction{ ki18n("Delete").toString() };
                 rightClickContext->addAction(reviewItem);
                 rightClickContext->addAction(deleteItem);
 
@@ -90,7 +92,7 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     buttons->addWidget(review);
 
     auto layout = new QVBoxLayout;
-    layout->addWidget(new QLabel{ tr("Double-click an entry to review it.") });
+    layout->addWidget(new QLabel{ ki18n("Double-click an entry to review it.").toString() });
     layout->addWidget(m_contentList);
     layout->addLayout(buttons);
 
@@ -140,8 +142,8 @@ void SavedContentLoader::prepareContent(QListWidgetItem *item)
     else if (settings.contains("custom/" + item->text()))
         emit contentReady(settings.value("custom/" + item->text()).toString());
     else
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Error: could not find data for ") + item->text());
+        QMessageBox::critical(this, ki18n("Error").toString(),
+                              ki18n("Error: could not find data for ").toString() + item->text());
 
     settings.endGroup();
 }

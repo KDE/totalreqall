@@ -3,6 +3,7 @@
 
 #include "CustomContentAdder.h"
 
+#include <KLocalizedString>
 #include <QDialogButtonBox>
 #include <QFormLayout>
 #include <QHBoxLayout>
@@ -19,18 +20,18 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     m_content->setAcceptRichText(false);
     m_content->setTabChangesFocus(true);
 
-    auto memorize = new QPushButton{ tr("Memorize") };
+    auto memorize = new QPushButton{ ki18n("Memorize").toString() };
     memorize->setIcon(QIcon::fromTheme("go-next"));
     connect(memorize, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
     connect(memorize, &QPushButton::clicked, this, [this]() {
         emit ok(m_content->toPlainText());
     });
 
-    auto back = new QPushButton{ tr("Back") };
+    auto back = new QPushButton{ ki18n("Back").toString() };
     back->setIcon(QIcon::fromTheme("go-previous"));
     connect(back, &QPushButton::clicked, this, &CustomContentAdder::cancel);
 
-    auto save = new QPushButton{ tr("Save") };
+    auto save = new QPushButton{ ki18n("Save").toString() };
     save->setIcon(QIcon::fromTheme("document-save"));
     connect(save, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
 
@@ -44,8 +45,8 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     // available space, so the QVBoxLayout is used to prevent lots of empty space between the
     // OK/Cancel buttons and the bottom of the window
     auto form = new QFormLayout;
-    form->addRow(new QLabel{ tr("Title:") }, m_title);
-    form->addRow(new QLabel{ tr("Content:") }, m_content);
+    form->addRow(new QLabel{ ki18n("Title:").toString() }, m_title);
+    form->addRow(new QLabel{ ki18n("Content:").toString() }, m_content);
 
     auto layout = new QVBoxLayout;
     layout->addLayout(form);
