@@ -23,7 +23,6 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
       m_runMemorizerBtn{ new QPushButton },
-      m_displayVerseBtn{ new QPushButton },
       m_verseDisplayBox{ new QTextBrowser }
 {
     // general setup
