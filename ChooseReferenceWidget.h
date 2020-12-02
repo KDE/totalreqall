@@ -44,7 +44,6 @@ private:
     QComboBox *m_chapters;
     QComboBox *m_startVerses;
     QComboBox *m_endVerses;
-	QPushButton *m_runMemorizerBtn;
     QTextBrowser *m_verseDisplayBox;
 };
 

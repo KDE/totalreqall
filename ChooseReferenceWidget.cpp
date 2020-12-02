@@ -22,7 +22,6 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_chapters{ new QComboBox },
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
-      m_runMemorizerBtn{ new QPushButton },
       m_verseDisplayBox{ new QTextBrowser }
 {
     // general setup
@@ -119,10 +118,10 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_startVerses->setMinimumContentsLength(3);
     m_endVerses->setMinimumContentsLength(3);
 
-    m_runMemorizerBtn->setText(ki18n("Memorize verse").toString());
-    m_runMemorizerBtn->setIcon(QIcon::fromTheme("go-next"));
-    connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
-    connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
+	auto memorize =
+        new QPushButton{ QIcon::fromTheme("go-next"), ki18n("Memorize verse").toString() };
+	connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
+	connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
     auto save = new QPushButton{ QIcon::fromTheme("document-save"), ki18n("Save").toString() };
     connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
@@ -152,7 +151,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
     buttonLayout->addWidget(save);
-    buttonLayout->addWidget(m_runMemorizerBtn);
+	buttonLayout->addWidget(memorize);
 
     layout->addLayout(buttonLayout, 2, 0, 1, 6);
 
