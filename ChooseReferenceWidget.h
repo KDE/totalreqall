@@ -34,6 +34,7 @@ private slots:
     void updateVerseValues();
     void updateEndVerseValues();
     void updateSaveVerse();
+    void saveItem();
 
     void displayVerse();
     void runMemorizer();

@@ -122,21 +122,13 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     m_runMemorizerBtn->setText(ki18n("Memorize verse").toString());
     m_runMemorizerBtn->setIcon(QIcon::fromTheme("go-next"));
-    connect(m_runMemorizerBtn, &QPushButton::clicked, this, [this]() {
-        QSettings settings;
-        settings.beginGroup("savedContent");
-        settings.beginGroup("verses");
-        settings.setValue(m_books->currentText() + " " + m_chapters->currentText() + ":" +
-                              m_startVerses->currentText(),
-                          m_books->currentText() + " " + m_chapters->currentText() + ":" +
-                              m_endVerses->currentText());
-        settings.endGroup();
-        settings.endGroup();
-    });
+    connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
     connect(m_runMemorizerBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
-    auto back = new QPushButton{ ki18n("Back").toString() };
-    back->setIcon(QIcon::fromTheme("go-previous"));
+    auto save = new QPushButton{ QIcon::fromTheme("document-save"), ki18n("Save").toString() };
+    connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
+
+    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), ki18n("Back").toString() };
     connect(back, &QPushButton::clicked, this, &ChooseReferenceWidget::cancel);
 
     m_verseDisplayBox->setFocusPolicy(Qt::ClickFocus);
@@ -160,6 +152,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
+    buttonLayout->addWidget(save);
     buttonLayout->addWidget(m_runMemorizerBtn);
 
     layout->addLayout(buttonLayout, 2, 0, 1, 6);
@@ -363,4 +356,17 @@ void ChooseReferenceWidget::displayVerse()
     }
 
     m_verseDisplayBox->setHtml(content);
+}
+
+void ChooseReferenceWidget::saveItem()
+{
+    QSettings settings;
+    settings.beginGroup("savedContent");
+    settings.beginGroup("verses");
+    settings.setValue(m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                          m_startVerses->currentText(),
+                      m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                          m_endVerses->currentText());
+    settings.endGroup();
+    settings.endGroup();
 }
