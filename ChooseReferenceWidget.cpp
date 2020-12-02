@@ -138,9 +138,6 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     back->setIcon(QIcon::fromTheme("go-previous"));
     connect(back, &QPushButton::clicked, this, &ChooseReferenceWidget::cancel);
 
-    m_displayVerseBtn->setText(tr("Display verse"));
-    connect(m_displayVerseBtn, &QPushButton::clicked, this, &ChooseReferenceWidget::displayVerse);
-
     m_verseDisplayBox->setFocusPolicy(Qt::ClickFocus);
 
     auto colon = new QLabel{ ":" };
@@ -161,8 +158,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
-    buttonLayout->addStretch();
-    buttonLayout->addWidget(m_displayVerseBtn);
+	buttonLayout->addStretch();
     buttonLayout->addWidget(m_runMemorizerBtn);
 
     layout->addLayout(buttonLayout, 2, 0, 1, 6);
