@@ -12,10 +12,10 @@
 #include <QPushButton>
 #include <QSettings>
 #include <QVBoxLayout>
-#include <sword/markupfiltmgr.h>
-#include <sword/swmgr.h>
-#include <sword/swmodule.h>
-#include <sword/versekey.h>
+#include <markupfiltmgr.h>
+#include <swmgr.h>
+#include <swmodule.h>
+#include <versekey.h>
 
 SavedContentLoader::SavedContentLoader(QWidget *parent)
     : QWidget(parent),
