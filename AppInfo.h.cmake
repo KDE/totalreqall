@@ -9,7 +9,7 @@
 
 namespace TotalReqall
 {
-    const QVersionNumber appVersion{ ${CPACK_PACKAGE_VERSION_MAJOR}, ${CPACK_PACKAGE_VERSION_MINOR}, ${CPACK_PACKAGE_VERSION_PATCH} };
+    const QVersionNumber appVersion{ ${CMAKE_PROJECT_VERSION_MAJOR}, ${CMAKE_PROJECT_VERSION_MINOR}, ${CMAKE_PROJECT_VERSION_PATCH} };
 	const QString appName{ "TotalReqall" };
 //	const QString organizationName{ "KDE" };
 //	const QString organizationDomain{ "org.kde.totalreqall" };
