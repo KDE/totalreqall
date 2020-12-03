@@ -70,7 +70,7 @@ MainWindow::MainWindow(KMainWindow *parent)
         KAboutData aboutData{ "TotalReqall",
                               ki18n("TotalReqall").toString(),
                               TotalReqall::appVersion.toString(),
-                              ki18n("Memorize the Bible or custom content.").toString(),
+							  ki18n("Memorize the Bible or custom content.").toString(),
                               KAboutLicense::BSDL,
                               ki18n("Copyright (C) 2020 Loren Burkholder").toString() };
 		aboutData.addAuthor("Loren Burkholder", ki18n("Creator, maintainer").toString(), "computersemiexpert@outlook.com");

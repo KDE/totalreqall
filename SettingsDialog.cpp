@@ -14,6 +14,8 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QVBoxLayout>
+#include <swmgr.h>
+#include <swmodule.h>
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog{ parent },
@@ -28,6 +30,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_setVerse{ new QRadioButton },
       m_chooseSetVerse{ new QPushButton },
       m_shouldSaveWindowSize{ new QCheckBox },
+      m_bibleVersionLoad{ new QButtonGroup },
+      m_loadLastBibleVersion{ new QRadioButton{ ki18n("Load &last version").toString() } },
+      m_loadDefaultBibleVersion{ new QRadioButton{ ki18n("Load &set version").toString() } },
+      m_defaultBibleVersion{ new QComboBox },
 #endif // Q_OS_WASM
       m_reset{ new QPushButton }
 {
@@ -57,14 +63,45 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
 
-    m_verseLoadSettings->addButton(m_saveVerse, VerseLoadOption::Saved);
-    m_verseLoadSettings->addButton(m_randVerse, VerseLoadOption::Random);
-    m_verseLoadSettings->addButton(m_setVerse, VerseLoadOption::Set);
-    m_verseLoadSettings->button(settings.value("ChooseReferenceWidget/verseLoadOption", 1).toInt())
+	m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
+    m_verseLoadSettings->addButton(m_randVerse, static_cast<int>(VerseLoadOption::Random));
+    m_verseLoadSettings->addButton(m_setVerse, static_cast<int>(VerseLoadOption::Set));
+    m_verseLoadSettings
+        ->button(settings
+                     .value("ChooseReferenceWidget/verseLoadOption",
+	                        static_cast<int>(VerseLoadOption::Last))
+                     .toInt())
         ->setChecked(true);
 
     m_shouldSaveWindowSize->setText(ki18n("Save last set window size").toString());
     m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
+
+    m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
+                                  static_cast<int>(BibleVersionLoadOption::Last));
+    m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion,
+                                  static_cast<int>(BibleVersionLoadOption::Set));
+    m_bibleVersionLoad
+        ->button(settings
+                     .value("ChooseReferenceWidget/bibleVersionLoadOption",
+                            static_cast<int>(BibleVersionLoadOption::Last))
+                     .toInt())
+        ->setChecked(true);
+
+    m_defaultBibleVersion->setEnabled(m_loadDefaultBibleVersion->isChecked());
+
+    sword::SWMgr mgr;
+    for (auto item : mgr.getModules())
+    {
+        auto mod = item.second;
+
+        auto type = mod->getType();
+        if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
+            m_defaultBibleVersion->addItem(item.first.c_str());
+    }
+    m_defaultBibleVersion->setCurrentText(settings
+                                              .value("ChooseReferenceWidget/defaultBibleVersion",
+                                                     m_defaultBibleVersion->currentText())
+                                              .toString());
 #endif // Q_OS_WASM
 
     m_reset->setText(ki18n("&Reset all settings...").toString());
@@ -105,8 +142,18 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     loadVerseGroup->setTitle(ki18n("Set what verse to load on startup").toString());
     loadVerseGroup->setLayout(loadVerseGroupLayout);
 
+    auto loadBibleVersionLayout = new QGridLayout;
+    loadBibleVersionLayout->addWidget(m_loadLastBibleVersion, 0, 0);
+    loadBibleVersionLayout->addWidget(m_loadDefaultBibleVersion, 1, 0);
+    loadBibleVersionLayout->addWidget(m_defaultBibleVersion, 1, 1);
+
+    auto loadBibleVersion =
+        new QGroupBox{ ki18n("Set what Bible version to load on startup").toString() };
+    loadBibleVersion->setLayout(loadBibleVersionLayout);
+
     auto startupLayout = new QVBoxLayout;
     startupLayout->addWidget(loadVerseGroup);
+    startupLayout->addWidget(loadBibleVersion);
     startupLayout->addStretch();
 
     auto startup = new QWidget;
@@ -153,6 +200,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         settings.endGroup();
     });
     connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
+    connect(m_loadDefaultBibleVersion, &QRadioButton::toggled, m_defaultBibleVersion,
+            &QComboBox::setEnabled);
 #endif // Q_OS_WASM
 
     auto buttonBox =
@@ -200,6 +249,10 @@ void SettingsDialog::apply()
     settings.beginGroup("ChooseReferenceWidget");
 
     settings.setValue("verseLoadOption", m_verseLoadSettings->checkedId());
+    settings.setValue("bibleVersionLoadOption", m_bibleVersionLoad->checkedId());
+	if (m_bibleVersionLoad->checkedId() == static_cast<int>(BibleVersionLoadOption::Set))
+        settings.setValue("defaultBibleVersion", m_defaultBibleVersion->currentText());
+
     settings.endGroup(); // ChooseReferenceWidget
 
     settings.beginGroup("MainWindow");

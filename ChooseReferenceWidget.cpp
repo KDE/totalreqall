@@ -22,14 +22,45 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_chapters{ new QComboBox },
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
-      m_verseDisplayBox{ new QTextBrowser }
+      m_bibleVersion{ new QComboBox },
+      m_verseDisplayBox{ new QTextBrowser },
+      m_currentBibleVersion{ "KJV" }
 {
+    QSettings settings;
+    settings.beginGroup("ChooseReferenceWidget");
+
     // general setup
     setStatusTip(ki18n("Choose a verse").toString());
 
-    // get the values for the books (chapters and verses will come later)
+    // set this up now so that the correct Bible version can be loaded for getting book names
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *module = mgr.getModule("KJV");
+    for (auto item : mgr.getModules())
+    {
+        auto mod = item.second;
+
+        auto type = mod->getType();
+        if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
+            m_bibleVersion->addItem(item.first.c_str());
+    }
+    switch (static_cast<BibleVersionLoadOption>(settings.value("bibleVersionLoadOption"),
+                                                static_cast<int>(BibleVersionLoadOption::Last)))
+    {
+    case BibleVersionLoadOption::Last:
+        m_currentBibleVersion =
+            settings.value("lastBibleVersion", m_bibleVersion->currentText()).toString();
+        break;
+    case BibleVersionLoadOption::Set:
+        m_currentBibleVersion =
+            settings.value("defaultBibleVersion", m_bibleVersion->currentText()).toString();
+        break;
+    default:
+        break;
+    }
+
+    m_bibleVersion->setCurrentText(m_currentBibleVersion);
+
+    // get the values for the books (chapters and verses will come later)
+    sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
     sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
     QStringList bookList;
     while (!key->popError())
@@ -45,18 +76,15 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
     connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
 
-    QSettings settings;
-    settings.beginGroup("ChooseReferenceWidget");
-
     // these are out here because apparently you can't create variables in a switch
     auto lastBook = settings.value("lastBook").toString();
     auto lastChapter = settings.value("lastChapter").toString();
     auto lastStartVerse = settings.value("lastStartVerse").toString();
     auto lastEndVerse = settings.value("lastEndVerse").toString();
 
-    switch (settings.value("verseLoadOption", 1).toInt())
+    switch (static_cast<VerseLoadOption>(settings.value("verseLoadOption", 1).toInt()))
     {
-    case VerseLoadOption::Saved:
+	case VerseLoadOption::Last:
 
         if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
         {
@@ -118,10 +146,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     m_startVerses->setMinimumContentsLength(3);
     m_endVerses->setMinimumContentsLength(3);
 
-	auto memorize =
+    connect(m_bibleVersion, &QComboBox::currentTextChanged, this, [this](const QString &text) {
+        m_currentBibleVersion = text;
+        QSettings settings;
+        settings.setValue("ChooseReferenceWidget/lastBibleVersion", m_currentBibleVersion);
+        displayVerse();
+    });
+
+    auto memorize =
         new QPushButton{ QIcon::fromTheme("go-next"), ki18n("Memorize verse").toString() };
-	connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
-	connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
+    connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
+    connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
     auto save = new QPushButton{ QIcon::fromTheme("document-save"), ki18n("Save").toString() };
     connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
@@ -145,15 +180,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     layout->addWidget(m_startVerses, 0, 3);
     layout->addWidget(dash, 0, 4);
     layout->addWidget(m_endVerses, 0, 5);
-    layout->addWidget(m_verseDisplayBox, 1, 0, 1, 6);
+    layout->addWidget(m_bibleVersion, 0, 6);
+
+    layout->addWidget(m_verseDisplayBox, 1, 0, 1, 7);
 
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
     buttonLayout->addWidget(save);
-	buttonLayout->addWidget(memorize);
+    buttonLayout->addWidget(memorize);
 
-    layout->addLayout(buttonLayout, 2, 0, 1, 6);
+    layout->addLayout(buttonLayout, 2, 0, 1, 7);
 
     this->setLayout(layout);
 
@@ -170,7 +207,7 @@ void ChooseReferenceWidget::updateChapterVerseValues()
 
     // set up sword
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *module = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
     sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
     key->setBookName(m_books->currentText().toStdString().c_str());
 
@@ -220,7 +257,7 @@ void ChooseReferenceWidget::updateVerseValues()
 
     // set up sword
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *module = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
     sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
     key->setBookName(m_books->currentText().toStdString().c_str());
     key->setChapter(m_chapters->currentText().toInt());
@@ -310,7 +347,7 @@ void ChooseReferenceWidget::runMemorizer()
                           0;
 
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *module = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
     QString content;
 
     sword::SWKey key{ reference
@@ -337,7 +374,7 @@ void ChooseReferenceWidget::displayVerse()
                           0;
 
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-    sword::SWModule *module = mgr.getModule("KJV");
+    sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
     QString content;
 
     sword::SWKey key{ reference

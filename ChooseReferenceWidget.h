@@ -12,12 +12,39 @@
 #include <QWidget>
 #include <map>
 
-enum VerseLoadOption : short
+enum class VerseLoadOption : int
 {
-    Saved = 1,
+	Last = 1,
+    Random = 2,
+	Set = 3,
+};
+
+//operator int(VerseLoadOption &op)
+//{
+//	return static_cast<int>(op);
+//}
+
+//operator VerseLoadOption(int &i)
+//{
+//	return static_cast<VerseLoadOption>(i);
+//}
+
+enum class BibleVersionLoadOption : int
+{
+    Last = 1,
     Random = 2,
     Set = 3,
 };
+
+//operator int(BibleVersionLoadOption &op)
+//{
+//	return static_cast<int>(op);
+//}
+
+//operator BibleVersionLoadOption(int &i)
+//{
+//	return static_cast<BibleVersionLoadOption>(i);
+//}
 
 class ChooseReferenceWidget : public QWidget
 {
@@ -44,7 +71,10 @@ private:
     QComboBox *m_chapters;
     QComboBox *m_startVerses;
     QComboBox *m_endVerses;
+    QComboBox *m_bibleVersion;
     QTextBrowser *m_verseDisplayBox;
+
+    QString m_currentBibleVersion;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

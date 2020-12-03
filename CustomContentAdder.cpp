@@ -32,7 +32,7 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     connect(back, &QPushButton::clicked, this, &CustomContentAdder::cancel);
 
     auto save = new QPushButton{ ki18n("Save").toString() };
-    save->setIcon(QIcon::fromTheme("document-save"));
+	save->setIcon(QIcon::fromTheme("document-save"));
     connect(save, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
 
     auto buttons = new QHBoxLayout;

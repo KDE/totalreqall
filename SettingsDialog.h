@@ -6,6 +6,7 @@
 
 #include <QButtonGroup>
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QPushButton>
 #include <QRadioButton>
@@ -39,6 +40,11 @@ private:
 
     QCheckBox *m_shouldSaveWindowSize;
 #endif // Q_OS_WASM
+
+    QButtonGroup *m_bibleVersionLoad;
+    QRadioButton *m_loadLastBibleVersion;
+    QRadioButton *m_loadDefaultBibleVersion;
+    QComboBox *m_defaultBibleVersion;
 
     QPushButton *m_reset;
 };
