@@ -14,17 +14,17 @@
 
 enum class VerseLoadOption : int
 {
-	Last = 1,
+    Last = 1,
     Random = 2,
-	Set = 3,
+    Set = 3,
 };
 
-//operator int(VerseLoadOption &op)
+// operator int(VerseLoadOption &op)
 //{
 //	return static_cast<int>(op);
 //}
 
-//operator VerseLoadOption(int &i)
+// operator VerseLoadOption(int &i)
 //{
 //	return static_cast<VerseLoadOption>(i);
 //}
@@ -36,12 +36,12 @@ enum class BibleVersionLoadOption : int
     Set = 3,
 };
 
-//operator int(BibleVersionLoadOption &op)
+// operator int(BibleVersionLoadOption &op)
 //{
 //	return static_cast<int>(op);
 //}
 
-//operator BibleVersionLoadOption(int &i)
+// operator BibleVersionLoadOption(int &i)
 //{
 //	return static_cast<BibleVersionLoadOption>(i);
 //}
@@ -51,6 +51,8 @@ class ChooseReferenceWidget : public QWidget
     Q_OBJECT
 public:
     explicit ChooseReferenceWidget(QWidget *parent = nullptr);
+
+    bool unusable();
 
 signals:
     void startMemorizer(const QString &);
@@ -75,6 +77,8 @@ private:
     QTextBrowser *m_verseDisplayBox;
 
     QString m_currentBibleVersion;
+
+    bool m_unusable = false;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

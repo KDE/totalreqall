@@ -8,6 +8,9 @@
 #include <QLabel>
 #include <QSettings>
 #include <QVBoxLayout>
+#include <markupfiltmgr.h>
+#include <swmgr.h>
+#include <swmodule.h>
 
 WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
 {
@@ -23,6 +26,18 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
                                                                             "content to "
                                                                             "memorize.")
                                                                           .toString() };
+    bool hasBibles = false;
+    sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+    for (auto item : mgr.getModules())
+    {
+        auto type = item.second->getType();
+        if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
+        {
+            hasBibles = true;
+            break;
+        }
+    }
+    bible->setEnabled(hasBibles);
 
     bool hasContent = false;
     QSettings settings;

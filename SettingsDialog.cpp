@@ -63,13 +63,13 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
 
-	m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
+    m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
     m_verseLoadSettings->addButton(m_randVerse, static_cast<int>(VerseLoadOption::Random));
     m_verseLoadSettings->addButton(m_setVerse, static_cast<int>(VerseLoadOption::Set));
     m_verseLoadSettings
         ->button(settings
                      .value("ChooseReferenceWidget/verseLoadOption",
-	                        static_cast<int>(VerseLoadOption::Last))
+                            static_cast<int>(VerseLoadOption::Last))
                      .toInt())
         ->setChecked(true);
 
@@ -250,7 +250,7 @@ void SettingsDialog::apply()
 
     settings.setValue("verseLoadOption", m_verseLoadSettings->checkedId());
     settings.setValue("bibleVersionLoadOption", m_bibleVersionLoad->checkedId());
-	if (m_bibleVersionLoad->checkedId() == static_cast<int>(BibleVersionLoadOption::Set))
+    if (m_bibleVersionLoad->checkedId() == static_cast<int>(BibleVersionLoadOption::Set))
         settings.setValue("defaultBibleVersion", m_defaultBibleVersion->currentText());
 
     settings.endGroup(); // ChooseReferenceWidget

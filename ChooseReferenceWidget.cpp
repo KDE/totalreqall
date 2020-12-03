@@ -8,6 +8,7 @@
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+#include <QMessageBox>
 #include <QRandomGenerator>
 #include <QSettings>
 #include <QStringList>
@@ -23,8 +24,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
       m_bibleVersion{ new QComboBox },
-      m_verseDisplayBox{ new QTextBrowser },
-      m_currentBibleVersion{ "KJV" }
+      m_verseDisplayBox{ new QTextBrowser }
 {
     QSettings settings;
     settings.beginGroup("ChooseReferenceWidget");
@@ -34,14 +34,22 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     // set this up now so that the correct Bible version can be loaded for getting book names
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+
     for (auto item : mgr.getModules())
     {
-        auto mod = item.second;
-
-        auto type = mod->getType();
+        auto type = item.second->getType();
         if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
             m_bibleVersion->addItem(item.first.c_str());
     }
+
+    // TODO: this should not show at startup; instead, show it when the user starts this widget
+    if (m_bibleVersion->count() == 0) // no Bible modules found
+    {
+        QMessageBox::critical(this, i18n("No modules found"),
+                              i18n("Could not find any Bible modules."));
+        m_unusable = true;
+    }
+
     switch (static_cast<BibleVersionLoadOption>(settings.value("bibleVersionLoadOption"),
                                                 static_cast<int>(BibleVersionLoadOption::Last)))
     {
@@ -54,6 +62,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
             settings.value("defaultBibleVersion", m_bibleVersion->currentText()).toString();
         break;
     default:
+        m_currentBibleVersion = m_bibleVersion->currentText();
         break;
     }
 
@@ -84,7 +93,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     switch (static_cast<VerseLoadOption>(settings.value("verseLoadOption", 1).toInt()))
     {
-	case VerseLoadOption::Last:
+    case VerseLoadOption::Last:
 
         if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
         {
@@ -404,4 +413,9 @@ void ChooseReferenceWidget::saveItem()
                           m_endVerses->currentText());
     settings.endGroup();
     settings.endGroup();
+}
+
+bool ChooseReferenceWidget::unusable()
+{
+    return m_unusable;
 }
