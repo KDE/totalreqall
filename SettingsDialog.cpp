@@ -31,13 +31,13 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_chooseSetVerse{ new QPushButton },
       m_shouldSaveWindowSize{ new QCheckBox },
       m_bibleVersionLoad{ new QButtonGroup },
-      m_loadLastBibleVersion{ new QRadioButton{ ki18n("Load &last version").toString() } },
-      m_loadDefaultBibleVersion{ new QRadioButton{ ki18n("Load &set version").toString() } },
+      m_loadLastBibleVersion{ new QRadioButton{ i18n("Load &last version") } },
+      m_loadDefaultBibleVersion{ new QRadioButton{ i18n("Load &set version") } },
       m_defaultBibleVersion{ new QComboBox },
 #endif // Q_OS_WASM
       m_reset{ new QPushButton }
 {
-    this->setWindowTitle(ki18n("Settings").toString());
+    this->setWindowTitle(i18n("Settings"));
 
     m_tabs->setUsesScrollButtons(false);
 
@@ -45,8 +45,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     QSettings settings;
 
     // set up the widgets
-    m_redo->setText(ki18n("&Retype the word").toString());
-    m_keepGoing->setText(ki18n("Mark the word as incorrect and &keep going").toString());
+    m_redo->setText(i18n("&Retype the word"));
+    m_keepGoing->setText(i18n("Mark the word as incorrect and &keep going"));
 
     m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
     m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
@@ -55,10 +55,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         ->setChecked(true);
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
-    m_saveVerse->setText(ki18n("Load &last verse").toString());
-    m_randVerse->setText(ki18n("Load &random verse").toString());
-    m_setVerse->setText(ki18n("Load a &set verse").toString());
-    m_chooseSetVerse->setText(ki18n("&Choose verse...").toString());
+    m_saveVerse->setText(i18n("Load &last verse"));
+    m_randVerse->setText(i18n("Load &random verse"));
+    m_setVerse->setText(i18n("Load a &set verse"));
+    m_chooseSetVerse->setText(i18n("&Choose verse..."));
 
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
@@ -73,7 +73,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
                      .toInt())
         ->setChecked(true);
 
-    m_shouldSaveWindowSize->setText(ki18n("Save last set window size").toString());
+    m_shouldSaveWindowSize->setText(i18n("Save last set window size"));
     m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
 
     m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
@@ -104,7 +104,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
                                               .toString());
 #endif // Q_OS_WASM
 
-    m_reset->setText(ki18n("&Reset all settings...").toString());
+    m_reset->setText(i18n("&Reset all settings..."));
 
     // Memorization tab
     auto errorActionGroupLayout = new QVBoxLayout;
@@ -113,7 +113,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     errorActionGroupLayout->addStretch();
 
     auto errorActionGroup = new QGroupBox;
-    errorActionGroup->setTitle(ki18n("Set action when the wrong key is typed").toString());
+    errorActionGroup->setTitle(i18n("Set action when the wrong key is typed"));
     errorActionGroup->setLayout(errorActionGroupLayout);
 
     auto memorizationLayout = new QVBoxLayout;
@@ -139,7 +139,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     loadVerseGroupLayout->addWidget(m_chooseSetVerse, 2, 1);
 
     auto loadVerseGroup = new QGroupBox;
-    loadVerseGroup->setTitle(ki18n("Set what verse to load on startup").toString());
+    loadVerseGroup->setTitle(i18n("Set what verse to load on startup"));
     loadVerseGroup->setLayout(loadVerseGroupLayout);
 
     auto loadBibleVersionLayout = new QGridLayout;
@@ -147,8 +147,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     loadBibleVersionLayout->addWidget(m_loadDefaultBibleVersion, 1, 0);
     loadBibleVersionLayout->addWidget(m_defaultBibleVersion, 1, 1);
 
-    auto loadBibleVersion =
-        new QGroupBox{ ki18n("Set what Bible version to load on startup").toString() };
+    auto loadBibleVersion = new QGroupBox{ i18n("Set what Bible version to load on startup") };
     loadBibleVersion->setLayout(loadBibleVersionLayout);
 
     auto startupLayout = new QVBoxLayout;
@@ -169,11 +168,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     // connect the widgets
     connect(m_reset, &QPushButton::clicked, this, [this]() {
-        if (QMessageBox::question(this, ki18n("Confirm reset").toString(),
-                                  ki18n("Are you sure you want to reset all settings? This will "
-                                        "take "
-                                        "effect immediately.")
-                                      .toString()) == QMessageBox::StandardButton::Yes)
+        if (QMessageBox::question(this, i18n("Confirm reset"),
+                                  i18n("Are you sure you want to reset all settings? This will "
+                                       "take "
+                                       "effect immediately.")) == QMessageBox::StandardButton::Yes)
         {
             QSettings settings;
             settings.clear();
@@ -215,14 +213,14 @@ SettingsDialog::SettingsDialog(QWidget *parent)
             this, &SettingsDialog::reject);
 
     // add the widgets
-    m_tabs->addTab(memorization, ki18n("&Memorization").toString());
+    m_tabs->addTab(memorization, i18n("&Memorization"));
 
 #ifndef Q_OS_WASM // these tabs aren't needed with the stuff skipped in WASM
-    m_tabs->addTab(display, ki18n("&Display").toString());
-    m_tabs->addTab(startup, ki18n("&Startup").toString());
+    m_tabs->addTab(display, i18n("&Display"));
+    m_tabs->addTab(startup, i18n("&Startup"));
 #endif // Q_OS_WASM
 
-    m_tabs->addTab(other, ki18n("&Other settings").toString());
+    m_tabs->addTab(other, i18n("&Other settings"));
 
     auto layout = new QGridLayout;
     layout->addWidget(m_tabs, 0, 0);

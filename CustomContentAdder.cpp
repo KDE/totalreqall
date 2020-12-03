@@ -20,18 +20,18 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     m_content->setAcceptRichText(false);
     m_content->setTabChangesFocus(true);
 
-    auto memorize = new QPushButton{ ki18n("Memorize").toString() };
+    auto memorize = new QPushButton{ i18n("Memorize") };
     memorize->setIcon(QIcon::fromTheme("go-next"));
     connect(memorize, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
     connect(memorize, &QPushButton::clicked, this, [this]() {
         emit ok(m_content->toPlainText());
     });
 
-    auto back = new QPushButton{ ki18n("Back").toString() };
+    auto back = new QPushButton{ i18n("Back") };
     back->setIcon(QIcon::fromTheme("go-previous"));
     connect(back, &QPushButton::clicked, this, &CustomContentAdder::cancel);
 
-    auto save = new QPushButton{ ki18n("Save").toString() };
+    auto save = new QPushButton{ i18n("Save") };
     save->setIcon(QIcon::fromTheme("document-save"));
     connect(save, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
 
@@ -45,8 +45,8 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     // available space, so the QVBoxLayout is used to prevent lots of empty space between the
     // OK/Cancel buttons and the bottom of the window
     auto form = new QFormLayout;
-    form->addRow(new QLabel{ ki18n("Title:").toString() }, m_title);
-    form->addRow(new QLabel{ ki18n("Content:").toString() }, m_content);
+    form->addRow(new QLabel{ i18n("Title:") }, m_title);
+    form->addRow(new QLabel{ i18n("Content:") }, m_content);
 
     auto layout = new QVBoxLayout;
     layout->addLayout(form);

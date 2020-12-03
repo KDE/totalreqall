@@ -115,7 +115,7 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
             switch (m_errorAction)
             {
             case ErrorAction::Redo:
-                emit messageToUser(ki18n("Oops, you messed up! Try again.").toString());
+                emit messageToUser(i18n("Oops, you messed up! Try again."));
                 break;
 
             case ErrorAction::KeepGoing:
@@ -128,7 +128,7 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
                 m_words.pop_front();
                 setHtml(m_richText + formattedEndString(m_difficulty));
 
-                emit messageToUser(ki18n("Oops, you messed up!").toString());
+                emit messageToUser(i18n("Oops, you messed up!"));
                 break;
 
             default:
@@ -146,7 +146,7 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
         else if (m_richText.endsWith("<br> </span>"))
             this->setHtml(m_richText.remove(m_richText.length() - 12, 12));
 
-        emit messageToUser(ki18n("Done!").toString());
+        emit messageToUser(i18n("Done!"));
         emit done();
     }
 }
@@ -205,7 +205,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 
     // set up the widgets...
     m_memorizeEdit = new MemorizeEdit{ m_content, m_difficulty };
-    m_endSession->setText(ki18n("Stop memorizing").toString());
+    m_endSession->setText(i18n("Stop memorizing"));
 
     connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
@@ -229,7 +229,7 @@ void MemorizeWidget::editDone()
     // remove this connection (now we want to go to the next level)
     disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
-    m_endSession->setText(ki18n("Continue").toString());
+    m_endSession->setText(i18n("Continue"));
     m_endSession->setFocus();
 }
 
@@ -238,7 +238,7 @@ void MemorizeWidget::nextLevel()
     if (m_difficulty < Difficulty::Hard)
     {
         m_difficulty = static_cast<Difficulty>(m_difficulty + 1);
-        m_endSession->setText(ki18n("Stop memorizing").toString());
+        m_endSession->setText(i18n("Stop memorizing"));
         disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
         connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
 
@@ -253,7 +253,7 @@ void MemorizeWidget::nextLevel()
         // register this as having been memorized in this session
         s_memorizedContent.insert(m_content);
 
-        m_endSession->setText(ki18n("Continue").toString());
+        m_endSession->setText(i18n("Continue"));
         emit done();
     }
 }

@@ -30,7 +30,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     settings.beginGroup("ChooseReferenceWidget");
 
     // general setup
-    setStatusTip(ki18n("Choose a verse").toString());
+    setStatusTip(i18n("Choose a verse"));
 
     // set this up now so that the correct Bible version can be loaded for getting book names
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
@@ -162,15 +162,14 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         displayVerse();
     });
 
-    auto memorize =
-        new QPushButton{ QIcon::fromTheme("go-next"), ki18n("Memorize verse").toString() };
+    auto memorize = new QPushButton{ QIcon::fromTheme("go-next"), i18n("Memorize verse") };
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
-    auto save = new QPushButton{ QIcon::fromTheme("document-save"), ki18n("Save").toString() };
+    auto save = new QPushButton{ QIcon::fromTheme("document-save"), i18n("Save") };
     connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
 
-    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), ki18n("Back").toString() };
+    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), i18n("Back") };
     connect(back, &QPushButton::clicked, this, &ChooseReferenceWidget::cancel);
 
     m_verseDisplayBox->setFocusPolicy(Qt::ClickFocus);

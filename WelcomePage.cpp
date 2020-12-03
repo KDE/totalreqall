@@ -16,16 +16,13 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
 {
     auto layout = new QVBoxLayout;
 
-    m_saved = new QCommandLinkButton{ ki18n("Saved").toString(),
-                                      ki18n("Review content that you've saved.").toString() };
-    auto bible = new QCommandLinkButton{ ki18n("Bible verse").toString(), ki18n("Memorize a verse "
-                                                                                "or verses from "
-                                                                                "the Bible.")
-                                                                              .toString() };
-    auto custom = new QCommandLinkButton{ ki18n("Custom").toString(), ki18n("Enter some custom "
-                                                                            "content to "
-                                                                            "memorize.")
-                                                                          .toString() };
+    m_saved = new QCommandLinkButton{ i18n("Saved"), i18n("Review content that you've saved.") };
+    auto bible = new QCommandLinkButton{ i18n("Bible verse"), i18n("Memorize a verse "
+                                                                   "or verses from "
+                                                                   "the Bible.") };
+    auto custom = new QCommandLinkButton{ i18n("Custom"), i18n("Enter some custom "
+                                                               "content to "
+                                                               "memorize.") };
     bool hasBibles = false;
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
     for (auto item : mgr.getModules())
@@ -59,7 +56,7 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
     connect(bible, &QCommandLinkButton::clicked, this, &WelcomePage::bibleClicked);
     connect(custom, &QCommandLinkButton::clicked, this, &WelcomePage::customClicked);
 
-    layout->addWidget(new QLabel{ ki18n("Choose what to memorize.").toString() });
+    layout->addWidget(new QLabel{ i18n("Choose what to memorize.") });
     layout->addWidget(m_saved);
     layout->addWidget(bible);
     layout->addWidget(custom);

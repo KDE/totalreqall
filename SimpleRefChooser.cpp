@@ -24,8 +24,8 @@ SimpleRefChooser::SimpleRefChooser(QWidget *parent, const QString &book, const Q
       m_ok{ new QPushButton },
       m_cancel{ new QPushButton }
 {
-    m_ok->setText(ki18n("OK").toString());
-    m_cancel->setText(ki18n("Cancel").toString());
+    m_ok->setText(i18n("OK"));
+    m_cancel->setText(i18n("Cancel"));
 
     // get the values for the books (chapters and verses will come later)
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };

@@ -27,10 +27,10 @@ MainWindow::MainWindow(KMainWindow *parent)
 
     // set up the menus
     // file menu
-    auto fileMenu = new QMenu{ ki18n("&File").toString() };
+    auto fileMenu = new QMenu{ i18n("&File") };
 
     // settings action
-    auto settings = new QAction{ ki18n("Settings...").toString() };
+    auto settings = new QAction{ i18n("Settings...") };
     connect(settings, &QAction::triggered, this, [this]() {
         SettingsDialog s{ this };
         s.exec();
@@ -39,16 +39,16 @@ MainWindow::MainWindow(KMainWindow *parent)
 
     // exit action
 #ifndef Q_OS_WASM // Skip this on WASM
-    auto exit = new QAction{ ki18n("Exit").toString() };
+    auto exit = new QAction{ i18n("Exit") };
     connect(exit, &QAction::triggered, this, &MainWindow::close);
     fileMenu->addAction(exit);
 #endif
 
     // help menu
-    auto helpMenu = new QMenu{ ki18n("&Help").toString() };
+    auto helpMenu = new QMenu{ i18n("&Help") };
 
     // online help
-    auto onlineHelp = new QAction{ ki18n("Online help...").toString() };
+    auto onlineHelp = new QAction{ i18n("Online help...") };
     connect(onlineHelp, &QAction::triggered, this, []() {
         QDesktopServices::openUrl(QUrl{ "https://lorendb.github.io/TotalReqall/help" });
     });
@@ -58,22 +58,22 @@ MainWindow::MainWindow(KMainWindow *parent)
     helpMenu->addSeparator();
 
     // about Qt
-    auto aboutQt = new QAction{ ki18n("About Qt").toString() };
+    auto aboutQt = new QAction{ i18n("About Qt") };
     connect(aboutQt, &QAction::triggered, this, [this]() {
         QMessageBox::aboutQt(this);
     });
     helpMenu->addAction(aboutQt);
 
     // about this program
-    auto about = new QAction{ ki18n("About").toString() };
+    auto about = new QAction{ i18n("About") };
     connect(about, &QAction::triggered, this, [this]() {
         KAboutData aboutData{ "TotalReqall",
-                              ki18n("TotalReqall").toString(),
+                              i18n("TotalReqall"),
                               TotalReqall::appVersion.toString(),
-                              ki18n("Memorize the Bible or custom content.").toString(),
+                              i18n("Memorize the Bible or custom content."),
                               KAboutLicense::BSDL,
-                              ki18n("Copyright (C) 2020 Loren Burkholder").toString() };
-        aboutData.addAuthor("Loren Burkholder", ki18n("Creator, maintainer").toString(),
+                              i18n("Copyright (C) 2020 Loren Burkholder") };
+        aboutData.addAuthor("Loren Burkholder", i18n("Creator, maintainer"),
                             "computersemiexpert@outlook.com");
         auto kdeAboutAppDlg =
             new KAboutApplicationDialog{ aboutData, KAboutApplicationDialog::NoOptions, this };
