@@ -23,7 +23,7 @@ MainWindow::MainWindow(KMainWindow *parent)
       m_contentAdder{ new CustomContentAdder },
       m_savedLoader{ new SavedContentLoader }
 {
-    setWindowIcon(QIcon{ ":/resources/icons/TotalReqall.svg" });
+	setWindowIcon(QIcon::fromTheme("TotalReqall", QIcon{ ":/resources/icons/TotalReqall.svg" }));
 
     // set up the menus
     // file menu
