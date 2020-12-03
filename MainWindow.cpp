@@ -73,6 +73,7 @@ MainWindow::MainWindow(KMainWindow *parent)
                               ki18n("Memorize the Bible or custom content.").toString(),
                               KAboutLicense::BSDL,
                               ki18n("Copyright (C) 2020 Loren Burkholder").toString() };
+		aboutData.addAuthor("Loren Burkholder", ki18n("Creator, maintainer").toString(), "computersemiexpert@outlook.com");
         auto kdeAboutAppDlg =
             new KAboutApplicationDialog{ aboutData, KAboutApplicationDialog::NoOptions, this };
         kdeAboutAppDlg->exec();
