@@ -43,6 +43,7 @@ private:
 
     QButtonGroup *m_bibleVersionLoad;
     QRadioButton *m_loadLastBibleVersion;
+    QRadioButton *m_loadRandomBibleVersion;
     QRadioButton *m_loadDefaultBibleVersion;
     QComboBox *m_defaultBibleVersion;
 

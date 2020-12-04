@@ -50,12 +50,14 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         m_unusable = true;
     }
 
-    switch (static_cast<BibleVersionLoadOption>(settings.value("bibleVersionLoadOption"),
-                                                static_cast<int>(BibleVersionLoadOption::Last)))
+    switch (static_cast<BibleVersionLoadOption>(settings.value("bibleVersionLoadOption").toInt()))
     {
     case BibleVersionLoadOption::Last:
         m_currentBibleVersion =
             settings.value("lastBibleVersion", m_bibleVersion->currentText()).toString();
+        break;
+    case BibleVersionLoadOption::Random:
+        m_currentBibleVersion = m_bibleVersion->itemText(QRandomGenerator64::global()->generate() % m_bibleVersion->count());
         break;
     case BibleVersionLoadOption::Set:
         m_currentBibleVersion =

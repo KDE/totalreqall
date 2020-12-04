@@ -32,6 +32,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_shouldSaveWindowSize{ new QCheckBox },
       m_bibleVersionLoad{ new QButtonGroup },
       m_loadLastBibleVersion{ new QRadioButton{ i18n("Load &last version") } },
+      m_loadRandomBibleVersion{ new QRadioButton{ i18n("Load &random version") } },
       m_loadDefaultBibleVersion{ new QRadioButton{ i18n("Load &set version") } },
       m_defaultBibleVersion{ new QComboBox },
 #endif // Q_OS_WASM
@@ -78,6 +79,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
                                   static_cast<int>(BibleVersionLoadOption::Last));
+    m_bibleVersionLoad->addButton(m_loadRandomBibleVersion,
+                                  static_cast<int>(BibleVersionLoadOption::Random));
     m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion,
                                   static_cast<int>(BibleVersionLoadOption::Set));
     m_bibleVersionLoad
@@ -92,9 +95,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     sword::SWMgr mgr;
     for (auto item : mgr.getModules())
     {
-        auto mod = item.second;
-
-        auto type = mod->getType();
+        auto type = item.second->getType();
         if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
             m_defaultBibleVersion->addItem(item.first.c_str());
     }
@@ -144,8 +145,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     auto loadBibleVersionLayout = new QGridLayout;
     loadBibleVersionLayout->addWidget(m_loadLastBibleVersion, 0, 0);
-    loadBibleVersionLayout->addWidget(m_loadDefaultBibleVersion, 1, 0);
-    loadBibleVersionLayout->addWidget(m_defaultBibleVersion, 1, 1);
+    loadBibleVersionLayout->addWidget(m_loadRandomBibleVersion, 1, 0);
+    loadBibleVersionLayout->addWidget(m_loadDefaultBibleVersion, 2, 0);
+    loadBibleVersionLayout->addWidget(m_defaultBibleVersion, 2, 1);
 
     auto loadBibleVersion = new QGroupBox{ i18n("Set what Bible version to load on startup") };
     loadBibleVersion->setLayout(loadBibleVersionLayout);
