@@ -25,12 +25,6 @@ private slots:
     void apply();
 
 private:
-    QTabWidget *m_tabs;
-
-    QButtonGroup *m_errorActionSettings;
-    QRadioButton *m_redo;
-    QRadioButton *m_keepGoing;
-
 #ifndef Q_OS_WASM // nothing in this block is applicable for WASM
     QButtonGroup *m_verseLoadSettings;
     QRadioButton *m_saveVerse;
@@ -39,15 +33,19 @@ private:
     QPushButton *m_chooseSetVerse;
 
     QCheckBox *m_shouldSaveWindowSize;
-#endif // Q_OS_WASM
 
     QButtonGroup *m_bibleVersionLoad;
     QRadioButton *m_loadLastBibleVersion;
     QRadioButton *m_loadRandomBibleVersion;
     QRadioButton *m_loadDefaultBibleVersion;
     QComboBox *m_defaultBibleVersion;
+#endif // Q_OS_WASM
 
-    QPushButton *m_reset;
+    QTabWidget *m_tabs;
+
+    QButtonGroup *m_errorActionSettings;
+    QRadioButton *m_redo;
+    QRadioButton *m_keepGoing;
 };
 
 #endif // SETTINGSDIALOG_H

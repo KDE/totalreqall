@@ -19,10 +19,6 @@
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog{ parent },
-      m_tabs{ new QTabWidget },
-      m_errorActionSettings{ new QButtonGroup },
-      m_redo{ new QRadioButton },
-      m_keepGoing{ new QRadioButton },
 #ifndef Q_OS_WASM // skip the unecessary stuff
       m_verseLoadSettings{ new QButtonGroup },
       m_saveVerse{ new QRadioButton },
@@ -36,7 +32,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_loadDefaultBibleVersion{ new QRadioButton{ i18n("Load &set version") } },
       m_defaultBibleVersion{ new QComboBox },
 #endif // Q_OS_WASM
-      m_reset{ new QPushButton }
+      m_tabs{ new QTabWidget },
+      m_errorActionSettings{ new QButtonGroup },
+      m_redo{ new QRadioButton },
+      m_keepGoing{ new QRadioButton }
 {
     this->setWindowTitle(i18n("Settings"));
 
@@ -105,8 +104,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
                                               .toString());
 #endif // Q_OS_WASM
 
-    m_reset->setText(i18n("&Reset all settings..."));
-
     // Memorization tab
     auto errorActionGroupLayout = new QVBoxLayout;
     errorActionGroupLayout->addWidget(m_redo);
@@ -161,25 +158,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     startup->setLayout(startupLayout);
 #endif // Q_OS_WASM
 
-    // Other tab
-    auto otherLayout = new QHBoxLayout;
-    otherLayout->insertWidget(0, m_reset);
-    otherLayout->insertStretch(1);
-    auto other = new QWidget;
-    other->setLayout(otherLayout);
-
     // connect the widgets
-    connect(m_reset, &QPushButton::clicked, this, [this]() {
-        if (QMessageBox::question(this, i18n("Confirm reset"),
-                                  i18n("Are you sure you want to reset all settings? This will "
-                                       "take "
-                                       "effect immediately.")) == QMessageBox::StandardButton::Yes)
-        {
-            QSettings settings;
-            settings.clear();
-        }
-    });
-
 #ifndef Q_OS_WASM // skip the unecessary stuff
     connect(m_chooseSetVerse, &QPushButton::clicked, this, [this]() {
         QSettings settings;
@@ -221,8 +200,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_tabs->addTab(display, i18n("&Display"));
     m_tabs->addTab(startup, i18n("&Startup"));
 #endif // Q_OS_WASM
-
-    m_tabs->addTab(other, i18n("&Other settings"));
 
     auto layout = new QGridLayout;
     layout->addWidget(m_tabs, 0, 0);
