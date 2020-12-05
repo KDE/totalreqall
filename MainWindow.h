@@ -19,6 +19,8 @@
 #include <QStatusBar>
 #include <QWidget>
 
+#define KMainWindow QMainWindow
+
 class MainWindow : public KMainWindow
 {
     Q_OBJECT

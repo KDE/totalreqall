@@ -36,6 +36,7 @@ add_executable(TotalReqall
     SavedContentLoader.cpp
     SettingsDialog.cpp
     SimpleRefChooser.cpp
+	UserSettings.cpp
     WelcomePage.cpp
     main.cpp
     general.qrc

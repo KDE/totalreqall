@@ -3,12 +3,12 @@
 
 #include "MemorizeWidget.h"
 
+#include "UserSettings.h"
 #include <KLocalizedString>
 #include <QDebug>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QRandomGenerator>
-#include <QSettings>
 #include <QStringList>
 #include <map>
 #include <string>
@@ -19,12 +19,10 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWid
     : QTextEdit{ parent },
       m_difficulty{ difficulty }
 {
-    QSettings settings;
-    settings.beginGroup("MemorizeEdit");
+    auto settings = UserSettings::global();
 
     // the static_cast is necessary here
-    m_errorAction =
-        static_cast<ErrorAction>(settings.value("errorAction", ErrorAction::Redo).toInt());
+    m_errorAction = settings->memorizeErrorAction();
 
     setAcceptRichText(true);
     setTabChangesFocus(true);
@@ -44,8 +42,6 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWid
 
     m_numWords = m_words.size();
     setHtml(formattedEndString(m_difficulty));
-
-    settings.endGroup(); // MemorizeEdit
 }
 
 void MemorizeEdit::keyPressEvent(QKeyEvent *event)

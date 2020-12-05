@@ -6,6 +6,7 @@
 #include "ChooseReferenceWidget.h"
 #include "MemorizeWidget.h"
 #include "SimpleRefChooser.h"
+#include "UserSettings.h"
 #include <KLocalizedString>
 #include <QDialogButtonBox>
 #include <QGridLayout>
@@ -42,7 +43,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_tabs->setUsesScrollButtons(false);
 
     // get our settings object
-    QSettings settings;
+    QSettings qsettings;
+    auto settings = UserSettings::global();
 
     // set up the widgets
     m_redo->setText(i18n("&Retype the word"));
@@ -51,7 +53,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
     m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
     m_errorActionSettings
-        ->button(settings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())
+        ->button(qsettings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())
         ->setChecked(true);
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
@@ -60,21 +62,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_setVerse->setText(i18n("Load a &set verse"));
     m_chooseSetVerse->setText(i18n("&Choose verse..."));
 
-    // only let the user choose the default reference if the user has selected to load it
-    m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
-
     m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
     m_verseLoadSettings->addButton(m_randVerse, static_cast<int>(VerseLoadOption::Random));
     m_verseLoadSettings->addButton(m_setVerse, static_cast<int>(VerseLoadOption::Set));
-    m_verseLoadSettings
-        ->button(settings
-                     .value("ChooseReferenceWidget/verseLoadOption",
-                            static_cast<int>(VerseLoadOption::Last))
-                     .toInt())
-        ->setChecked(true);
+    m_verseLoadSettings->button(static_cast<int>(settings->verseLoadOption()))->setChecked(true);
+
+    // only let the user choose the default reference if the user has selected to load it
+    m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
 
     m_shouldSaveWindowSize->setText(i18n("Save last set window size"));
-    m_shouldSaveWindowSize->setChecked(settings.value("MainWindow/saveWinSize", true).toBool());
+    m_shouldSaveWindowSize->setChecked(settings->saveWinSize());
 
     m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
                                   static_cast<int>(BibleVersionLoadOption::Last));
@@ -82,11 +79,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
                                   static_cast<int>(BibleVersionLoadOption::Random));
     m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion,
                                   static_cast<int>(BibleVersionLoadOption::Set));
-    m_bibleVersionLoad
-        ->button(settings
-                     .value("ChooseReferenceWidget/bibleVersionLoadOption",
-                            static_cast<int>(BibleVersionLoadOption::Last))
-                     .toInt())
+    m_bibleVersionLoad->button(static_cast<int>(settings->bibleVersionLoadOption()))
         ->setChecked(true);
 
     m_defaultBibleVersion->setEnabled(m_loadDefaultBibleVersion->isChecked());
@@ -98,10 +91,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
         if (strcmp(type, sword::SWMgr::MODTYPE_BIBLES) == 0)
             m_defaultBibleVersion->addItem(item.first.c_str());
     }
-    m_defaultBibleVersion->setCurrentText(settings
-                                              .value("ChooseReferenceWidget/defaultBibleVersion",
-                                                     m_defaultBibleVersion->currentText())
-                                              .toString());
+    m_defaultBibleVersion->setCurrentText(settings->defaultBibleVersion());
 #endif // Q_OS_WASM
 
     // Memorization tab
@@ -161,22 +151,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // connect the widgets
 #ifndef Q_OS_WASM // skip the unecessary stuff
     connect(m_chooseSetVerse, &QPushButton::clicked, this, [this]() {
-        QSettings settings;
-        settings.beginGroup("ChooseReferenceWidget");
-        SimpleRefChooser chooser{ this, settings.value("defaultBook", "").toString(),
-                                  settings.value("defaultChapter", "").toString(),
-                                  settings.value("defaultStartVerse", "").toString(),
-                                  settings.value("defaultEndVerse", "").toString() };
-
+        auto settings = UserSettings::global();
+        SimpleRefChooser chooser{ this, settings->defaultBook(), settings->defaultChapter(),
+                                  settings->defaultStartVerse(), settings->defaultEndVerse() };
         if (chooser.exec() == QDialog::DialogCode::Accepted)
         {
-            settings.setValue("defaultBook", chooser.getBook());
-            settings.setValue("defaultChapter", chooser.getChapter());
-            settings.setValue("defaultStartVerse", chooser.getStartVerse());
-            settings.setValue("defaultEndVerse", chooser.getEndVerse());
+            settings->setDefaultBook(chooser.getBook());
+            settings->setDefaultChapter(chooser.getChapter());
+            settings->setDefaultStartVerse(chooser.getStartVerse());
+            settings->setDefaultEndVerse(chooser.getEndVerse());
         }
-
-        settings.endGroup();
     });
     connect(m_setVerse, &QRadioButton::toggled, m_chooseSetVerse, &QPushButton::setEnabled);
     connect(m_loadDefaultBibleVersion, &QRadioButton::toggled, m_defaultBibleVersion,
@@ -216,25 +200,18 @@ void SettingsDialog::ok()
 
 void SettingsDialog::apply()
 {
-    QSettings settings;
+    auto settings = UserSettings::global();
 
-    settings.beginGroup("MemorizeEdit");
-    settings.setValue("errorAction", m_errorActionSettings->checkedId());
-    settings.endGroup(); // MemorizeEdit
+    settings->setMemorizeErrorAction(static_cast<ErrorAction>(m_errorActionSettings->checkedId()));
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
-    settings.beginGroup("ChooseReferenceWidget");
-
-    settings.setValue("verseLoadOption", m_verseLoadSettings->checkedId());
-    settings.setValue("bibleVersionLoadOption", m_bibleVersionLoad->checkedId());
+    settings->setVerseLoadOption(static_cast<VerseLoadOption>(m_verseLoadSettings->checkedId()));
+    settings->setBibleVersionLoadOption(
+        static_cast<BibleVersionLoadOption>(m_bibleVersionLoad->checkedId()));
     if (m_bibleVersionLoad->checkedId() == static_cast<int>(BibleVersionLoadOption::Set))
-        settings.setValue("defaultBibleVersion", m_defaultBibleVersion->currentText());
+        settings->setDefaultBibleVersion(m_defaultBibleVersion->currentText());
 
-    settings.endGroup(); // ChooseReferenceWidget
-
-    settings.beginGroup("MainWindow");
-    settings.setValue("saveWinSize", m_shouldSaveWindowSize->isChecked());
-    settings.endGroup(); // MainWindow
+    settings->setSaveWinSize(m_shouldSaveWindowSize->isChecked());
 #endif // Q_OS_WASM
 
     // TODO: disable the apply button when settings haven't been changed

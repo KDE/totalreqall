@@ -3,6 +3,8 @@
 
 #include "ChooseReferenceWidget.h"
 
+#include "MainWindow.h"
+#include "UserSettings.h"
 #include <KLocalizedString>
 #include <QDebug>
 #include <QGridLayout>
@@ -26,8 +28,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_bibleVersion{ new QComboBox },
       m_verseDisplayBox{ new QTextBrowser }
 {
-    QSettings settings;
-    settings.beginGroup("ChooseReferenceWidget");
+    auto settings = UserSettings::global();
 
     // general setup
     setStatusTip(i18n("Choose a verse"));
@@ -50,18 +51,21 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         m_unusable = true;
     }
 
-    switch (static_cast<BibleVersionLoadOption>(settings.value("bibleVersionLoadOption").toInt()))
+    switch (settings->bibleVersionLoadOption())
     {
     case BibleVersionLoadOption::Last:
         m_currentBibleVersion =
-            settings.value("lastBibleVersion", m_bibleVersion->currentText()).toString();
+            (settings->lastBibleVersion() != "" ? settings->lastBibleVersion() :
+                                                  m_bibleVersion->currentText());
         break;
     case BibleVersionLoadOption::Random:
-        m_currentBibleVersion = m_bibleVersion->itemText(QRandomGenerator64::global()->generate() % m_bibleVersion->count());
+        m_currentBibleVersion = m_bibleVersion->itemText(QRandomGenerator64::global()->generate() %
+                                                         m_bibleVersion->count());
         break;
     case BibleVersionLoadOption::Set:
         m_currentBibleVersion =
-            settings.value("defaultBibleVersion", m_bibleVersion->currentText()).toString();
+            (settings->defaultBibleVersion() != "" ? settings->defaultBibleVersion() :
+                                                     m_bibleVersion->currentText());
         break;
     default:
         m_currentBibleVersion = m_bibleVersion->currentText();
@@ -81,34 +85,22 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     }
     m_books->insertItems(0, bookList);
 
-    // connect the combos
-    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
-    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
-    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-
-    // these are out here because apparently you can't create variables in a switch
-    auto lastBook = settings.value("lastBook").toString();
-    auto lastChapter = settings.value("lastChapter").toString();
-    auto lastStartVerse = settings.value("lastStartVerse").toString();
-    auto lastEndVerse = settings.value("lastEndVerse").toString();
-
-    switch (static_cast<VerseLoadOption>(settings.value("verseLoadOption", 1).toInt()))
+    switch (static_cast<VerseLoadOption>(settings->verseLoadOption()))
     {
     case VerseLoadOption::Last:
-
-        if (lastBook != "" && lastChapter != "" && lastStartVerse != "" && lastEndVerse != "")
+        if (settings->lastBook() != "" && settings->lastChapter() != "" &&
+            settings->lastStartVerse() != "" && settings->lastEndVerse() != "")
         {
-            m_books->setCurrentText(lastBook);
+            m_books->setCurrentText(settings->lastBook());
 
             // update the values now to load the data for the chapters and verses
             updateChapterVerseValues();
 
-            m_chapters->setCurrentText(lastChapter);
-            m_startVerses->setCurrentText(lastStartVerse);
-            m_endVerses->setCurrentText(lastEndVerse);
+            m_chapters->setCurrentText(settings->lastChapter());
+            m_startVerses->setCurrentText(settings->lastStartVerse());
+            m_endVerses->setCurrentText(settings->lastEndVerse());
         }
-        else
+        else // invalid save data, use whatever is available (normally Genesis 1:1-1)
         {
             updateChapterVerseValues();
             updateSaveVerse();
@@ -128,41 +120,33 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         break;
 
     case VerseLoadOption::Set:
-        m_books->setCurrentText(settings.value("defaultBook", "Genesis").toString());
-        updateChapterVerseValues();
-        m_chapters->setCurrentText(settings.value("defaultChapter", "1").toString());
-        m_startVerses->setCurrentText(settings.value("defaultStartVerse", "1").toString());
-        m_endVerses->setCurrentText(settings.value("defaultEndVerse", "1").toString());
+        if (settings->defaultBook() != "" && settings->defaultChapter() != "" &&
+            settings->defaultStartVerse() != "" && settings->defaultEndVerse() != "")
+        {
+            m_books->setCurrentText(settings->defaultBook());
+            updateChapterVerseValues();
+            m_chapters->setCurrentText(settings->defaultChapter());
+            m_startVerses->setCurrentText(settings->defaultStartVerse());
+            m_endVerses->setCurrentText(settings->defaultEndVerse());
+        }
+        else // invalid save data, use whatever is available (normally Genesis 1:1-1)
+        {
+            updateChapterVerseValues();
+            updateSaveVerse();
+        }
         break;
 
     default:
+        updateChapterVerseValues();
+        updateSaveVerse();
         break;
     }
 
-    // we also need to save all info about the last verse
-    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-
-    // and we want to always display the currently selected verse
-    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
-    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
-    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
-    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
-
-    // ... and make sure that the combo boxes are large enough (try removing this and then
+    // make sure that the combo boxes are large enough (try removing this and then
     // viewing the verses for Psalms 119 if you think this is unnecessary!)
     m_chapters->setMinimumContentsLength(3);
     m_startVerses->setMinimumContentsLength(3);
     m_endVerses->setMinimumContentsLength(3);
-
-    connect(m_bibleVersion, &QComboBox::currentTextChanged, this, [this](const QString &text) {
-        m_currentBibleVersion = text;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastBibleVersion", m_currentBibleVersion);
-        displayVerse();
-    });
 
     auto memorize = new QPushButton{ QIcon::fromTheme("go-next"), i18n("Memorize verse") };
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
@@ -204,16 +188,40 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     this->setLayout(layout);
 
-    displayVerse();
+    connect(m_bibleVersion, &QComboBox::currentTextChanged, this, [this](const QString &text) {
+        m_currentBibleVersion = text;
+        UserSettings::global()->setLastBibleVersion(m_currentBibleVersion);
+        displayVerse();
+    });
 
-    settings.endGroup(); // ChooseReferenceWidget
+    // connect the combos
+    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateChapterVerseValues()));
+    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
+    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
+
+    // we also need to save all info about the last verse
+    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
+
+    // and we want to always display the currently selected verse
+    connect(m_books, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(displayVerse()));
+
+    updateChapterVerseValues();
+    updateSaveVerse();
+
+    displayVerse();
 }
 
 void ChooseReferenceWidget::updateChapterVerseValues()
 {
     // prevent lots of signals from being emitted
     disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
-    disconnect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
     // set up sword
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
@@ -250,11 +258,9 @@ void ChooseReferenceWidget::updateChapterVerseValues()
         m_chapters->setCurrentIndex(m_chapters->count() - 1);
 
     updateVerseValues();
-    updateSaveVerse();
 
-    // reconnect the signals
+    // reconnect the signal
     connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateVerseValues()));
-    connect(m_chapters, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
 void ChooseReferenceWidget::updateVerseValues()
@@ -262,8 +268,6 @@ void ChooseReferenceWidget::updateVerseValues()
     // prevent lots of signals from being emitted
     disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
     disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-    disconnect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-    disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
     // set up sword
     sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
@@ -311,42 +315,29 @@ void ChooseReferenceWidget::updateVerseValues()
     // make sure that m_endVerses has a proper index
     updateEndVerseValues();
 
-    updateSaveVerse();
-
     // reconnect the signals
     connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
     connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-    connect(m_startVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
-    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
 void ChooseReferenceWidget::updateEndVerseValues()
 {
     // prevent lots of signals from being emitted
     disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-    disconnect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 
     if (m_startVerses->currentIndex() > m_endVerses->currentIndex())
         m_endVerses->setCurrentIndex(m_startVerses->currentIndex());
 
-    updateSaveVerse();
-
-    // reconnect the signals
+    // reconnect the signal
     connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateEndVerseValues()));
-    connect(m_endVerses, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSaveVerse()));
 }
 
 void ChooseReferenceWidget::updateSaveVerse()
 {
-    QSettings settings;
-
-    if (settings.value("ChooseReferenceWidget/saveLastRef", true).toBool())
-    {
-        settings.setValue("ChooseReferenceWidget/lastBook", m_books->currentText());
-        settings.setValue("ChooseReferenceWidget/lastChapter", m_chapters->currentText());
-        settings.setValue("ChooseReferenceWidget/lastStartVerse", m_startVerses->currentText());
-        settings.setValue("ChooseReferenceWidget/lastEndVerse", m_endVerses->currentText());
-    }
+    UserSettings::global()->setLastBook(m_books->currentText());
+    UserSettings::global()->setLastChapter(m_chapters->currentText());
+    UserSettings::global()->setLastStartVerse(m_startVerses->currentText());
+    UserSettings::global()->setLastEndVerse(m_endVerses->currentText());
 }
 
 void ChooseReferenceWidget::runMemorizer()

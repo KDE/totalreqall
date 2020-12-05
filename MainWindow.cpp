@@ -5,6 +5,7 @@
 
 #include "AppInfo.h"
 #include "SettingsDialog.h"
+#include "UserSettings.h"
 #include <KAboutApplicationDialog>
 #include <KAboutData>
 #include <KLocalizedString>
@@ -15,6 +16,9 @@
 #include <QIcon>
 #include <QSettings>
 #include <QTextStream>
+
+// temporary hack to prevent crashes
+#define KMainWindow QMainWindow
 
 MainWindow::MainWindow(KMainWindow *parent)
     : KMainWindow{ parent },
@@ -173,12 +177,12 @@ void MainWindow::setStatusMessage(QString message)
 
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    QSettings settings;
+    auto settings = UserSettings::global();
 
-    if (settings.value("MainWindow/saveWinSize", true).toBool())
+    if (settings->saveWinSize())
     {
-        settings.setValue("MainWindow/width", event->size().width());
-        settings.setValue("MainWindow/height", event->size().height());
+        settings->setWindowWidth(width());
+        settings->setWindowHeight(height());
     }
 
     QWidget::resizeEvent(event);
