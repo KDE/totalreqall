@@ -1,0 +1,10 @@
+[Desktop Entry]
+Comment=A program to help you memorize the Bible and other works
+Exec=totalreqall
+Icon=totalreqall
+Name=TotalReqall 
+GenericName=Memorize things
+Terminal=false
+Type=Application
+Categories=X-Bible;Utilities;Qt;KDE;X-KDE-More
+Keywords=bible;memorize;
