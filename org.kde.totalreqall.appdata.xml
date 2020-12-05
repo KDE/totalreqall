@@ -14,15 +14,38 @@
   <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=totalreqall</url>
   <url type="donation">https://www.kde.org/community/donations/?app=totalreqall</url>
   <launchable type="desktop-id">org.kde.totalreqall.desktop</launchable>
-  <!--screenshots>
+  <screenshots>
     <screenshot type="default">
+      <caption>The TotalReqall welcome page</caption>
       <image>
-        see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-screenshots
-        Central hosting for uploading at https://phabricator.kde.org/source/websites-product-screenshots/
-        Central URL to use here https://cdn.kde.org/screenshots/...
+        https://cdn.kde.org/screenshots/totalreqall/welcome.png
       </image>
     </screenshot>
-  </screenshots-->
+    <screenshot>
+      <caption>Choosing a verse</caption>
+      <image>
+        https://cdn.kde.org/screenshots/totalreqall/choose-verse.png
+      </image>
+    </screenshot>
+    <screenshot>
+      <caption>Entering custom content</caption>
+      <image>
+        https://cdn.kde.org/screenshots/totalreqall/custom-content.png
+      </image>
+    </screenshot>
+    <screenshot>
+      <caption>Selecting a saved item to memorize</caption>
+      <image>
+        https://cdn.kde.org/screenshots/totalreqall/saved-content.png
+      </image>
+    </screenshot>
+    <screenshot>
+      <caption>Memorizing a verse</caption>
+      <image>
+        https://cdn.kde.org/screenshots/totalreqall/memorizing.png
+      </image>
+    </screenshot>
+  </screenshots>
   <provides>
     <binary>totalreqall</binary>
   </provides>

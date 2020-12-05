@@ -51,6 +51,7 @@ target_link_libraries(TotalReqall
 )
 
 install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(FILES org.kde.totalreqall.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} TotalReqall_en_US.ts)
 
