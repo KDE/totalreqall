@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="desktop-application">
+  <id>org.kde.totalreqall</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>BSD-2-Clause</project_license>
+  <name>TotalReqall</name>
+  <summary>A program to help you memorize the Bible or anything else you want to.</summary>
+  <description>
+    <p>TotalReqall is a memorization tool which allows memorizing the Bible in many different translations, as well as memorizing any other content you want to.</p>
+    <p>TotalReqall uses the Sword library to manage Biblical texts. This makes it simple to add new translations to TotalReqall by simply installing a new Sword module on your system.</p>
+    <p>For custom content, merely enter what you want to memorize, along with a unique title for identification. Then you can memorize it just like you would memorize a Bible verse.</p>
+  </description>
+  <url type="homepage">https://www.kde.org</url>
+  <url type="bugtracker">https://bugs.kde.org/enter_bug.cgi?format=guided&amp;product=totalreqall</url>
+  <url type="donation">https://www.kde.org/community/donations/?app=totalreqall</url>
+  <launchable type="desktop-id">org.kde.totalreqall.desktop</launchable>
+  <!--screenshots>
+    <screenshot type="default">
+      <image>
+        see https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-screenshots
+        Central hosting for uploading at https://phabricator.kde.org/source/websites-product-screenshots/
+        Central URL to use here https://cdn.kde.org/screenshots/...
+      </image>
+    </screenshot>
+  </screenshots-->
+  <provides>
+    <binary>totalreqall</binary>
+  </provides>
+  <project_group>KDE</project_group>
+</component> 
