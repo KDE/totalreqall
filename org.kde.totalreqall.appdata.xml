@@ -4,7 +4,7 @@
   <metadata_license>FSFAP</metadata_license>
   <project_license>BSD-2-Clause</project_license>
   <name>TotalReqall</name>
-  <summary>A program to help you memorize the Bible or anything else you want to.</summary>
+  <summary>Memorize the Bible or anything else</summary>
   <description>
     <p>TotalReqall is a memorization tool which allows memorizing the Bible in many different translations, as well as memorizing any other content you want to.</p>
     <p>TotalReqall uses the Sword library to manage Biblical texts. This makes it simple to add new translations to TotalReqall by simply installing a new Sword module on your system.</p>
