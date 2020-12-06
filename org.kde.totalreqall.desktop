@@ -2,7 +2,7 @@
 Comment=A program to help you memorize the Bible and other works
 Exec=totalreqall
 Icon=totalreqall
-Name=TotalReqall 
+Name=TotalReqall
 GenericName=Memorize things
 Terminal=false
 Type=Application
