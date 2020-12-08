@@ -17,9 +17,6 @@
 #include <QSettings>
 #include <QTextStream>
 
-// temporary hack to prevent crashes
-#define KMainWindow QMainWindow
-
 MainWindow::MainWindow(KMainWindow *parent)
     : KMainWindow{ parent },
       m_refChooser{ new ChooseReferenceWidget },
