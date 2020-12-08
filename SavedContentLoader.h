@@ -6,7 +6,9 @@
 
 #include <QListWidget>
 #include <QPushButton>
+#include <QTextToSpeech>
 #include <QWidget>
+#include <QPushButton>
 
 class SavedContentLoader : public QWidget
 {
@@ -29,6 +31,9 @@ private:
 
     QListWidget *m_contentList;
     QPushButton *m_deleteBtn;
+
+    QPushButton *m_speak;
+    QTextToSpeech *m_speaker;
 };
 
 #endif // SAVEDCONTENTLOADER_H

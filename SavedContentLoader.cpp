@@ -17,18 +17,41 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTextStream>
+#include <QKeySequence>
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
+#include <QDebug>
 
 SavedContentLoader::SavedContentLoader(QWidget *parent)
     : QWidget(parent),
       m_contentList{ new QListWidget },
-      m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } }
+      m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } },
+      m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } }
 {
+    QSettings settings;
+    settings.beginGroup("savedContent");
+    settings.beginGroup("verses");
+
+    // TODO: make this work
+    m_speak->grabShortcut(QKeySequence{ int{ Qt::Key_MediaTogglePlayPause } });
+
+    for (auto item : settings.childKeys())
+        new QListWidgetItem{ item, m_contentList };
+
+    settings.endGroup();
+    settings.beginGroup("custom");
+
+    for (auto item : settings.childKeys())
+        new QListWidgetItem{ item, m_contentList };
+
+    settings.endGroup();
+    settings.endGroup();
+
     auto review = new QPushButton{ QIcon::fromTheme("go-next"), i18n("Review") };
     auto back = new QPushButton{ QIcon::fromTheme("go-previous"), i18n("Back") };
 
@@ -62,10 +85,49 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     });
     connect(back, &QPushButton::clicked, this, &SavedContentLoader::cancel);
 
+    m_speak->setDisabled(m_speaker->state() == QTextToSpeech::BackendError);
+
+    connect(m_speaker, &QTextToSpeech::stateChanged, this, [this](QTextToSpeech::State s) {
+        if (s == QTextToSpeech::Ready)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-start"));
+        else if (s == QTextToSpeech::Speaking)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-stop"));
+    });
+
+    connect(m_speak, &QPushButton::clicked, this, [this]() {
+        if (m_speaker->state() == QTextToSpeech::Ready && m_contentList->selectedItems().count() > 0)
+        {
+            QSettings settings;
+            settings.beginGroup("savedContent");
+            QString text;
+            auto item = this->m_contentList->selectedItems().first();
+            if (settings.contains("verses/" + item->text()))
+            {
+                settings.beginGroup("verses");
+                sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+                sword::SWModule *module = mgr.getModule("KJV");
+                sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
+                key->setText(item->text().toStdString().c_str());
+                for (sword::VerseKey otherKey{
+                         settings.value(item->text()).toString().toStdString().c_str() };
+                     *key <= otherKey; key->increment())
+                    text += module->renderText();
+                settings.endGroup();
+            }
+            else if (settings.contains("custom/" + item->text()))
+                text = settings.value("custom/" + item->text()).toString();
+            m_speaker->say(text);
+            settings.endGroup();
+        }
+        else if (m_speaker->state() == QTextToSpeech::Speaking)
+            m_speaker->stop();
+    });
+
     auto buttons = new QHBoxLayout;
     buttons->addWidget(back);
     buttons->addStretch();
     buttons->addWidget(m_deleteBtn);
+    buttons->addWidget(m_speak);
     buttons->addWidget(review);
 
     auto layout = new QVBoxLayout;

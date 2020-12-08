@@ -19,6 +19,8 @@
 #include <QRandomGenerator>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QTextToSpeech>
+#include <QtTextToSpeech/QTextToSpeechEngine>
 #include <QStringList>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
@@ -158,6 +160,36 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
+    auto speak = new QPushButton{ i18n("Speak verse") };
+    connect(speak, &QPushButton::clicked, this, [this]() {
+        auto speaker = new QTextToSpeech{ QTextToSpeech::availableEngines().first() };
+        if (speaker->state() == QTextToSpeech::Ready)
+        {
+            QString reference{ "%1 %2:%3" };
+            int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ?
+                                  (m_endVerses->currentIndex() - m_startVerses->currentIndex()) :
+                                  0;
+
+            sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
+            sword::SWModule *module = mgr.getModule(m_currentBibleVersion.toStdString().c_str());
+            QString content;
+
+            sword::SWKey key{ reference
+                                  .arg(m_books->currentText(), m_chapters->currentText(),
+                                       m_startVerses->currentText())
+                                  .toStdString()
+                                  .c_str() };
+            module->setKey(key);
+
+            for (int i = 0; i <= extraVerses; ++i)
+            {
+                content.append(module->renderText() + " ");
+                module->increment();
+            }
+            speaker->say(content);
+        }
+    });
+
     auto save = new QPushButton{ QIcon::fromTheme("document-save"), i18n("Save") };
     connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
 
@@ -187,6 +219,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
+    buttonLayout->addWidget(speak);
     buttonLayout->addWidget(save);
     buttonLayout->addWidget(memorize);
 

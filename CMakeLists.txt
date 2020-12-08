@@ -16,7 +16,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(FeatureSummary)
 
-find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
+find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools TextToSpeech)
 find_package(sword REQUIRED)
 find_package(KF5 ${KF5_DEP_VERSION}
 	REQUIRED COMPONENTS
@@ -25,14 +25,13 @@ find_package(KF5 ${KF5_DEP_VERSION}
             I18n
 )
 
-
 configure_file(AppInfo.h.cmake AppInfo.h)
 
 add_executable(TotalReqall
     ChooseReferenceWidget.cpp
     CustomContentAdder.cpp
     MainWindow.cpp
-    MemorizeWidget.cpp
+	MemorizeWidget.cpp
     SavedContentLoader.cpp
     SettingsDialog.cpp
     SimpleRefChooser.cpp
@@ -44,7 +43,8 @@ add_executable(TotalReqall
 )
 
 target_link_libraries(TotalReqall
-    Qt5::Widgets
+	Qt5::Widgets
+	Qt5::TextToSpeech
     sword::sword
     KF5::CoreAddons
     KF5::XmlGui
