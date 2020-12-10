@@ -26,6 +26,7 @@
     <p xml:lang="ca">El TotalReqall és una eina de memorització que permet memoritzar la Bíblia en moltes traduccions diferents, així com qualsevol altre contingut que vulgueu.</p>
     <p xml:lang="ca-valencia">El TotalReqall és una eina de memorització que permet memoritzar la Bíblia en moltes traduccions diferents, així com qualsevol altre contingut que vulgueu.</p>
     <p xml:lang="es">TotalReqall es una herramienta de memorización que le permite memorizar la Biblia en muchas traducciones distintas, así como memorizar cualquier otro tipo de contenido que desee.</p>
+    <p xml:lang="nl">TotalReqall is een hulpmiddel voor memoriseren voor het memoriseren van Bijbelteksten in vele verschillende vertalingen, evenals het memoriseren van elke andere inhoud die u zou willen.</p>
     <p xml:lang="pt">O TotalReqall é uma ferramenta de memorização que lhe permite memorizar a Bíblia nas suas várias traduções, assim como memorizar qualquer outro conteúdo que desejar.</p>
     <p xml:lang="sv">TotalReqall är ett memoreringsverktyg som gör det möjligt att memorera bibeln med många olika översättningar, samt memorera vilket annat innehåll som du vill.</p>
     <p xml:lang="uk">TotalReqall — інструмент для вивчення текстів напам'ять, за допомогою якого ви можете вивчати напам'ять уривки з Біблії у багатьох різних перекладах, а також вивчати напам'ять будь-які інші тексти.</p>
@@ -34,6 +35,7 @@
     <p xml:lang="ca">El TotalReqall usa la biblioteca Sword per a gestionar els texts bíblics. Això facilita afegir traduccions noves al TotalReqall instal·lant un mòdul Sword nou al sistema.</p>
     <p xml:lang="ca-valencia">El TotalReqall usa la biblioteca Sword per a gestionar els texts bíblics. Això facilita afegir traduccions noves al TotalReqall instal·lant un mòdul Sword nou al sistema.</p>
     <p xml:lang="es">TotalReqall usa la biblioteca Sword para gestionar textos bíblicos. Facilita la adición de nuevas traducciones a TotalReqall con solo instalar un nuevo módulo de Sword en el sistema.</p>
+    <p xml:lang="nl">TotalReqall gebruikt de Sword bibliotheek om Bijbelse teksten te beheren. Dit maakt het eenvoudig om nieuwe vertalingen aan TotalReqall toe te voegen door eenvoudig een nieuwe Sword module op uw systeem te installeren.</p>
     <p xml:lang="pt">O TotalReqall usa a biblioteca Sword para gerir os textos Bíblicos. Isto simplifica a adição de novas traduções ao TotalReqall, instalando para tal um novo módulo do Sword no seu sistema.</p>
     <p xml:lang="sv">TotalReqall använder biblioteket Sword för att hantera bibliska texter. Det gör det enkelt att lägga till nya översättningar i TotalReqall genom att helt enkelt installera en ny modul i Sword på systemet.</p>
     <p xml:lang="uk">Для керування текстами з Біблії у TotalReqall використано бібліотеку Sword. Це спрощує додавання нових перекладів до TotalReqall — достатньо просто встановити новий модуль Sword у вашій системі.</p>
@@ -42,6 +44,7 @@
     <p xml:lang="ca">Per al contingut personalitzat, només introduïu el que vulgueu memoritzar amb un títol únic com a identificació. Després ho podreu memoritzar de la mateixa manera que memoritzaríeu un versicle de la Bíblia.</p>
     <p xml:lang="ca-valencia">Per al contingut personalitzat, només introduïu el que vulgueu memoritzar amb un títol únic com a identificació. Després ho podreu memoritzar de la mateixa manera que memoritzaríeu un versicle de la Bíblia.</p>
     <p xml:lang="es">Para contenido personalizado, introduzca simplemente lo que desee memorizar junto con un título único a modo de identificación. A continuación podrá memorizarlo como haría con un versículo de la Biblia.</p>
+    <p xml:lang="nl">Voor eigen inhoud, voer gewoon wat u wilt memoriseren in, samen met een unieke titel voor identificatie. Daarna kunt u het memoriseren net als u een Bijbelvers zou doen.</p>
     <p xml:lang="pt">Para o conteúdo personalizado, simplesmente introduza o que deseja memorizar, em conjunto com um título único para a identificação. Agora pode memorizá-lo como faria com um verso da Bíblia.</p>
     <p xml:lang="sv">För eget innehåll, skriv helt enkelt in vad du vill memorera, tillsammans med en unik titel för identifikation. Sedan kan du memorera det precis som du skulle memorera en bibelvers.</p>
     <p xml:lang="uk">Для роботи із іншими текстами достатньо просто ввести текст для вивчення напам'ять і вказати унікальну назву для ідентифікації цього тексту. Далі можна вивчати текст напам'ять у той самий спосіб, у який ви можете вивчати напам'ять вірші з Біблії.</p>
@@ -99,6 +102,7 @@
       <caption xml:lang="ca">Seleccionar un element desat a memoritzar</caption>
       <caption xml:lang="ca-valencia">Seleccionar un element guardat a memoritzar</caption>
       <caption xml:lang="es">Selección de un elemento guardado para memorizarlo</caption>
+      <caption xml:lang="nl">Een opgeslagen item om te memoriseren selecteren</caption>
       <caption xml:lang="pt">Seleccionar um item gravado para memorizar</caption>
       <caption xml:lang="sv">Välja ett sparat objekt att memorera</caption>
       <caption xml:lang="uk">Вибір збереженого запису для вивчення напам'ять</caption>
@@ -112,6 +116,7 @@
       <caption xml:lang="ca">Memoritzar un versicle</caption>
       <caption xml:lang="ca-valencia">Memoritzar un versicle</caption>
       <caption xml:lang="es">Memorizar un versículo</caption>
+      <caption xml:lang="nl">Een vers memoriseren</caption>
       <caption xml:lang="pt">Memorizar um verso</caption>
       <caption xml:lang="sv">Memorera en vers</caption>
       <caption xml:lang="uk">Вивчення вірша напам'ять</caption>
