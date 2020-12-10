@@ -21,8 +21,8 @@ find_package(sword REQUIRED)
 find_package(KF5 ${KF5_DEP_VERSION}
 	REQUIRED COMPONENTS
 	    XmlGui
-		CoreAddons
-		I18n
+            CoreAddons
+            I18n
 )
 
 
@@ -36,7 +36,7 @@ add_executable(TotalReqall
     SavedContentLoader.cpp
     SettingsDialog.cpp
     SimpleRefChooser.cpp
-	UserSettings.cpp
+    UserSettings.cpp
     WelcomePage.cpp
     main.cpp
     general.qrc
@@ -46,9 +46,9 @@ add_executable(TotalReqall
 target_link_libraries(TotalReqall
     Qt5::Widgets
     sword::sword
-	KF5::CoreAddons
-	KF5::XmlGui
-	KF5::I18n
+    KF5::CoreAddons
+    KF5::XmlGui
+    KF5::I18n
 )
 
 install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})
