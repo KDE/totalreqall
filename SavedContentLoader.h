@@ -5,6 +5,7 @@
 #define SAVEDCONTENTLOADER_H
 
 #include <QListWidget>
+#include <QPushButton>
 #include <QWidget>
 
 class SavedContentLoader : public QWidget
@@ -20,10 +21,14 @@ signals:
 public slots:
     void refresh();
 
+private slots:
+    void deleteItem(QListWidgetItem *);
+
 private:
     void prepareContent(QListWidgetItem *);
 
     QListWidget *m_contentList;
+    QPushButton *m_deleteBtn;
 };
 
 #endif // SAVEDCONTENTLOADER_H

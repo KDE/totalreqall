@@ -4,12 +4,18 @@
 #include "CustomContentAdder.h"
 
 #include <KLocalizedString>
+#include <QDebug>
 #include <QDialogButtonBox>
+#include <QFile>
 #include <QFormLayout>
 #include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLabel>
 #include <QPushButton>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QVBoxLayout>
 
 CustomContentAdder::CustomContentAdder(QWidget *parent)
@@ -67,10 +73,29 @@ QString CustomContentAdder::getContent()
 
 void CustomContentAdder::saveItem()
 {
-    QSettings settings;
-    settings.beginGroup("savedContent");
-    settings.beginGroup("custom");
-    settings.setValue(m_title->text(), m_content->toPlainText());
-    settings.endGroup();
-    settings.endGroup();
+    QFile file{ QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalreqall-"
+                                                                                    "saves.json" };
+    if (file.open(QIODevice::ReadWrite))
+    {
+        QJsonObject item;
+        item.insert("type", "custom");
+        item.insert("title", m_title->text());
+        item.insert("content", m_content->toPlainText());
+        item.insert("completed", false);
+
+        QJsonDocument doc{ QJsonDocument::fromJson(file.readAll()) };
+        QJsonArray a;
+
+        if (doc.isArray())
+            a = doc.array();
+
+        a.append(item);
+        doc.setArray(a);
+        file.resize(0);
+        QTextStream s(&file);
+        s << doc.toJson();
+        file.close();
+    }
+    else
+        qDebug() << "File couldn't be opened";
 }

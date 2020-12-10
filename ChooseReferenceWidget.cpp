@@ -7,12 +7,18 @@
 #include "UserSettings.h"
 #include <KLocalizedString>
 #include <QDebug>
+#include <QFile>
 #include <QGridLayout>
 #include <QHBoxLayout>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
 #include <QLabel>
 #include <QMessageBox>
 #include <QRandomGenerator>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QStringList>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
@@ -396,15 +402,38 @@ void ChooseReferenceWidget::displayVerse()
 
 void ChooseReferenceWidget::saveItem()
 {
-    QSettings settings;
-    settings.beginGroup("savedContent");
-    settings.beginGroup("verses");
-    settings.setValue(m_books->currentText() + " " + m_chapters->currentText() + ":" +
-                          m_startVerses->currentText(),
-                      m_books->currentText() + " " + m_chapters->currentText() + ":" +
-                          m_endVerses->currentText());
-    settings.endGroup();
-    settings.endGroup();
+    QFile file{ QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalreqall-"
+                                                                                    "saves.json" };
+    if (file.open(QIODevice::ReadWrite))
+    {
+        QJsonObject item;
+        item.insert("type", "verse");
+        item.insert("title", m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                                 m_startVerses->currentText() + "-" + m_endVerses->currentText());
+        item.insert("startRef", m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                                    m_startVerses->currentText());
+        item.insert("endRef", m_books->currentText() + " " + m_chapters->currentText() + ":" +
+                                  m_endVerses->currentText());
+        item.insert("numExtraVerses",
+                    m_endVerses->currentText().toInt() - m_startVerses->currentText().toInt());
+        item.insert("bibleVersion", m_bibleVersion->currentText());
+        item.insert("completed", false);
+
+        QJsonDocument doc{ QJsonDocument::fromJson(file.readAll()) };
+        QJsonArray a;
+
+        if (doc.isArray())
+            a = doc.array();
+
+        a.append(item);
+        doc.setArray(a);
+        file.resize(0);
+        QTextStream s(&file);
+        s << doc.toJson();
+        file.close();
+    }
+    else
+        qDebug() << "File couldn't be opened";
 }
 
 bool ChooseReferenceWidget::unusable()
