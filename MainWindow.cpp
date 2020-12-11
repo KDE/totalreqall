@@ -68,16 +68,8 @@ MainWindow::MainWindow(KMainWindow *parent)
     // about this program
     auto about = new QAction{ i18n("About") };
     connect(about, &QAction::triggered, this, [this]() {
-        KAboutData aboutData{ "TotalReqall",
-                              i18n("TotalReqall"),
-                              TotalReqall::appVersion.toString(),
-                              i18n("Memorize the Bible or custom content."),
-                              KAboutLicense::BSDL,
-                              i18n("Copyright (C) 2020 Loren Burkholder") };
-        aboutData.addAuthor("Loren Burkholder", i18n("Creator, maintainer"),
-                            "computersemiexpert@outlook.com");
         auto kdeAboutAppDlg =
-            new KAboutApplicationDialog{ aboutData, KAboutApplicationDialog::NoOptions, this };
+            new KAboutApplicationDialog{ KAboutData::applicationData(), KAboutApplicationDialog::NoOptions, this };
         kdeAboutAppDlg->exec();
     });
     helpMenu->addAction(about);

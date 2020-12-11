@@ -6,12 +6,15 @@
 #include "MainWindow.h"
 #include "MemorizeWidget.h"
 #include "UserSettings.h"
-#include <KI18n/KLocalizedString>
+#include <KAboutData>
+#include <KLocalizedString>
 #include <QApplication>
 #include <QPoint>
 #include <QPushButton>
 #include <QScreen>
+#include <QCommandLineParser>
 #include <QSettings>
+#include <QDebug>
 
 inline QPoint centerWindowOnScreen(int, int);
 
@@ -22,7 +25,30 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName(TotalReqall::organizationName);
     QCoreApplication::setOrganizationDomain(TotalReqall::organizationDomain);
 
+    QApplication app(argc, argv);
+
     KLocalizedString::setApplicationDomain(TotalReqall::appName.toStdString().c_str());
+
+    KAboutData aboutData{ "TotalReqall",
+        i18n("TotalReqall"),
+        TotalReqall::appVersion.toString(),
+        TotalReqall::appDescription,
+        KAboutLicense::BSDL,
+        i18n("Copyright (C) 2020 Loren Burkholder") };
+
+    aboutData.addAuthor("Loren Burkholder", i18n("Creator, maintainer"),
+                        "computersemiexpert@outlook.com");
+
+    KAboutData::setApplicationData(aboutData);
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription(TotalReqall::appDescription);
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    aboutData.setupCommandLine(&parser);
+
+    parser.process(app);
 
     // make sure that anything accessing the user settings actually gets data
     // The problem is that the global variable gets created before the app info
@@ -30,8 +56,6 @@ int main(int argc, char *argv[])
     // the default value (or to a null QVariant).
     // This statement needs to come before any access of the UserSettings to prevent logic errors.
     UserSettings::global()->refresh();
-
-    QApplication a(argc, argv);
     MainWindow mainWindow;
 
     auto settings = UserSettings::global();
@@ -42,7 +66,7 @@ int main(int argc, char *argv[])
     mainWindow.show();
     mainWindow.move(centerWindowOnScreen(mainWindow.width(), mainWindow.height()));
 
-    return a.exec();
+    return app.exec();
 }
 
 inline QPoint centerWindowOnScreen(int w, int h)
