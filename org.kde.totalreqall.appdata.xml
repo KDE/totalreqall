@@ -130,6 +130,6 @@
     <binary>totalreqall</binary>
   </provides>
   <project_group>KDE</project_group>
-  <value key="KDE::matrix">#totalreqall:matrix.org</value>
-  <value key="KDE::irc">#totalreqall</value>
+  <value key="KDE::matrix">#totalreqall:kde.org</value>
+  <value key="KDE::irc">#kde-totalreqall</value>
 </component>
