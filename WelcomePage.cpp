@@ -6,6 +6,8 @@
 #include <KLocalizedString>
 #include <QCommandLinkButton>
 #include <QLabel>
+#include <QStandardPaths>
+#include <QFile>
 #include <QSettings>
 #include <QVBoxLayout>
 #include <markupfiltmgr.h>
@@ -49,6 +51,8 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
     settings.endGroup(); // custom
 
     settings.endGroup(); // savedContent
+
+    hasContent |= QFile::exists(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalreqall-saves.json");
 
     m_saved->setEnabled(hasContent);
 

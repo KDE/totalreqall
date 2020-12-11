@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
     KLocalizedString::setApplicationDomain(TotalReqall::appName.toStdString().c_str());
 
-    KAboutData aboutData{ "TotalReqall",
+    KAboutData aboutData{ "totalreqall",
         i18n("TotalReqall"),
         TotalReqall::appVersion.toString(),
         TotalReqall::appDescription,
