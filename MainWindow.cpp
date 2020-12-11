@@ -146,7 +146,6 @@ void MainWindow::runMemorizer(const QString &content)
         delete m_memorizer;
     m_memorizer = new MemorizeWidget{ content };
     setCentralWidget(m_memorizer);
-    m_memorizer->focusMemorizer();
 
     connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
     connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);

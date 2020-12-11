@@ -60,10 +60,6 @@ class MemorizeWidget : public QWidget
 public:
     explicit MemorizeWidget(QString, QWidget * = nullptr);
     ~MemorizeWidget();
-    void focusMemorizer()
-    {
-        m_memorizeEdit->setFocus();
-    }
 
 signals:
     void done();
