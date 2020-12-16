@@ -1,11 +1,21 @@
 # TotalReqall
 A program for memorizing the Bible and other works. Written in C++ with Qt, KDE Frameworks, and the Sword library.
 
-## Usage
-Start the program and choose a book, chapter, and verse. If you want to familiarize yourself with the verse, click "Display verse". Otherwise, click "Memorize verse" to memorize it.
+Features:
+- Memorize one Bible verse or select multiple verses from the same chapter and book.
+- Create your own content to memorize.
+- Save items to memorize later.
+ Every time you select a verse or enter custom content and click "Memorize", that item will be saved automatically.
+- Split large items into smaller chunks for easier memorization.
+ Note that currently TotalReqall will only split content at line breaks. If double-spaced breaks exist, TotalReqall will split the content at the double-spaced break. Otherwise, the content will be split at single-spaced line breaks. There is no way to set what size of content should be split or how large of chunks it should be split into. The splitting feature can be disabled if so desired. Stay tuned for more development in this area.
 
 ## Installing
-You will need to install the Sword and cmark libraries, including the development files. Also, make sure that you have the KJV Sword module installed (failure to provide the KJV module will cause a segfault on Linux). Then build with cmake.
+You will need to install the Sword library, including the development files. Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
+
+### Debian/Ubuntu
+`sudo apt install sword-devel sword-text-kjv # sword-text-kjv is the King James Version module for Sword`
+
+Build with cmake.
 
 ## Contributing
 All MRs will be reviewed, even if they are not accepted. Please run `clang-format -i *.cpp *.h` in the root of the repo before committing.
