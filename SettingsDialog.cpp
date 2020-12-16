@@ -56,10 +56,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_splitContent->setChecked(settings->splitContent());
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
-    m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
-    m_verseLoadSettings->addButton(m_randVerse, static_cast<int>(VerseLoadOption::Random));
-    m_verseLoadSettings->addButton(m_setVerse, static_cast<int>(VerseLoadOption::Set));
-    m_verseLoadSettings->button(static_cast<int>(settings->verseLoadOption()))->setChecked(true);
+    m_verseLoadSettings->addButton(m_saveVerse, LastVerse);
+    m_verseLoadSettings->addButton(m_randVerse, RandomVerse);
+    m_verseLoadSettings->addButton(m_setVerse, SetVerse);
+    m_verseLoadSettings->button(settings->verseLoadOption())->setChecked(true);
 
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
@@ -67,12 +67,12 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_shouldSaveWindowSize->setChecked(settings->saveWinSize());
 
     m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
-                                  static_cast<int>(BibleVersionLoadOption::Last));
+                                  LastVersion);
     m_bibleVersionLoad->addButton(m_loadRandomBibleVersion,
-                                  static_cast<int>(BibleVersionLoadOption::Random));
+                                  RandomVersion);
     m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion,
-                                  static_cast<int>(BibleVersionLoadOption::Set));
-    m_bibleVersionLoad->button(static_cast<int>(settings->bibleVersionLoadOption()))
+                                  SetVersion);
+    m_bibleVersionLoad->button(settings->bibleVersionLoadOption())
         ->setChecked(true);
 
     m_defaultBibleVersion->setEnabled(m_loadDefaultBibleVersion->isChecked());
@@ -208,7 +208,7 @@ void SettingsDialog::apply()
     settings->setVerseLoadOption(static_cast<VerseLoadOption>(m_verseLoadSettings->checkedId()));
     settings->setBibleVersionLoadOption(
         static_cast<BibleVersionLoadOption>(m_bibleVersionLoad->checkedId()));
-    if (m_bibleVersionLoad->checkedId() == static_cast<int>(BibleVersionLoadOption::Set))
+    if (m_bibleVersionLoad->checkedId() == SetVersion)
         settings->setDefaultBibleVersion(m_defaultBibleVersion->currentText());
 
     settings->setSaveWinSize(m_shouldSaveWindowSize->isChecked());

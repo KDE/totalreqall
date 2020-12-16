@@ -29,10 +29,10 @@ void UserSettings::refresh()
     settings.beginGroup("ChooseReferenceWidget");
 
     m_bibleVersionLoadOption = static_cast<BibleVersionLoadOption>(
-        settings.value("bibleVersionLoadOption", static_cast<int>(BibleVersionLoadOption::Last))
+        settings.value("bibleVersionLoadOption", LastVersion)
             .toInt());
     m_verseLoadOption = static_cast<VerseLoadOption>(
-        settings.value("verseLoadOption", static_cast<int>(VerseLoadOption::Last)).toInt());
+        settings.value("verseLoadOption", LastVerse).toInt());
 
     m_lastBook = settings.value("lastBook").toString();
     m_lastChapter = settings.value("lastChapter").toString();

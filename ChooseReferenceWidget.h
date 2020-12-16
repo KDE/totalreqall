@@ -12,39 +12,19 @@
 #include <QWidget>
 #include <map>
 
-enum class VerseLoadOption : int
+enum VerseLoadOption : int
 {
-    Last = 1,
-    Random = 2,
-    Set = 3,
+    LastVerse = 1,
+    RandomVerse = 2,
+    SetVerse = 3,
 };
 
-// operator int(VerseLoadOption &op)
-//{
-//	return static_cast<int>(op);
-//}
-
-// operator VerseLoadOption(int &i)
-//{
-//	return static_cast<VerseLoadOption>(i);
-//}
-
-enum class BibleVersionLoadOption : int
+enum BibleVersionLoadOption : int
 {
-    Last = 1,
-    Random = 2,
-    Set = 3,
+    LastVersion = 1,
+    RandomVersion = 2,
+    SetVersion = 3,
 };
-
-// operator int(BibleVersionLoadOption &op)
-//{
-//	return static_cast<int>(op);
-//}
-
-// operator BibleVersionLoadOption(int &i)
-//{
-//	return static_cast<BibleVersionLoadOption>(i);
-//}
 
 class ChooseReferenceWidget : public QWidget
 {

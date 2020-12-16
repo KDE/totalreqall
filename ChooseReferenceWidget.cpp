@@ -59,16 +59,16 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
     switch (settings->bibleVersionLoadOption())
     {
-    case BibleVersionLoadOption::Last:
+    case BibleVersionLoadOption::LastVersion:
         m_currentBibleVersion =
             (settings->lastBibleVersion() != "" ? settings->lastBibleVersion() :
                                                   m_bibleVersion->currentText());
         break;
-    case BibleVersionLoadOption::Random:
+    case BibleVersionLoadOption::RandomVersion:
         m_currentBibleVersion = m_bibleVersion->itemText(QRandomGenerator64::global()->generate() %
                                                          m_bibleVersion->count());
         break;
-    case BibleVersionLoadOption::Set:
+    case BibleVersionLoadOption::SetVersion:
         m_currentBibleVersion =
             (settings->defaultBibleVersion() != "" ? settings->defaultBibleVersion() :
                                                      m_bibleVersion->currentText());
@@ -91,9 +91,9 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     }
     m_books->insertItems(0, bookList);
 
-    switch (static_cast<VerseLoadOption>(settings->verseLoadOption()))
+    switch (settings->verseLoadOption())
     {
-    case VerseLoadOption::Last:
+    case VerseLoadOption::LastVerse:
         if (settings->lastBook() != "" && settings->lastChapter() != "" &&
             settings->lastStartVerse() != "" && settings->lastEndVerse() != "")
         {
@@ -114,7 +114,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
 
         break;
 
-    case VerseLoadOption::Random:
+    case VerseLoadOption::RandomVerse:
         updateChapterVerseValues();
         m_books->setCurrentIndex(QRandomGenerator::global()->generate() % m_books->count());
         m_chapters->setCurrentIndex(QRandomGenerator::global()->generate() % m_chapters->count());
@@ -125,7 +125,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         m_endVerses->setCurrentIndex(m_startVerses->currentIndex());
         break;
 
-    case VerseLoadOption::Set:
+    case VerseLoadOption::SetVerse:
         if (settings->defaultBook() != "" && settings->defaultChapter() != "" &&
             settings->defaultStartVerse() != "" && settings->defaultEndVerse() != "")
         {
