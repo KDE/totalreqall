@@ -28,7 +28,7 @@ Build and install with cmake.
 ```bash
 mkdir build && cd build
 cmake .. # don't forget to pass -DTTS_ENABLED=OFF if desired
-cmake -build .
+cmake --build .
 sudo cmake --install .
 ```
 
