@@ -37,19 +37,21 @@ endif()
 
 configure_file(AppInfo.h.cmake AppInfo.h)
 
+include_directories(src)
+
 add_executable(TotalReqall
-    ChooseReferenceWidget.cpp
-    CustomContentAdder.cpp
-    MainWindow.cpp
-	MemorizeWidget.cpp
-    SavedContentLoader.cpp
-    SettingsDialog.cpp
-    SimpleRefChooser.cpp
-    UserSettings.cpp
-    WelcomePage.cpp
-    main.cpp
-    general.qrc
-    icons.qrc
+	src/ChooseReferenceWidget.cpp
+	src/CustomContentAdder.cpp
+	src/MainWindow.cpp
+	src/MemorizeWidget.cpp
+	src/SavedContentLoader.cpp
+	src/SettingsDialog.cpp
+	src/SimpleRefChooser.cpp
+	src/UserSettings.cpp
+	src/WelcomePage.cpp
+	src/main.cpp
+	general.qrc
+	icons.qrc
 )
 
 target_link_libraries(TotalReqall
