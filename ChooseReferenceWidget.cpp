@@ -27,14 +27,16 @@
 
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
+#ifndef NO_TTS
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
+      m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
+#endif
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
       m_bibleVersion{ new QComboBox },
-      m_verseDisplayBox{ new QTextBrowser },
-      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
-      m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } }
+      m_verseDisplayBox{ new QTextBrowser }
 {
     auto settings = UserSettings::global();
 
@@ -160,6 +162,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
+#ifndef NO_TTS
     connect(m_speak, &QPushButton::clicked, this, [this]() {
         if (m_speaker->state() == QTextToSpeech::Ready)
         {
@@ -196,6 +199,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
         else if (s == QTextToSpeech::Speaking)
             m_speak->setIcon(QIcon::fromTheme("media-playback-stop"));
     });
+#endif
 
     auto save = new QPushButton{ QIcon::fromTheme("document-save"), i18n("Save") };
     connect(save, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
@@ -226,7 +230,9 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
+#ifndef NO_TTS
     buttonLayout->addWidget(m_speak);
+#endif
     buttonLayout->addWidget(save);
     buttonLayout->addWidget(memorize);
 

@@ -27,17 +27,16 @@
 
 SavedContentLoader::SavedContentLoader(QWidget *parent)
     : QWidget(parent),
-      m_contentList{ new QListWidget },
-      m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } },
+#ifndef NO_TTS
       m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
-      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } }
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
+#endif
+      m_contentList{ new QListWidget },
+      m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } }
 {
     QSettings settings;
     settings.beginGroup("savedContent");
     settings.beginGroup("verses");
-
-    // TODO: make this work
-    m_speak->grabShortcut(QKeySequence{ int{ Qt::Key_MediaTogglePlayPause } });
 
     for (auto item : settings.childKeys())
         new QListWidgetItem{ item, m_contentList };
@@ -85,6 +84,10 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     });
     connect(back, &QPushButton::clicked, this, &SavedContentLoader::cancel);
 
+#ifndef NO_TTS
+    // TODO: make this work
+    m_speak->grabShortcut(QKeySequence{ int{ Qt::Key_MediaTogglePlayPause } });
+
     m_speak->setDisabled(m_speaker->state() == QTextToSpeech::BackendError);
 
     connect(m_speaker, &QTextToSpeech::stateChanged, this, [this](QTextToSpeech::State s) {
@@ -106,11 +109,14 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
         else if (m_speaker->state() == QTextToSpeech::Speaking)
             m_speaker->stop();
     });
+#endif
 
     auto buttons = new QHBoxLayout;
     buttons->addWidget(back);
     buttons->addStretch();
+#ifndef NO_TTS
     buttons->addWidget(m_speak);
+#endif
     buttons->addWidget(m_deleteBtn);
     buttons->addWidget(review);
 

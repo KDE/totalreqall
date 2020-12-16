@@ -6,8 +6,11 @@
 
 #include <QListWidget>
 #include <QPushButton>
-#include <QTextToSpeech>
 #include <QWidget>
+
+#ifndef NO_TTS
+#include <QTextToSpeech>
+#endif
 
 class SavedContentLoader : public QWidget
 {
@@ -28,11 +31,13 @@ private slots:
     QString prepareContent(QListWidgetItem *, bool);
 
 private:
-    QListWidget *m_contentList;
-    QPushButton *m_deleteBtn;
-
+#ifndef NO_TTS
     QPushButton *m_speak;
     QTextToSpeech *m_speaker;
+#endif
+
+    QListWidget *m_contentList;
+    QPushButton *m_deleteBtn;
 };
 
 #endif // SAVEDCONTENTLOADER_H

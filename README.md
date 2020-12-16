@@ -12,11 +12,15 @@ Features:
  > This will only work on systems with text-to-speech available. See [the Qt docs](https://doc.qt.io/qt-5/qtspeech-index.html) for more details.  
 
 ## Installing
-You will need to install the Sword library, including the development files, and the Qt Speech module (for text-to-speech). Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
+You will need to install the Sword library. Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
+
+If you want text-to-speech, you will need to install the Qt Speech module as well.
 
 ### Debian/Ubuntu
 ```bash
-sudo apt install libqt5texttospeech5-dev sword-devel sword-text-kjv # sword-text-kjv is the King James Version module for Sword
+# sword-text-kjv is the King James Version module for Sword
+# If you don't want text-to-speech, you don't need libqt5texttospeech5-dev
+sudo apt install libqt5texttospeech5-dev sword-devel sword-text-kjv
 ```
 
 Build with cmake.

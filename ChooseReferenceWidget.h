@@ -9,9 +9,13 @@
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QTextEdit>
-#include <QTextToSpeech>
 #include <QWidget>
+
 #include <map>
+
+#ifndef NO_TTS
+#include <QTextToSpeech>
+#endif
 
 enum VerseLoadOption : int
 {
@@ -50,6 +54,11 @@ private slots:
     void runMemorizer();
 
 private:
+#ifndef NO_TTS
+    QTextToSpeech *m_speaker;
+    QPushButton *m_speak;
+#endif
+
     QComboBox *m_books;
     QComboBox *m_chapters;
     QComboBox *m_startVerses;
@@ -60,9 +69,6 @@ private:
     QString m_currentBibleVersion;
 
     bool m_unusable = false;
-
-    QTextToSpeech *m_speaker;
-    QPushButton *m_speak;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H
