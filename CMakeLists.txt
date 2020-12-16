@@ -32,7 +32,7 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG COMPONENTS TextToSpeech)
 if(TTS_ENABLED AND NOT Qt5TextToSpeech_FOUND)
 	message(FATAL_ERROR "You asked for TTS, but it couldn't be found.")
 elseif(NOT TTS_ENABLED)
-	add_definitions(-DNO_TTS)
+	add_compile_definitions(NO_TTS)
 endif()
 
 configure_file(AppInfo.h.cmake AppInfo.h)
