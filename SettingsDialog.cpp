@@ -22,11 +22,11 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog{ parent },
 #ifndef Q_OS_WASM // skip the unecessary stuff
       m_verseLoadSettings{ new QButtonGroup },
-      m_saveVerse{ new QRadioButton },
-      m_randVerse{ new QRadioButton },
-      m_setVerse{ new QRadioButton },
-      m_chooseSetVerse{ new QPushButton },
-      m_shouldSaveWindowSize{ new QCheckBox },
+      m_saveVerse{ new QRadioButton{ i18n("Load &last verse") } },
+      m_randVerse{ new QRadioButton{ i18n("Load &random verse") } },
+      m_setVerse{ new QRadioButton{ i18n("Load a &set verse") } },
+      m_chooseSetVerse{ new QPushButton{ i18n("&Choose verse...") } },
+      m_shouldSaveWindowSize{ new QCheckBox{ i18n("Save last set window size") } },
       m_bibleVersionLoad{ new QButtonGroup },
       m_loadLastBibleVersion{ new QRadioButton{ i18n("Load &last version") } },
       m_loadRandomBibleVersion{ new QRadioButton{ i18n("Load &random version") } },
@@ -35,8 +35,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 #endif // Q_OS_WASM
       m_tabs{ new QTabWidget },
       m_errorActionSettings{ new QButtonGroup },
-      m_redo{ new QRadioButton },
-      m_keepGoing{ new QRadioButton },
+      m_redo{ new QRadioButton{ i18n("&Retype the word") } },
+      m_keepGoing{ new QRadioButton{ i18n("Mark the word as incorrect and &keep going") } },
       m_splitContent{ new QCheckBox{ i18n("Split large content into smaller chunks") } }
 {
     this->setWindowTitle(i18n("Settings"));
@@ -44,27 +44,18 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_tabs->setUsesScrollButtons(false);
 
     // get our settings object
-    QSettings qsettings;
     auto settings = UserSettings::global();
 
     // set up the widgets
-    m_redo->setText(i18n("&Retype the word"));
-    m_keepGoing->setText(i18n("Mark the word as incorrect and &keep going"));
-
     m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
     m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
     m_errorActionSettings
-        ->button(qsettings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())
+        ->button(settings->memorizeErrorAction())
         ->setChecked(true);
 
     m_splitContent->setChecked(settings->splitContent());
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
-    m_saveVerse->setText(i18n("Load &last verse"));
-    m_randVerse->setText(i18n("Load &random verse"));
-    m_setVerse->setText(i18n("Load a &set verse"));
-    m_chooseSetVerse->setText(i18n("&Choose verse..."));
-
     m_verseLoadSettings->addButton(m_saveVerse, static_cast<int>(VerseLoadOption::Last));
     m_verseLoadSettings->addButton(m_randVerse, static_cast<int>(VerseLoadOption::Random));
     m_verseLoadSettings->addButton(m_setVerse, static_cast<int>(VerseLoadOption::Set));
@@ -73,7 +64,6 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // only let the user choose the default reference if the user has selected to load it
     m_chooseSetVerse->setEnabled(m_setVerse->isChecked());
 
-    m_shouldSaveWindowSize->setText(i18n("Save last set window size"));
     m_shouldSaveWindowSize->setChecked(settings->saveWinSize());
 
     m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
