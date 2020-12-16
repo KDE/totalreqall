@@ -14,7 +14,7 @@ Features:
 ## Installing
 You will need to install the Sword library. Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
 
-If you want text-to-speech, you will need to install the Qt Speech module as well.
+If you want text-to-speech, you will need to install the Qt Speech module as well. If you don't, pass `-DTTS_ENABLED=OFF` to cmake.
 
 ### Debian/Ubuntu
 ```bash
