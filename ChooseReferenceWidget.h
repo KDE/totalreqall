@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QTextEdit>
+#include <QTextToSpeech>
 #include <QWidget>
 #include <map>
 
@@ -59,6 +60,9 @@ private:
     QString m_currentBibleVersion;
 
     bool m_unusable = false;
+
+    QTextToSpeech *m_speaker;
+    QPushButton *m_speak;
 };
 
 #endif // CHOOSEREFERENCEWIDGET_H

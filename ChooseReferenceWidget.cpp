@@ -19,8 +19,6 @@
 #include <QRandomGenerator>
 #include <QSettings>
 #include <QStandardPaths>
-#include <QTextToSpeech>
-#include <QtTextToSpeech/QTextToSpeechEngine>
 #include <QStringList>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
@@ -34,7 +32,9 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
       m_startVerses{ new QComboBox },
       m_endVerses{ new QComboBox },
       m_bibleVersion{ new QComboBox },
-      m_verseDisplayBox{ new QTextBrowser }
+      m_verseDisplayBox{ new QTextBrowser },
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
+      m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } }
 {
     auto settings = UserSettings::global();
 
@@ -160,10 +160,8 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::saveItem);
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
-    auto speak = new QPushButton{ i18n("Speak verse") };
-    connect(speak, &QPushButton::clicked, this, [this]() {
-        auto speaker = new QTextToSpeech{ QTextToSpeech::availableEngines().first() };
-        if (speaker->state() == QTextToSpeech::Ready)
+    connect(m_speak, &QPushButton::clicked, this, [this]() {
+        if (m_speaker->state() == QTextToSpeech::Ready)
         {
             QString reference{ "%1 %2:%3" };
             int extraVerses = (m_endVerses->currentIndex() > m_startVerses->currentIndex()) ?
@@ -186,8 +184,17 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
                 content.append(module->renderText() + " ");
                 module->increment();
             }
-            speaker->say(content);
+            m_speaker->say(content);
         }
+        else if (m_speaker->state() == QTextToSpeech::Speaking)
+            m_speaker->stop();
+    });
+
+    connect(m_speaker, &QTextToSpeech::stateChanged, this, [this](QTextToSpeech::State s) {
+        if (s == QTextToSpeech::Ready)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-start"));
+        else if (s == QTextToSpeech::Speaking)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-stop"));
     });
 
     auto save = new QPushButton{ QIcon::fromTheme("document-save"), i18n("Save") };
@@ -219,7 +226,7 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     auto buttonLayout = new QHBoxLayout;
     buttonLayout->addWidget(back);
     buttonLayout->addStretch();
-    buttonLayout->addWidget(speak);
+    buttonLayout->addWidget(m_speak);
     buttonLayout->addWidget(save);
     buttonLayout->addWidget(memorize);
 
