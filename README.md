@@ -5,11 +5,11 @@ Features:
 - Memorize one Bible verse or select multiple verses from the same chapter and book.
 - Create your own content to memorize.
 - Save items to memorize later.  
- Every time you select a verse or enter custom content and click "Memorize", that item will be saved automatically.  
+ > Every time you select a verse or enter custom content and click "Memorize", that item will be saved automatically.  
 - Split large items into smaller chunks for easier memorization.  
- Note that currently TotalReqall will only split content at line breaks. If double-spaced breaks exist, TotalReqall will split the content at the double-spaced break. Otherwise, the content will be split at single-spaced line breaks. There is no way to set what size of content should be split or how large of chunks it should be split into. The splitting feature can be disabled if so desired. Stay tuned for more development in this area.  
+ > Note that currently TotalReqall will only split content at line breaks. If double-spaced breaks exist, TotalReqall will split the content at the double-spaced break. Otherwise, the content will be split at single-spaced line breaks. There is no way to set what size of content should be split or how large of chunks it should be split into. The splitting feature can be disabled if so desired. Stay tuned for more development in this area.  
 - Listen to items using text-to-speech.  
- This will only work on systems with text-to-speech available. See [the Qt docs](https://doc.qt.io/qt-5/qtspeech-index.html) for more details.  
+ > This will only work on systems with text-to-speech available. See [the Qt docs](https://doc.qt.io/qt-5/qtspeech-index.html) for more details.  
 
 ## Installing
 You will need to install the Sword library, including the development files, and the Qt Speech module (for text-to-speech). Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
