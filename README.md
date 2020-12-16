@@ -11,6 +11,14 @@ Features:
 - Listen to items using text-to-speech.  
  > This will only work on systems with text-to-speech available. See [the Qt docs](https://doc.qt.io/qt-5/qtspeech-index.html) for more details.  
 
+## How it works
+When you select something to memorize, TotalReqall will present you with a screen with a text edit box. This box will contain the content (albeit grayed-out). Type the first letter of each word. When you're done, click "Continue". The text box will now contain every other word grayed-out. Again, type the first letter of each word and click "Continue". Now the text box will be empty. This means that you will have to type the first letter of each word from memory.
+
+If you have enabled content splitting, this process will be repeated for each chunk. Then TotalReqall will run this process on the whole thing.
+
+Once you've memorized something, TotalReqall will not give you any hints the next time you select it.  
+> Note that this currently resets every time TotalReqall is restarted.
+
 ## Installing
 You will need to install the Sword library. Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
 
