@@ -39,7 +39,7 @@ configure_file(AppInfo.h.cmake AppInfo.h)
 
 include_directories(src)
 
-add_executable(TotalReqall
+add_executable(totalreqall
 	src/ChooseReferenceWidget.cpp
 	src/CustomContentAdder.cpp
 	src/MainWindow.cpp
@@ -54,7 +54,7 @@ add_executable(TotalReqall
 	icons.qrc
 )
 
-target_link_libraries(TotalReqall
+target_link_libraries(totalreqall
 	Qt5::Widgets
     sword::sword
     KF5::CoreAddons
@@ -63,10 +63,10 @@ target_link_libraries(TotalReqall
 )
 
 if(TTS_ENABLED)
-	target_link_libraries(TotalReqall Qt5::TextToSpeech)
+	target_link_libraries(totalreqall Qt5::TextToSpeech)
 endif()
 
-install(TARGETS TotalReqall ${INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS totalreqall ${INSTALL_TARGETS_DEFAULT_ARGS})
 install(FILES org.kde.totalreqall.appdata.xml DESTINATION ${KDE_INSTALL_METAINFODIR})
 install(PROGRAMS org.kde.totalreqall.desktop DESTINATION  ${XDG_APPS_INSTALL_DIR})
 
