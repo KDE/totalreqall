@@ -40,6 +40,8 @@ public:
     int windowHeight() const;
     bool saveWinSize() const;
 
+    bool splitContent() const;
+
     void setBibleVersionLoadOption(BibleVersionLoadOption);
     void setVerseLoadOption(VerseLoadOption);
     void setMemorizeErrorAction(ErrorAction);
@@ -59,6 +61,8 @@ public:
     void setWindowWidth(int);
     void setWindowHeight(int);
     void setSaveWinSize(bool);
+
+    void setSplitContent(bool);
 
 signals:
     void bibleVersionLoadOptionChanged(BibleVersionLoadOption &);
@@ -81,6 +85,8 @@ signals:
     void windowHeightChanged(int &);
     void saveWinSizeChanged(bool &);
 
+    void splitContentChanged(bool &);
+
 private:
     BibleVersionLoadOption m_bibleVersionLoadOption;
     VerseLoadOption m_verseLoadOption;
@@ -101,6 +107,8 @@ private:
     int m_windowWidth;
     int m_windowHeight;
     bool m_saveWinSize;
+
+    bool m_splitContent;
 
     static QSharedPointer<UserSettings> s_settings;
 };

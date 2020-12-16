@@ -46,6 +46,8 @@ private:
     QButtonGroup *m_errorActionSettings;
     QRadioButton *m_redo;
     QRadioButton *m_keepGoing;
+
+    QCheckBox *m_splitContent;
 };
 
 #endif // SETTINGSDIALOG_H

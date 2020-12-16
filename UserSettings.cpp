@@ -58,6 +58,7 @@ void UserSettings::refresh()
 
     m_memorizeErrorAction =
         static_cast<ErrorAction>(settings.value("errorAction", ErrorAction::Redo).toInt());
+    m_splitContent = settings.value("splitContent", true).toBool();
 
     settings.endGroup(); // MemorizeEdit
 }
@@ -90,6 +91,7 @@ void UserSettings::save()
     settings.beginGroup("MemorizeEdit");
 
     settings.setValue("errorAction", m_memorizeErrorAction);
+    settings.setValue("splitContent", m_splitContent);
 
     settings.endGroup(); // MemorizeEdit
 }
@@ -272,6 +274,17 @@ void UserSettings::setSaveWinSize(bool b)
     }
 }
 
+void UserSettings::setSplitContent(bool b)
+{
+    if (b != m_splitContent)
+    {
+        m_splitContent = b;
+        QSettings settings;
+        settings.setValue("MemorizeEdit/splitContent", m_splitContent);
+        emit splitContentChanged(m_splitContent);
+    }
+}
+
 BibleVersionLoadOption UserSettings::bibleVersionLoadOption() const
 {
     return m_bibleVersionLoadOption;
@@ -342,4 +355,9 @@ int UserSettings::windowHeight() const
 bool UserSettings::saveWinSize() const
 {
     return m_saveWinSize;
+}
+
+bool UserSettings::splitContent() const
+{
+    return m_splitContent;
 }

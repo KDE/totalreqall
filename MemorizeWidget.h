@@ -40,7 +40,7 @@ signals:
     void messageToUser(QString message);
 
 protected:
-    virtual void keyPressEvent(QKeyEvent *);
+    virtual void keyPressEvent(QKeyEvent *) override;
 
 private:
     QString formattedEndString(Difficulty);
@@ -75,7 +75,9 @@ private:
     MemorizeEdit *m_memorizeEdit;
 
     Difficulty m_difficulty;
-    QString m_content;
+    QStringList m_content;
+    int m_contentIndex = 0;
+    QString m_sep;
 
     QTimer *m_endMemorizerTimer = nullptr;
 
