@@ -188,19 +188,36 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_layout{ new QGridLayout{ this } },
       m_endSession{ new QPushButton },
-      m_content{ memorizeContent },
       m_endMemorizerTimer{ new QTimer }
 {
     // clear the status bar
     emit newStatus("");
 
-    if (!MemorizeWidget::s_memorizedContent.contains(m_content))
+    if (UserSettings::global()->splitContent())
+    {
+        if (memorizeContent.split("\n\n").size() > 1)
+        {
+            m_content = memorizeContent.split("\n\n");
+            m_sep = "\n\n";
+        }
+        else if (memorizeContent.split("\n").size() > 2)
+        {
+            m_content = memorizeContent.split("\n");
+            m_sep = "\n";
+        }
+        else
+            m_content << memorizeContent;
+    }
+    else
+        m_content << memorizeContent;
+
+    if (!MemorizeWidget::s_memorizedContent.contains(m_content.join(m_sep)))
         m_difficulty = Difficulty::Easy; // completely memorize this
     else
         m_difficulty = Difficulty::Hard; // we know this already
 
     // set up the widgets...
-    m_memorizeEdit = new MemorizeEdit{ m_content, m_difficulty };
+    m_memorizeEdit = new MemorizeEdit{ m_content[m_contentIndex], m_difficulty };
     m_endSession->setText(i18n("Stop memorizing"));
 
     connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
@@ -216,6 +233,9 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 
     // now we can set the layout
     this->setLayout(m_layout);
+
+    // grab the focus
+    m_memorizeEdit->setFocus();
 }
 
 MemorizeWidget::~MemorizeWidget() {}
@@ -231,25 +251,51 @@ void MemorizeWidget::editDone()
 
 void MemorizeWidget::nextLevel()
 {
+    // set up the new level
     if (m_difficulty < Difficulty::Hard)
-    {
         m_difficulty = static_cast<Difficulty>(m_difficulty + 1);
-        m_endSession->setText(i18n("Stop memorizing"));
-        disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
-        connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
 
-        delete m_memorizeEdit;
-        m_memorizeEdit = new MemorizeEdit{ m_content, m_difficulty };
-        connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
-        m_layout->addWidget(m_memorizeEdit, 0, 0);
-        m_memorizeEdit->setFocus();
+    // we've fully memorized this, so it's time to either move to the next chunk of data or end the loop6
+    else if (m_content.size() == 1)
+    {
+        // this is a special case, because using normal handling on content size 1 will result in running the whole memorization process 3 times (in my expericence)
+        // register this as having been memorized in this session
+        s_memorizedContent.insert(m_content.first());
+
+        m_endSession->setText(i18n("Continue"));
+        emit done();
+        return; // skip the memorize process
+    }
+    else if (m_contentIndex < m_content.size())
+    {
+        ++m_contentIndex;
+        m_difficulty = Difficulty::Easy;
+    }
+    else if (m_contentIndex == m_content.size())
+    {
+        ++m_contentIndex;
+        m_difficulty = Difficulty::Easy;
     }
     else
     {
         // register this as having been memorized in this session
-        s_memorizedContent.insert(m_content);
+        s_memorizedContent.insert(m_content.join(" "));
 
         m_endSession->setText(i18n("Continue"));
         emit done();
+        return; // skip the memorize process
     }
+
+    // grab the appropriate content
+    QString content = (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_content.join(m_sep);
+
+    m_endSession->setText(i18n("Stop memorizing"));
+    disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
+    connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
+
+    delete m_memorizeEdit;
+    m_memorizeEdit = new MemorizeEdit{ content, m_difficulty };
+    connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
+    m_layout->addWidget(m_memorizeEdit, 0, 0);
+    m_memorizeEdit->setFocus();
 }

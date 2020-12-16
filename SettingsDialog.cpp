@@ -36,7 +36,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_tabs{ new QTabWidget },
       m_errorActionSettings{ new QButtonGroup },
       m_redo{ new QRadioButton },
-      m_keepGoing{ new QRadioButton }
+      m_keepGoing{ new QRadioButton },
+      m_splitContent{ new QCheckBox{ i18n("Split large content into smaller chunks") } }
 {
     this->setWindowTitle(i18n("Settings"));
 
@@ -55,6 +56,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_errorActionSettings
         ->button(qsettings.value("MemorizeEdit/errorAction", ErrorAction::Redo).toInt())
         ->setChecked(true);
+
+    m_splitContent->setChecked(settings->splitContent());
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
     m_saveVerse->setText(i18n("Load &last verse"));
@@ -104,8 +107,15 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     errorActionGroup->setTitle(i18n("Set action when the wrong key is typed"));
     errorActionGroup->setLayout(errorActionGroupLayout);
 
+    auto splitContentLayout = new QVBoxLayout;
+    splitContentLayout->addWidget(m_splitContent);
+
+    auto splitContentGroup = new QGroupBox{ i18n("Configure how large content is handled") };
+    splitContentGroup->setLayout(splitContentLayout);
+
     auto memorizationLayout = new QVBoxLayout;
     memorizationLayout->addWidget(errorActionGroup);
+    memorizationLayout->addWidget(splitContentGroup);
     memorizationLayout->addStretch();
 
     auto memorization = new QWidget;
@@ -213,6 +223,8 @@ void SettingsDialog::apply()
 
     settings->setSaveWinSize(m_shouldSaveWindowSize->isChecked());
 #endif // Q_OS_WASM
+
+    settings->setSplitContent(m_splitContent->isChecked());
 
     // TODO: disable the apply button when settings haven't been changed
     //	m_apply->setDisabled(true);
