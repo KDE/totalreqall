@@ -9,12 +9,11 @@
 #include <KAboutData>
 #include <KLocalizedString>
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QPoint>
 #include <QPushButton>
 #include <QScreen>
-#include <QCommandLineParser>
 #include <QSettings>
-#include <QDebug>
 
 inline QPoint centerWindowOnScreen(int, int);
 
@@ -30,11 +29,11 @@ int main(int argc, char *argv[])
     KLocalizedString::setApplicationDomain(TotalReqall::appName.toStdString().c_str());
 
     KAboutData aboutData{ "totalreqall",
-        i18n("TotalReqall"),
-        TotalReqall::appVersion.toString(),
-        TotalReqall::appDescription,
-        KAboutLicense::BSDL,
-        i18n("Copyright (C) 2020 Loren Burkholder") };
+                          i18n("TotalReqall"),
+                          TotalReqall::appVersion.toString(),
+                          TotalReqall::appDescription,
+                          KAboutLicense::BSDL,
+                          i18n("Copyright (C) 2020 Loren Burkholder") };
 
     aboutData.addAuthor("Loren Burkholder", i18n("Creator, maintainer"),
                         "computersemiexpert@outlook.com");
