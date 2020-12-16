@@ -49,9 +49,7 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     // set up the widgets
     m_errorActionSettings->addButton(m_redo, ErrorAction::Redo);
     m_errorActionSettings->addButton(m_keepGoing, ErrorAction::KeepGoing);
-    m_errorActionSettings
-        ->button(settings->memorizeErrorAction())
-        ->setChecked(true);
+    m_errorActionSettings->button(settings->memorizeErrorAction())->setChecked(true);
 
     m_splitContent->setChecked(settings->splitContent());
 
@@ -66,14 +64,10 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     m_shouldSaveWindowSize->setChecked(settings->saveWinSize());
 
-    m_bibleVersionLoad->addButton(m_loadLastBibleVersion,
-                                  LastVersion);
-    m_bibleVersionLoad->addButton(m_loadRandomBibleVersion,
-                                  RandomVersion);
-    m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion,
-                                  SetVersion);
-    m_bibleVersionLoad->button(settings->bibleVersionLoadOption())
-        ->setChecked(true);
+    m_bibleVersionLoad->addButton(m_loadLastBibleVersion, LastVersion);
+    m_bibleVersionLoad->addButton(m_loadRandomBibleVersion, RandomVersion);
+    m_bibleVersionLoad->addButton(m_loadDefaultBibleVersion, SetVersion);
+    m_bibleVersionLoad->button(settings->bibleVersionLoadOption())->setChecked(true);
 
     m_defaultBibleVersion->setEnabled(m_loadDefaultBibleVersion->isChecked());
 

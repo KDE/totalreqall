@@ -5,10 +5,10 @@
 
 #include <KLocalizedString>
 #include <QCommandLinkButton>
-#include <QLabel>
-#include <QStandardPaths>
 #include <QFile>
+#include <QLabel>
 #include <QSettings>
+#include <QStandardPaths>
 #include <QVBoxLayout>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
@@ -52,7 +52,11 @@ WelcomePage::WelcomePage(QWidget *parent) : QWidget(parent)
 
     settings.endGroup(); // savedContent
 
-    hasContent |= QFile::exists(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalreqall-saves.json");
+    hasContent |=
+        QFile::exists(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalre"
+                                                                                          "qall-"
+                                                                                          "saves."
+                                                                                          "json");
 
     m_saved->setEnabled(hasContent);
 

@@ -256,11 +256,13 @@ void MemorizeWidget::nextLevel()
     if (m_difficulty < Difficulty::Hard)
         m_difficulty = static_cast<Difficulty>(m_difficulty + 1);
 
-    // we've fully memorized this, so it's time to either move to the next chunk of data or end the loop6
+    // we've fully memorized this, so it's time to either move to the next chunk of data or end the
+    // loop6
     else if (m_content.size() == 1)
     {
-        // this is a special case, because using normal handling on content size 1 will result in running the whole memorization process 3 times (in my expericence)
-        // register this as having been memorized in this session
+        // this is a special case, because using normal handling on content size 1 will result in
+        // running the whole memorization process 3 times (in my expericence) register this as
+        // having been memorized in this session
         s_memorizedContent.insert(m_content.first());
 
         m_endSession->setText(i18n("Continue"));
@@ -288,7 +290,8 @@ void MemorizeWidget::nextLevel()
     }
 
     // grab the appropriate content
-    QString content = (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_content.join(m_sep);
+    QString content =
+        (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_content.join(m_sep);
 
     m_endSession->setText(i18n("Stop memorizing"));
     disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);

@@ -69,7 +69,8 @@ MainWindow::MainWindow(KMainWindow *parent)
     auto about = new QAction{ i18n("About") };
     connect(about, &QAction::triggered, this, [this]() {
         auto kdeAboutAppDlg =
-            new KAboutApplicationDialog{ KAboutData::applicationData(), KAboutApplicationDialog::NoOptions, this };
+            new KAboutApplicationDialog{ KAboutData::applicationData(),
+                                         KAboutApplicationDialog::NoOptions, this };
         kdeAboutAppDlg->exec();
     });
     helpMenu->addAction(about);
