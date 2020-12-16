@@ -79,8 +79,6 @@ private:
     int m_contentIndex = 0;
     QString m_sep;
 
-    QTimer *m_endMemorizerTimer = nullptr;
-
     static QSet<QString> s_memorizedContent;
 };
 

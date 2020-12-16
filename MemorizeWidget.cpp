@@ -187,8 +187,7 @@ QString MemorizeEdit::formattedEndString(Difficulty difficulty)
 MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_layout{ new QGridLayout{ this } },
-      m_endSession{ new QPushButton },
-      m_endMemorizerTimer{ new QTimer }
+      m_endSession{ new QPushButton }
 {
     // clear the status bar
     emit newStatus("");
