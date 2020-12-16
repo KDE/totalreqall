@@ -13,7 +13,9 @@ Features:
 You will need to install the Sword library, including the development files. Also, make sure that you have at least one Sword module installed (failure to provide a module may cause bad behavior).
 
 ### Debian/Ubuntu
-`sudo apt install sword-devel sword-text-kjv # sword-text-kjv is the King James Version module for Sword`
+```bash
+sudo apt install sword-devel sword-text-kjv # sword-text-kjv is the King James Version module for Sword
+```
 
 Build with cmake.
 
