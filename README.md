@@ -23,7 +23,14 @@ If you want text-to-speech, you will need to install the Qt Speech module as wel
 sudo apt install libqt5texttospeech5-dev sword-devel sword-text-kjv
 ```
 
-Build with cmake.
+Build and install with cmake.
+
+```bash
+mkdir build && cd build
+cmake .. # don't forget to pass -DTTS_ENABLED=OFF if desired
+cmake -build .
+sudo cmake --install .
+```
 
 ## Contributing
 All MRs will be reviewed, even if they are not accepted. Please run `clang-format -i *.cpp *.h` in the root of the repo before committing.
