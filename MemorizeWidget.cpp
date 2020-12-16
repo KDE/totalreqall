@@ -65,8 +65,6 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
         m_words.pop_front();
 
         setHtml(m_richText + formattedEndString(m_difficulty));
-
-        emit messageToUser("Hint provided.");
     }
 
     // skip all keys but the letters and numbers
@@ -103,15 +101,12 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
             m_words.pop_front();
 
             setHtml(m_richText + formattedEndString(m_difficulty));
-
-            emit messageToUser("");
         }
         else
         {
             switch (m_errorAction)
             {
             case ErrorAction::Redo:
-                emit messageToUser(i18n("Oops, you messed up! Try again."));
                 break;
 
             case ErrorAction::KeepGoing:
@@ -123,8 +118,6 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
                 m_richText += "</span>";
                 m_words.pop_front();
                 setHtml(m_richText + formattedEndString(m_difficulty));
-
-                emit messageToUser(i18n("Oops, you messed up!"));
                 break;
 
             default:
@@ -142,7 +135,6 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
         else if (m_richText.endsWith("<br> </span>"))
             this->setHtml(m_richText.remove(m_richText.length() - 12, 12));
 
-        emit messageToUser(i18n("Done!"));
         emit done();
     }
 }
@@ -189,9 +181,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
       m_layout{ new QGridLayout{ this } },
       m_endSession{ new QPushButton }
 {
-    // clear the status bar
-    emit newStatus("");
-
     if (UserSettings::global()->splitContent())
     {
         if (memorizeContent.split("\n\n").size() > 1)
@@ -221,7 +210,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
 
     connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
-    connect(m_memorizeEdit, &MemorizeEdit::messageToUser, this, &MemorizeWidget::newStatus);
 
     // ...and add them to the layout
     auto btnRow = new QHBoxLayout;

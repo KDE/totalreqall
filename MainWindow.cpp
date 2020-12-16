@@ -140,7 +140,6 @@ void MainWindow::runMemorizer(const QString &content)
     m_memorizer = new MemorizeWidget{ content };
     setCentralWidget(m_memorizer);
 
-    connect(m_memorizer, &MemorizeWidget::newStatus, this, &MainWindow::setStatusMessage);
     connect(m_memorizer, &MemorizeWidget::done, this, &MainWindow::cleanUpMemorizer);
 }
 
@@ -157,11 +156,6 @@ void MainWindow::cleanUpMemorizer()
         m_saveFocusWidget->setFocus();
         m_saveFocusWidget = nullptr;
     }
-}
-
-void MainWindow::setStatusMessage(QString message)
-{
-    this->statusBar()->showMessage(message);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)

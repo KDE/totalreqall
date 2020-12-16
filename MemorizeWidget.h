@@ -37,7 +37,6 @@ public:
 
 signals:
     void done();
-    void messageToUser(QString message);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *) override;
@@ -63,7 +62,6 @@ public:
 
 signals:
     void done();
-    void newStatus(QString message);
 
 private slots:
     void editDone();

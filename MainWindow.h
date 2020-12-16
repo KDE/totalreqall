@@ -44,6 +44,5 @@ private:
 private slots:
     void runMemorizer(const QString &);
     void cleanUpMemorizer();
-    void setStatusMessage(QString);
 };
 #endif // MainWindow_H
