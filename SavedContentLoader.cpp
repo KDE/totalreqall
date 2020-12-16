@@ -10,6 +10,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QKeySequence>
 #include <QLabel>
 #include <QMenu>
 #include <QMessageBox>
@@ -17,14 +18,12 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTextStream>
-#include <QKeySequence>
 #include <QVBoxLayout>
 #include <QXmlStreamReader>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
 #include <swmodule.h>
 #include <versekey.h>
-#include <QDebug>
 
 SavedContentLoader::SavedContentLoader(QWidget *parent)
     : QWidget(parent),
@@ -73,8 +72,9 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
                     deleteItem(m_contentList->itemAt(pos));
             });
 
-    connect(m_contentList, &QListWidget::itemDoubleClicked, this,
-            &SavedContentLoader::prepareContent);
+    // SIGNAL/SLOT macros required due to incompatible function signatures
+    connect(m_contentList, SIGNAL(itemDoubleClicked(QListWidgetItem *)), this,
+            SLOT(prepareContent(QListWidgetItem *)));
 
     connect(review, &QPushButton::clicked, this, [this]() {
         prepareContent(m_contentList->currentItem());
@@ -95,29 +95,13 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     });
 
     connect(m_speak, &QPushButton::clicked, this, [this]() {
-        if (m_speaker->state() == QTextToSpeech::Ready && m_contentList->selectedItems().count() > 0)
+        if (m_speaker->state() == QTextToSpeech::Ready &&
+            m_contentList->selectedItems().count() > 0)
         {
-            QSettings settings;
-            settings.beginGroup("savedContent");
-            QString text;
             auto item = this->m_contentList->selectedItems().first();
-            if (settings.contains("verses/" + item->text()))
-            {
-                settings.beginGroup("verses");
-                sword::SWMgr mgr{ new sword::MarkupFilterMgr{ sword::FMT_PLAIN } };
-                sword::SWModule *module = mgr.getModule("KJV");
-                sword::VerseKey *key{ static_cast<sword::VerseKey *>(module->getKey()) };
-                key->setText(item->text().toStdString().c_str());
-                for (sword::VerseKey otherKey{
-                         settings.value(item->text()).toString().toStdString().c_str() };
-                     *key <= otherKey; key->increment())
-                    text += module->renderText();
-                settings.endGroup();
-            }
-            else if (settings.contains("custom/" + item->text()))
-                text = settings.value("custom/" + item->text()).toString();
-            m_speaker->say(text);
-            settings.endGroup();
+            QString text = prepareContent(item, false);
+            if (!text.isNull())
+                m_speaker->say(text);
         }
         else if (m_speaker->state() == QTextToSpeech::Speaking)
             m_speaker->stop();
@@ -126,8 +110,8 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     auto buttons = new QHBoxLayout;
     buttons->addWidget(back);
     buttons->addStretch();
-    buttons->addWidget(m_deleteBtn);
     buttons->addWidget(m_speak);
+    buttons->addWidget(m_deleteBtn);
     buttons->addWidget(review);
 
     auto layout = new QVBoxLayout;
@@ -158,7 +142,8 @@ void SavedContentLoader::refresh()
     }
 
     // load legacy items
-    // at some point the QSettings stuff will be entirely removed since it's now deprecated and read-only
+    // at some point the QSettings stuff will be entirely removed since it's now deprecated and
+    // read-only
     QSettings settings;
     settings.beginGroup("savedContent");
     settings.beginGroup("verses");
@@ -176,10 +161,17 @@ void SavedContentLoader::refresh()
     settings.endGroup();
 }
 
-void SavedContentLoader::prepareContent(QListWidgetItem *item)
+QString SavedContentLoader::prepareContent(QListWidgetItem *item)
+{
+    // emit the signal by default
+    return prepareContent(item, true);
+}
+
+QString SavedContentLoader::prepareContent(QListWidgetItem *item, bool emitSignal)
 {
     bool foundInJson = false; // this is used to determine whether to search in the settings for a
                               // legacy item
+    QString content;
 
     QFile file{ QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/totalreqall-"
                                                                                     "saves.json" };
@@ -207,14 +199,14 @@ void SavedContentLoader::prepareContent(QListWidgetItem *item)
                                  jsonObj["endRef"].toString().toStdString().c_str() };
                              *key <= otherKey; key->increment())
                             text += module->renderText();
-                        emit contentReady(text);
+                        content = text;
 
                         foundInJson = true;
                     }
                     else if (jsonObj.contains("type") && jsonObj["type"].toString() == "custom" &&
                              jsonObj.contains("content"))
                     {
-                        emit contentReady(jsonObj["content"].toString());
+                        content = jsonObj["content"].toString();
                         foundInJson = true;
                     }
                 }
@@ -242,16 +234,21 @@ void SavedContentLoader::prepareContent(QListWidgetItem *item)
                  *key <= otherKey; key->increment())
                 text += module->renderText();
             settings.endGroup(); // verses
-            emit contentReady(text);
+            content = text;
         }
         else if (settings.contains("custom/" + item->text()))
-            emit contentReady(settings.value("custom/" + item->text()).toString());
+            content = settings.value("custom/" + item->text()).toString();
         else
             QMessageBox::critical(this, i18n("Error"),
                                   i18n("Error: could not find data for ") + item->text());
 
         settings.endGroup(); // savedContent
     }
+
+    if (emitSignal && !content.isNull())
+        emit contentReady(content);
+
+    return content;
 }
 
 void SavedContentLoader::deleteItem(QListWidgetItem *itemToDelete)

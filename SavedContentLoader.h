@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <QTextToSpeech>
 #include <QWidget>
-#include <QPushButton>
 
 class SavedContentLoader : public QWidget
 {
@@ -17,7 +16,7 @@ public:
     explicit SavedContentLoader(QWidget *parent = nullptr);
 
 signals:
-    void contentReady(const QString &);
+    void contentReady(QString);
     void cancel();
 
 public slots:
@@ -25,10 +24,10 @@ public slots:
 
 private slots:
     void deleteItem(QListWidgetItem *);
+    QString prepareContent(QListWidgetItem *);
+    QString prepareContent(QListWidgetItem *, bool);
 
 private:
-    void prepareContent(QListWidgetItem *);
-
     QListWidget *m_contentList;
     QPushButton *m_deleteBtn;
 
