@@ -28,7 +28,7 @@ public:
     ~MainWindow();
 
 protected:
-    virtual void resizeEvent(QResizeEvent *);
+    virtual void resizeEvent(QResizeEvent *) override;
 
 private:
     ChooseReferenceWidget *m_refChooser;
