@@ -56,10 +56,10 @@ add_executable(totalreqall
 
 target_link_libraries(totalreqall
 	Qt5::Widgets
-    sword::sword
-    KF5::CoreAddons
-    KF5::XmlGui
-    KF5::I18n
+	sword::sword
+	KF5::CoreAddons
+	KF5::XmlGui
+	KF5::I18n
 )
 
 if(TTS_ENABLED)
