@@ -28,9 +28,9 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWid
     setTabChangesFocus(true);
     setReadOnly(true);
 
-    // add a space after each newline so that words break appropriately at newlines (e.g. "word1\n"
+    // Add a space after each newline so that words break appropriately at newlines (e.g. "word1\n"
     // "word2" instead of "word1\nword2") and also change the "\n" to a "<br>" to play right with
-    // the HTML text std::string is the easiest way to do this
+    // the HTML text. std::string is the easiest way to do this
     auto temp = memorizeContent.toStdString();
 
     for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos;
@@ -75,6 +75,14 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
     // make sure there's still something to take care of
     else if (m_words.length() > 0)
     {
+        // Some words aren't going to be things that we want to actually memorize, so let's take care of them.
+        // This should likely be handled somewhere else, though
+        if (m_words[0].isNull() || m_words[0] == "" || m_words[0] == "<br>")
+        {
+            m_richText.append(m_words.front());
+            m_words.pop_front();
+        }
+
         // Get the first letter of the word. This is designed to prevent one from
         // having to input punctuation (e.g. for the string "...but" type "b"
         // instead of ".")
@@ -125,6 +133,13 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
             }
         }
     }
+
+    // TODO: This is supposed to make sure that the user can always see what they are typing; however, it doesn't work. This needs fixing.
+    textCursor().setPosition(document()->toPlainText().length());
+    textCursor().movePosition(QTextCursor::End);
+    for (auto x : m_words)
+        textCursor().movePosition(QTextCursor::WordLeft);
+    ensureCursorVisible();
 
     // we're done with the memorization, clean up and shut down
     if (m_words.length() < 1)
@@ -194,33 +209,46 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
             {
                 if (m_content.at(i).size() > settings->splitThreshold())
                 {
-                    if (m_content.at(i).split("\n\n").size() > 1)
+                    if (m_content[i].split("\n\n").size() > 1)
                     {
-                        QStringList split = m_content.at(i).split("\n\n");
+                        QString sep = "\n\n";
+                        QStringList split = m_content.at(i).split(sep);
                         m_content.removeAt(i);
                         for (int j = 0; j < split.size(); ++j)
                         {
-                            m_content.insert(i + j, split[j]);
+                            if (split[j].size() < settings->chunkSize() && QString(split[j] + split[j + 1]).size() < settings->chunkSize())
+                            {
+                                m_content.insert(i + j, split[j] + sep + split[j + 1]);
+                                split.removeAt(j + 1);
+                            }
+                            else
+                                m_content.insert(i + j, split[j]);
                         }
-                        m_sep = "\n\n";
                         continue;
                     }
-                    else if (m_content.at(i).split("\n").size() > 2)
+
+                    // This is not an "else if" because the previous "if" may have split m_content[i] into a chunk that is still too large,
+                    // meaning that this block needs to run as well
+                    if (m_content[i].split("\n").size() > 2)
                     {
-                        QStringList split = m_content.at(i).split("\n");
+                        QString sep = "\n";
+                        QStringList split = m_content.at(i).split(sep);
                         m_content.removeAt(i);
                         for (int j = 0; j < split.size(); ++j)
                         {
-                            m_content.insert(i + j, split[j]);
+                            if (split[j].size() < settings->chunkSize() && QString(split[j] + split[j + 1]).size() < settings->chunkSize())
+                            {
+                                m_content.insert(i + j, split[j] + sep + split[j + 1]);
+                                split.removeAt(j + 1);
+                            }
+                            else
+                                m_content.insert(i + j, split[j]);
                         }
-                        m_sep = "\n";
                         continue;
                     }
                     else
                         allSegmentsProperSize = true; // this couldn't be split
                 }
-                //                else
-                //                    allSegmentsProperSize = true;
             }
             allSegmentsProperSize = true;
             for (auto i : m_content)
@@ -230,7 +258,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     else
         m_content << memorizeContent;
 
-    if (!MemorizeWidget::s_memorizedContent.contains(m_content.join(m_sep)))
+    if (!MemorizeWidget::s_memorizedContent.contains(m_originalContent))
         m_difficulty = Difficulty::Easy; // completely memorize this
     else
         m_difficulty = Difficulty::Hard; // we know this already
@@ -283,7 +311,7 @@ void MemorizeWidget::nextLevel()
         // running the whole memorization process 3 times (in my expericence)
 
         // register this as having been memorized in this session
-        s_memorizedContent.insert(m_content.first());
+        s_memorizedContent.insert(m_originalContent);
 
         m_endSession->setText(i18n("Continue"));
         emit done();
@@ -305,7 +333,7 @@ void MemorizeWidget::nextLevel()
     else
     {
         // register this as having been memorized in this session
-        s_memorizedContent.insert(m_content.join(" "));
+        s_memorizedContent.insert(m_originalContent);
 
         m_endSession->setText(i18n("Continue"));
         emit done();

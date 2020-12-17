@@ -76,7 +76,6 @@ private:
     QStringList m_content;
     QString m_originalContent;
     int m_contentIndex = 0;
-    QString m_sep;
 
     static QSet<QString> s_memorizedContent;
 };
