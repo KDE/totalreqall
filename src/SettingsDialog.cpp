@@ -65,7 +65,8 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_splitThreshold->setSingleStep(10);
     m_splitThreshold->setPageStep(50);
 
-    // a lot of this stuff is m_splitThreshold.item / 2 because the chunk size is about half of the split threshold
+    // a lot of this stuff is m_splitThreshold.item / 2 because the chunk size is about half of the
+    // split threshold
     m_chunkSize->setMinimum(m_splitThreshold->minimum() / 2);
     m_chunkSize->setMaximum(m_splitThreshold->maximum() / 2);
     m_chunkSize->setValue(settings->chunkSize());
