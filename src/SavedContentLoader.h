@@ -9,7 +9,7 @@
 #include <QWidget>
 
 #ifndef NO_TTS
-#include <QTextToSpeech>
+    #include <QTextToSpeech>
 #endif
 
 class SavedContentLoader : public QWidget

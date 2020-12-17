@@ -10,11 +10,10 @@
 #include <QTextBrowser>
 #include <QTextEdit>
 #include <QWidget>
-
 #include <map>
 
 #ifndef NO_TTS
-#include <QTextToSpeech>
+    #include <QTextToSpeech>
 #endif
 
 enum VerseLoadOption : int
