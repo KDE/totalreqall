@@ -188,26 +188,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     if (settings->splitContent())
     {
         bool allSegmentsProperSize = false;
-//        if (memorizeContent.size() > settings->splitThreshold())
-//        {
-//            if (memorizeContent.split("\n\n").size() > 1)
-//            {
-//                m_content = memorizeContent.split("\n\n");
-//                m_sep = "\n\n";
-//            }
-//            else if (memorizeContent.split("\n").size() > 2)
-//            {
-//                m_content = memorizeContent.split("\n");
-//                m_sep = "\n";
-//            }
-//            else
-//                m_content << memorizeContent;
-//        }
-//        else
-//        {
-//            m_content << memorizeContent;
-//            allSegmentsProperSize = true;
-//        }
         do
         {
             for (int i = 0; i < m_content.size(); ++i)
@@ -239,8 +219,8 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                     else
                         allSegmentsProperSize = true; // this couldn't be split
                 }
-//                else
-//                    allSegmentsProperSize = true;
+                //                else
+                //                    allSegmentsProperSize = true;
             }
             allSegmentsProperSize = true;
             for (auto i : m_content)
@@ -295,8 +275,8 @@ void MemorizeWidget::nextLevel()
     if (m_difficulty < Difficulty::Hard)
         m_difficulty = static_cast<Difficulty>(m_difficulty + 1);
 
-    // we've fully memorized this chunk of data, so it's time to either move to the next chunk of data or end the
-    // loop
+    // we've fully memorized this chunk of data, so it's time to either move to the next chunk of
+    // data or end the loop
     else if (m_content.size() == 1)
     {
         // this is a special case, because using normal handling on content size 1 will result in
@@ -317,7 +297,8 @@ void MemorizeWidget::nextLevel()
     }
     else if (m_contentIndex == m_content.size())
     {
-        // we've memorized all the data chunks, increment the index to clearly state that there aren't any more chunks to process
+        // we've memorized all the data chunks, increment the index to clearly state that there
+        // aren't any more chunks to process
         ++m_contentIndex;
         m_difficulty = Difficulty::Easy;
     }
