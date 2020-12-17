@@ -33,11 +33,6 @@ MemorizeEdit::MemorizeEdit(QString &memorizeContent, Difficulty difficulty, QWid
     // the HTML text. std::string is the easiest way to do this
     auto temp = memorizeContent.toStdString();
 
-    // delete all the extra newlines found
-//    for (std::string::size_type pos = temp.find("\n\n", 0); pos != std::string::npos;
-//         pos = temp.find("\n\n", pos))
-//        temp.replace(pos, 2, "\n");
-
     for (std::string::size_type pos = temp.find("\n", 0); pos != std::string::npos;
          pos = temp.find("\n", pos))
         temp.replace(pos, 1, "<br> ");
@@ -139,13 +134,12 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
         }
     }
 
-    setReadOnly(false);
+    // TODO: This is supposed to make sure that the user can always see what they are typing; however, it doesn't work. This needs fixing.
     textCursor().setPosition(document()->toPlainText().length());
     textCursor().movePosition(QTextCursor::End);
     for (auto x : m_words)
         textCursor().movePosition(QTextCursor::WordLeft);
     ensureCursorVisible();
-    setReadOnly(true);
 
     // we're done with the memorization, clean up and shut down
     if (m_words.length() < 1)
