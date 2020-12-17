@@ -179,22 +179,73 @@ QString MemorizeEdit::formattedEndString(Difficulty difficulty)
 MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     : QWidget{ parent },
       m_layout{ new QGridLayout{ this } },
-      m_endSession{ new QPushButton }
+      m_endSession{ new QPushButton },
+      m_originalContent{ memorizeContent }
 {
-    if (UserSettings::global()->splitContent())
+    auto settings = UserSettings::global();
+
+    m_content << memorizeContent;
+    if (settings->splitContent())
     {
-        if (memorizeContent.split("\n\n").size() > 1)
+        bool allSegmentsProperSize = false;
+//        if (memorizeContent.size() > settings->splitThreshold())
+//        {
+//            if (memorizeContent.split("\n\n").size() > 1)
+//            {
+//                m_content = memorizeContent.split("\n\n");
+//                m_sep = "\n\n";
+//            }
+//            else if (memorizeContent.split("\n").size() > 2)
+//            {
+//                m_content = memorizeContent.split("\n");
+//                m_sep = "\n";
+//            }
+//            else
+//                m_content << memorizeContent;
+//        }
+//        else
+//        {
+//            m_content << memorizeContent;
+//            allSegmentsProperSize = true;
+//        }
+        do
         {
-            m_content = memorizeContent.split("\n\n");
-            m_sep = "\n\n";
-        }
-        else if (memorizeContent.split("\n").size() > 2)
-        {
-            m_content = memorizeContent.split("\n");
-            m_sep = "\n";
-        }
-        else
-            m_content << memorizeContent;
+            for (int i = 0; i < m_content.size(); ++i)
+            {
+                if (m_content.at(i).size() > settings->splitThreshold())
+                {
+                    if (m_content.at(i).split("\n\n").size() > 1)
+                    {
+                        QStringList split = m_content.at(i).split("\n\n");
+                        m_content.removeAt(i);
+                        for (int j = 0; j < split.size(); ++j)
+                        {
+                            m_content.insert(i + j, split[j]);
+                        }
+                        m_sep = "\n\n";
+                        continue;
+                    }
+                    else if (m_content.at(i).split("\n").size() > 2)
+                    {
+                        QStringList split = m_content.at(i).split("\n");
+                        m_content.removeAt(i);
+                        for (int j = 0; j < split.size(); ++j)
+                        {
+                            m_content.insert(i + j, split[j]);
+                        }
+                        m_sep = "\n";
+                        continue;
+                    }
+                    else
+                        allSegmentsProperSize = true; // this couldn't be split
+                }
+//                else
+//                    allSegmentsProperSize = true;
+            }
+            allSegmentsProperSize = true;
+            for (auto i : m_content)
+                allSegmentsProperSize &= (i.size() < settings->splitThreshold());
+        } while (!allSegmentsProperSize);
     }
     else
         m_content << memorizeContent;
@@ -205,7 +256,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
         m_difficulty = Difficulty::Hard; // we know this already
 
     // set up the widgets...
-    m_memorizeEdit = new MemorizeEdit{ m_content[m_contentIndex], m_difficulty };
+    m_memorizeEdit = new MemorizeEdit{ m_content.first(), m_difficulty };
     m_endSession->setText(i18n("Stop memorizing"));
 
     connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
@@ -244,13 +295,14 @@ void MemorizeWidget::nextLevel()
     if (m_difficulty < Difficulty::Hard)
         m_difficulty = static_cast<Difficulty>(m_difficulty + 1);
 
-    // we've fully memorized this, so it's time to either move to the next chunk of data or end the
-    // loop6
+    // we've fully memorized this chunk of data, so it's time to either move to the next chunk of data or end the
+    // loop
     else if (m_content.size() == 1)
     {
         // this is a special case, because using normal handling on content size 1 will result in
-        // running the whole memorization process 3 times (in my expericence) register this as
-        // having been memorized in this session
+        // running the whole memorization process 3 times (in my expericence)
+
+        // register this as having been memorized in this session
         s_memorizedContent.insert(m_content.first());
 
         m_endSession->setText(i18n("Continue"));
@@ -259,11 +311,13 @@ void MemorizeWidget::nextLevel()
     }
     else if (m_contentIndex < m_content.size())
     {
+        // there are still some chunks of data left to memorize
         ++m_contentIndex;
         m_difficulty = Difficulty::Easy;
     }
     else if (m_contentIndex == m_content.size())
     {
+        // we've memorized all the data chunks, increment the index to clearly state that there aren't any more chunks to process
         ++m_contentIndex;
         m_difficulty = Difficulty::Easy;
     }
@@ -279,7 +333,7 @@ void MemorizeWidget::nextLevel()
 
     // grab the appropriate content
     QString content =
-        (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_content.join(m_sep);
+        (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_originalContent;
 
     m_endSession->setText(i18n("Stop memorizing"));
     disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);

@@ -74,6 +74,7 @@ private:
 
     Difficulty m_difficulty;
     QStringList m_content;
+    QString m_originalContent;
     int m_contentIndex = 0;
     QString m_sep;
 
