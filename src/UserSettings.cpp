@@ -29,9 +29,9 @@ void UserSettings::refresh()
     settings.beginGroup("ChooseReferenceWidget");
 
     m_bibleVersionLoadOption = static_cast<BibleVersionLoadOption>(
-        settings.value("bibleVersionLoadOption", LastVersion).toInt());
-    m_verseLoadOption =
-        static_cast<VerseLoadOption>(settings.value("verseLoadOption", LastVerse).toInt());
+        settings.value("bibleVersionLoadOption", BibleVersionLoadOption::LastVersion).toInt());
+    m_verseLoadOption = static_cast<VerseLoadOption>(
+        settings.value("verseLoadOption", VerseLoadOption::LastVerse).toInt());
 
     m_lastBook = settings.value("lastBook").toString();
     m_lastChapter = settings.value("lastChapter").toString();
@@ -58,6 +58,8 @@ void UserSettings::refresh()
     m_memorizeErrorAction =
         static_cast<ErrorAction>(settings.value("errorAction", ErrorAction::Redo).toInt());
     m_splitContent = settings.value("splitContent", true).toBool();
+    m_splitThreshold = settings.value("splitThreshold", 200).toInt();
+    m_chunkSize = settings.value("chunkSize", 100).toInt();
 
     settings.endGroup(); // MemorizeEdit
 }
@@ -91,6 +93,8 @@ void UserSettings::save()
 
     settings.setValue("errorAction", m_memorizeErrorAction);
     settings.setValue("splitContent", m_splitContent);
+    settings.setValue("splitThreshold", m_splitThreshold);
+    settings.setValue("chunkSize", m_chunkSize);
 
     settings.endGroup(); // MemorizeEdit
 }
@@ -100,9 +104,7 @@ void UserSettings::setBibleVersionLoadOption(BibleVersionLoadOption option)
     if (option != m_bibleVersionLoadOption)
     {
         m_bibleVersionLoadOption = option;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/bibleVersionLoadOption",
-                          static_cast<int>(m_bibleVersionLoadOption));
+        save();
         emit bibleVersionLoadOptionChanged(m_bibleVersionLoadOption);
     }
 }
@@ -112,9 +114,7 @@ void UserSettings::setVerseLoadOption(VerseLoadOption option)
     if (option != m_verseLoadOption)
     {
         m_verseLoadOption = option;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/verseLoadOption",
-                          static_cast<int>(m_verseLoadOption));
+        save();
         emit verseLoadOptionChanged(m_verseLoadOption);
     }
 }
@@ -124,8 +124,7 @@ void UserSettings::setMemorizeErrorAction(ErrorAction action)
     if (action != m_memorizeErrorAction)
     {
         m_memorizeErrorAction = action;
-        QSettings settings;
-        settings.setValue("MemorizeEdit/errorAction", m_memorizeErrorAction);
+        save();
         emit memorizeErrorActionChanged(m_memorizeErrorAction);
     }
 }
@@ -135,8 +134,7 @@ void UserSettings::setLastBook(QString book)
     if (book != m_lastBook)
     {
         m_lastBook = book;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastBook", m_lastBook);
+        save();
         emit lastBookChanged(m_lastBook);
     }
 }
@@ -146,8 +144,7 @@ void UserSettings::setLastChapter(QString chapter)
     if (chapter != m_lastChapter)
     {
         m_lastChapter = chapter;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastChapter", m_lastChapter);
+        save();
         emit lastChapterChanged(m_lastChapter);
     }
 }
@@ -157,8 +154,7 @@ void UserSettings::setLastStartVerse(QString verse)
     if (verse != m_lastStartVerse)
     {
         m_lastStartVerse = verse;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastStartVerse", m_lastStartVerse);
+        save();
         emit lastStartVerseChanged(m_lastStartVerse);
     }
 }
@@ -168,8 +164,7 @@ void UserSettings::setLastEndVerse(QString verse)
     if (verse != m_lastEndVerse)
     {
         m_lastEndVerse = verse;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastBook", m_lastEndVerse);
+        save();
         emit lastEndVerseChanged(m_lastEndVerse);
     }
 }
@@ -179,8 +174,7 @@ void UserSettings::setDefaultBook(QString book)
     if (book != m_defaultBook)
     {
         m_defaultBook = book;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/defaultBook", m_defaultBook);
+        save();
         emit defaultBookChanged(m_defaultBook);
     }
 }
@@ -190,8 +184,7 @@ void UserSettings::setDefaultChapter(QString chapter)
     if (chapter != m_defaultChapter)
     {
         m_defaultChapter = chapter;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/defaultChapter", m_defaultChapter);
+        save();
         emit defaultChapterChanged(m_defaultChapter);
     }
 }
@@ -201,8 +194,7 @@ void UserSettings::setDefaultStartVerse(QString verse)
     if (verse != m_defaultStartVerse)
     {
         m_defaultStartVerse = verse;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/defaultStartVerse", m_defaultStartVerse);
+        save();
         emit defaultStartVerseChanged(m_defaultStartVerse);
     }
 }
@@ -212,8 +204,7 @@ void UserSettings::setDefaultEndVerse(QString verse)
     if (verse != m_defaultEndVerse)
     {
         m_defaultEndVerse = verse;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/defaultEndVerse", m_defaultEndVerse);
+        save();
         emit defaultEndVerseChanged(m_defaultEndVerse);
     }
 }
@@ -223,8 +214,7 @@ void UserSettings::setLastBibleVersion(QString version)
     if (version != m_lastBibleVersion)
     {
         m_lastBibleVersion = version;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/lastBibleVersion", m_lastBibleVersion);
+        save();
         emit lastEndVerseChanged(m_lastBibleVersion);
     }
 }
@@ -234,8 +224,7 @@ void UserSettings::setDefaultBibleVersion(QString version)
     if (version != m_defaultBibleVersion)
     {
         m_defaultBibleVersion = version;
-        QSettings settings;
-        settings.setValue("ChooseReferenceWidget/defaultBibleVersion", m_defaultBibleVersion);
+        save();
         emit lastEndVerseChanged(m_defaultBibleVersion);
     }
 }
@@ -245,8 +234,7 @@ void UserSettings::setWindowWidth(int width)
     if (width != m_windowWidth)
     {
         m_windowWidth = width;
-        QSettings settings;
-        settings.setValue("MainWindow/width", m_windowWidth);
+        save();
         emit windowWidthChanged(m_windowWidth);
     }
 }
@@ -256,8 +244,7 @@ void UserSettings::setWindowHeight(int height)
     if (height != m_windowHeight)
     {
         m_windowHeight = height;
-        QSettings settings;
-        settings.setValue("MainWindow/height", m_windowHeight);
+        save();
         emit windowHeightChanged(m_windowHeight);
     }
 }
@@ -267,8 +254,7 @@ void UserSettings::setSaveWinSize(bool b)
     if (b != m_saveWinSize)
     {
         m_saveWinSize = b;
-        QSettings settings;
-        settings.setValue("MainWindow/saveWinSize", m_saveWinSize);
+        save();
         emit saveWinSizeChanged(m_saveWinSize);
     }
 }
@@ -278,9 +264,28 @@ void UserSettings::setSplitContent(bool b)
     if (b != m_splitContent)
     {
         m_splitContent = b;
-        QSettings settings;
-        settings.setValue("MemorizeEdit/splitContent", m_splitContent);
+        save();
         emit splitContentChanged(m_splitContent);
+    }
+}
+
+void UserSettings::setSplitThreshold(int threshold)
+{
+    if (threshold != m_splitThreshold)
+    {
+        m_splitThreshold = threshold;
+        save();
+        emit splitThresholdChanged(m_splitThreshold);
+    }
+}
+
+void UserSettings::setChunkSize(int size)
+{
+    if (size != m_chunkSize)
+    {
+        m_chunkSize = size;
+        save();
+        emit chunkSizeChanged(m_chunkSize);
     }
 }
 
@@ -359,4 +364,14 @@ bool UserSettings::saveWinSize() const
 bool UserSettings::splitContent() const
 {
     return m_splitContent;
+}
+
+int UserSettings::splitThreshold() const
+{
+    return m_splitThreshold;
+}
+
+int UserSettings::chunkSize() const
+{
+    return m_chunkSize;
 }
