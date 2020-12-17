@@ -1,3 +1,3 @@
 #! /usr/bin/env sh
 
-$XGETTEXT $(find . -name "*.cpp") -o $podir/TotalReqall.pot
+$XGETTEXT $(find . -name "*.cpp") -o $podir/totalreqall.pot
