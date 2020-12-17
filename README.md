@@ -7,7 +7,7 @@ Features:
 - Save items to memorize later.  
  > Every time you select a verse or enter custom content and click "Memorize", that item will be saved automatically.  
 - Split large items into smaller chunks for easier memorization.  
- > Note that currently TotalReqall will only split content at line breaks. If double-spaced breaks exist, TotalReqall will split the content at the double-spaced break. Otherwise, the content will be split at single-spaced line breaks. There is no way to set what size of content should be split or how large of chunks it should be split into. The splitting feature can be disabled if so desired. Stay tuned for more development in this area.  
+ > Note that currently TotalReqall will only split content at line breaks. If double-spaced breaks exist, TotalReqall will split the content at the double-spaced break. Otherwise, the content will be split at single-spaced line breaks. There are simple settings for configuring the content splitting, including whether to split at all and information about the size of content to split and how large of chunks to split it into.
 - Listen to items using text-to-speech.  
  > This will only work on systems with text-to-speech available. See [the Qt docs](https://doc.qt.io/qt-5/qtspeech-index.html) for more details.  
 
