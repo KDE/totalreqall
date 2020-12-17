@@ -37,7 +37,9 @@ SettingsDialog::SettingsDialog(QWidget *parent)
       m_errorActionSettings{ new QButtonGroup },
       m_redo{ new QRadioButton{ i18n("&Retype the word") } },
       m_keepGoing{ new QRadioButton{ i18n("Mark the word as incorrect and &keep going") } },
-      m_splitContent{ new QCheckBox{ i18n("Split large content into smaller chunks") } }
+      m_splitContent{ new QCheckBox{ i18n("Split large content into smaller chunks") } },
+      m_splitThreshold{ new QSlider{ Qt::Horizontal } },
+      m_chunkSize{ new QSlider{ Qt::Horizontal } }
 {
     this->setWindowTitle(i18n("Settings"));
 
@@ -52,6 +54,33 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     m_errorActionSettings->button(settings->memorizeErrorAction())->setChecked(true);
 
     m_splitContent->setChecked(settings->splitContent());
+    m_splitThreshold->setEnabled(m_splitContent->isChecked());
+    m_chunkSize->setEnabled(m_splitContent->isChecked());
+
+    m_splitThreshold->setMinimum(100);
+    m_splitThreshold->setMaximum(500);
+    m_splitThreshold->setValue(settings->splitThreshold());
+    m_splitThreshold->setTickInterval(100);
+    m_splitThreshold->setTickPosition(QSlider::TicksBelow);
+    m_splitThreshold->setSingleStep(10);
+    m_splitThreshold->setPageStep(50);
+
+    // a lot of this stuff is m_splitThreshold.item / 2 because the chunk size is about half of the split threshold
+    m_chunkSize->setMinimum(m_splitThreshold->minimum() / 2);
+    m_chunkSize->setMaximum(m_splitThreshold->maximum() / 2);
+    m_chunkSize->setValue(settings->chunkSize());
+    m_chunkSize->setTickInterval(m_splitThreshold->tickInterval() / 2);
+    m_chunkSize->setTickPosition(QSlider::TicksBelow);
+    m_chunkSize->setSingleStep(m_splitThreshold->singleStep() / 2);
+    m_chunkSize->setPageStep(m_splitThreshold->pageStep() / 2);
+
+    auto thresholdLabel = new QLabel{ i18n("&Threshold size for splitting") };
+    auto chunkSizeLabel = new QLabel{ i18n("&How large of chunks to split into") };
+
+    thresholdLabel->setBuddy(m_splitThreshold);
+    chunkSizeLabel->setBuddy(m_chunkSize);
+    thresholdLabel->setEnabled(m_splitContent->isChecked());
+    chunkSizeLabel->setEnabled(m_splitContent->isChecked());
 
 #ifndef Q_OS_WASM // skip the unecessary stuff
     m_verseLoadSettings->addButton(m_saveVerse, LastVerse);
@@ -91,8 +120,13 @@ SettingsDialog::SettingsDialog(QWidget *parent)
     errorActionGroup->setTitle(i18n("Set action when the wrong key is typed"));
     errorActionGroup->setLayout(errorActionGroupLayout);
 
-    auto splitContentLayout = new QVBoxLayout;
-    splitContentLayout->addWidget(m_splitContent);
+    auto splitContentLayout = new QGridLayout;
+    splitContentLayout->addWidget(m_splitContent, 0, 0, 1, 2);
+
+    splitContentLayout->addWidget(thresholdLabel, 1, 0);
+    splitContentLayout->addWidget(m_splitThreshold, 1, 1);
+    splitContentLayout->addWidget(chunkSizeLabel, 2, 0);
+    splitContentLayout->addWidget(m_chunkSize, 2, 1);
 
     auto splitContentGroup = new QGroupBox{ i18n("Configure how large content is handled") };
     splitContentGroup->setLayout(splitContentLayout);
@@ -161,6 +195,16 @@ SettingsDialog::SettingsDialog(QWidget *parent)
             &QComboBox::setEnabled);
 #endif // Q_OS_WASM
 
+    connect(m_splitContent, &QCheckBox::toggled, m_splitThreshold, &QSlider::setEnabled);
+    connect(m_splitContent, &QCheckBox::toggled, m_chunkSize, &QSlider::setEnabled);
+    connect(m_splitContent, &QCheckBox::toggled, thresholdLabel, &QLabel::setEnabled);
+    connect(m_splitContent, &QCheckBox::toggled, chunkSizeLabel, &QLabel::setEnabled);
+
+    connect(m_splitThreshold, &QSlider::valueChanged, this, [this](int value) {
+        if (m_chunkSize->value() > value)
+            m_chunkSize->setValue(value / 2);
+    });
+
     auto buttonBox =
         new QDialogButtonBox{ QDialogButtonBox::StandardButton::Ok | QDialogButtonBox::Apply |
                               QDialogButtonBox::StandardButton::Cancel };
@@ -209,6 +253,8 @@ void SettingsDialog::apply()
 #endif // Q_OS_WASM
 
     settings->setSplitContent(m_splitContent->isChecked());
+    settings->setSplitThreshold(m_splitThreshold->value());
+    settings->setChunkSize(m_chunkSize->value());
 
     // TODO: disable the apply button when settings haven't been changed
     //	m_apply->setDisabled(true);

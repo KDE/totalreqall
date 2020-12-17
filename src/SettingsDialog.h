@@ -10,6 +10,7 @@
 #include <QDialog>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QSlider>
 #include <QTabWidget>
 
 class SettingsDialog : public QDialog
@@ -48,6 +49,8 @@ private:
     QRadioButton *m_keepGoing;
 
     QCheckBox *m_splitContent;
+    QSlider *m_splitThreshold;
+    QSlider *m_chunkSize;
 };
 
 #endif // SETTINGSDIALOG_H
