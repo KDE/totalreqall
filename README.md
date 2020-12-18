@@ -3,6 +3,8 @@ A program for memorizing the Bible and other works. Written in C++ with Qt, KDE 
 
 Features:
 - Memorize one Bible verse or select multiple verses from the same chapter and book.
+- Install and use multiple Bible translations.
+ > Bible translations are added by installing new Sword modules. Use Sword's `installmgr` program, install prepackaged modules from your distro's repos, or manually install new modules if you want to add more modules to your system.
 - Create your own content to memorize.
 - Save items to memorize later.  
  > Every time you select a verse or enter custom content and click "Memorize", that item will be saved automatically.  
