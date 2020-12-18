@@ -13,13 +13,16 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLabel>
-#include <QPushButton>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QVBoxLayout>
 
 CustomContentAdder::CustomContentAdder(QWidget *parent)
     : QWidget(parent),
+#ifndef NO_TTS
+      m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first(), this } },
+#endif
       m_title{ new QLineEdit },
       m_content{ new QTextEdit }
 {
@@ -41,9 +44,33 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
     save->setIcon(QIcon::fromTheme("document-save"));
     connect(save, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
 
+#ifndef NO_TTS
+    // TODO: make this work
+    m_speak->grabShortcut(QKeySequence{ int{ Qt::Key_MediaTogglePlayPause } });
+
+    m_speak->setDisabled(m_speaker->state() == QTextToSpeech::BackendError);
+
+    connect(m_speaker, &QTextToSpeech::stateChanged, this, [this](QTextToSpeech::State s) {
+        if (s == QTextToSpeech::Ready)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-start"));
+        else if (s == QTextToSpeech::Speaking)
+            m_speak->setIcon(QIcon::fromTheme("media-playback-stop"));
+    });
+
+    connect(m_speak, &QPushButton::clicked, this, [this]() {
+        if (m_speaker->state() == QTextToSpeech::Ready && !m_content->toPlainText().isNull())
+            m_speaker->say(m_content->toPlainText());
+        else if (m_speaker->state() == QTextToSpeech::Speaking)
+            m_speaker->stop();
+    });
+#endif
+
     auto buttons = new QHBoxLayout;
     buttons->addWidget(back);
     buttons->addStretch();
+#ifndef NO_TTS
+    buttons->addWidget(m_speak);
+#endif
     buttons->addWidget(save);
     buttons->addWidget(memorize);
 

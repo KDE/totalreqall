@@ -7,6 +7,11 @@
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QWidget>
+#include <QPushButton>
+
+#ifndef NO_TTS
+#include <QTextToSpeech>
+#endif
 
 class CustomContentAdder : public QWidget
 {
@@ -25,6 +30,10 @@ private slots:
     void saveItem();
 
 private:
+#ifndef NO_TTS
+    QPushButton *m_speak;
+    QTextToSpeech *m_speaker;
+#endif
     QLineEdit *m_title;
     QTextEdit *m_content;
 };
