@@ -36,12 +36,10 @@ CustomContentAdder::CustomContentAdder(QWidget *parent)
         emit ok(m_content->toPlainText());
     });
 
-    auto back = new QPushButton{ i18n("Back") };
-    back->setIcon(QIcon::fromTheme("go-previous"));
+    auto back = new QPushButton{ QIcon::fromTheme("go-previous"), i18n("Back") };
     connect(back, &QPushButton::clicked, this, &CustomContentAdder::cancel);
 
-    auto save = new QPushButton{ i18n("Save") };
-    save->setIcon(QIcon::fromTheme("document-save"));
+    auto save = new QPushButton{ QIcon::fromTheme("document-save"), i18n("Save") };
     connect(save, &QPushButton::clicked, this, &CustomContentAdder::saveItem);
 
 #ifndef NO_TTS
