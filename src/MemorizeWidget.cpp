@@ -266,6 +266,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     // set up the widgets...
     m_memorizeEdit = new MemorizeEdit{ m_content.first(), m_difficulty };
     m_endSession->setText(i18n("Stop memorizing"));
+    m_endSession->setIcon(QIcon::fromTheme("process-stop"));
 
     connect(m_memorizeEdit, &MemorizeEdit::done, this, &MemorizeWidget::editDone);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
@@ -294,6 +295,7 @@ void MemorizeWidget::editDone()
     disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
     m_endSession->setText(i18n("Continue"));
+    m_endSession->setIcon(QIcon::fromTheme("go-next"));
     m_endSession->setFocus();
 }
 
@@ -345,6 +347,7 @@ void MemorizeWidget::nextLevel()
         (m_contentIndex < m_content.size()) ? m_content[m_contentIndex] : m_originalContent;
 
     m_endSession->setText(i18n("Stop memorizing"));
+    m_endSession->setIcon(QIcon::fromTheme("process-stop"));
     disconnect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::nextLevel);
     connect(m_endSession, &QPushButton::clicked, this, &MemorizeWidget::done);
 
