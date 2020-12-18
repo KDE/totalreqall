@@ -34,22 +34,6 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
       m_contentList{ new QListWidget },
       m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } }
 {
-    QSettings settings;
-    settings.beginGroup("savedContent");
-    settings.beginGroup("verses");
-
-    for (auto item : settings.childKeys())
-        new QListWidgetItem{ item, m_contentList };
-
-    settings.endGroup();
-    settings.beginGroup("custom");
-
-    for (auto item : settings.childKeys())
-        new QListWidgetItem{ item, m_contentList };
-
-    settings.endGroup();
-    settings.endGroup();
-
     auto review = new QPushButton{ QIcon::fromTheme("go-next"), i18n("Review") };
     auto back = new QPushButton{ QIcon::fromTheme("go-previous"), i18n("Back") };
 
