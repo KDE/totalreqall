@@ -19,7 +19,6 @@
 #include <QStandardPaths>
 #include <QTextStream>
 #include <QVBoxLayout>
-#include <QXmlStreamReader>
 #include <markupfiltmgr.h>
 #include <swmgr.h>
 #include <swmodule.h>
