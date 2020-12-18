@@ -54,8 +54,8 @@ private slots:
 
 private:
 #ifndef NO_TTS
-    QTextToSpeech *m_speaker;
     QPushButton *m_speak;
+    QTextToSpeech *m_speaker;
 #endif
 
     QComboBox *m_books;

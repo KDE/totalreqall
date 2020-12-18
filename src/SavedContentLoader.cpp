@@ -29,7 +29,7 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     : QWidget(parent),
 #ifndef NO_TTS
       m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
-      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first(), this } },
 #endif
       m_contentList{ new QListWidget },
       m_deleteBtn{ new QPushButton{ QIcon::fromTheme("edit-delete"), i18n("Delete") } }

@@ -28,8 +28,8 @@
 ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     : QWidget(parent),
 #ifndef NO_TTS
-      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first() } },
       m_speak{ new QPushButton{ QIcon::fromTheme("media-playback-start"), i18n("Speak") } },
+      m_speaker{ new QTextToSpeech{ QTextToSpeech::availableEngines().first(), this } },
 #endif
       m_books{ new QComboBox },
       m_chapters{ new QComboBox },
@@ -163,6 +163,11 @@ ChooseReferenceWidget::ChooseReferenceWidget(QWidget *parent)
     connect(memorize, &QPushButton::clicked, this, &ChooseReferenceWidget::runMemorizer);
 
 #ifndef NO_TTS
+    // TODO: make this work
+    m_speak->grabShortcut(QKeySequence{ int{ Qt::Key_MediaTogglePlayPause } });
+
+    m_speak->setDisabled(m_speaker->state() == QTextToSpeech::BackendError);
+
     connect(m_speak, &QPushButton::clicked, this, [this]() {
         if (m_speaker->state() == QTextToSpeech::Ready)
         {
