@@ -36,6 +36,7 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
     auto review = new QPushButton{ QIcon::fromTheme("go-next"), i18n("Review") };
     auto back = new QPushButton{ QIcon::fromTheme("go-previous"), i18n("Back") };
 
+    m_contentList->setSelectionMode(QAbstractItemView::ExtendedSelection);
     m_contentList->setContextMenuPolicy(Qt::CustomContextMenu);
     connect(m_contentList, &QListWidget::customContextMenuRequested, this,
             [this](const QPoint &pos) {
@@ -59,7 +60,13 @@ SavedContentLoader::SavedContentLoader(QWidget *parent)
             SLOT(prepareContent(QListWidgetItem *)));
 
     connect(review, &QPushButton::clicked, this, [this]() {
-        prepareContent(m_contentList->currentItem());
+        if (m_contentList->selectedItems().count() > 0)
+        {
+            // for some reason, this goes backwards
+            auto itemList = m_contentList->selectedItems();
+            for (auto item : itemList)
+                prepareContent(item);
+        }
     });
     connect(m_deleteBtn, &QPushButton::clicked, this, [this]() {
         for (auto item : m_contentList->selectedItems())
@@ -148,6 +155,11 @@ void SavedContentLoader::refresh()
 
     settings.endGroup();
     settings.endGroup();
+
+    // there should ideally always be one item selected
+    if (m_contentList->count() > 0)
+//        m_contentList->setsel
+        m_contentList->item(0)->setSelected(true);
 }
 
 QString SavedContentLoader::prepareContent(QListWidgetItem *item)
