@@ -15,8 +15,7 @@ include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(FeatureSummary)
-
-option(TTS_ENABLED "Compile with text-to-speech support" ON)
+include(CMakeDependentOption)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
 find_package(sword REQUIRED)
@@ -27,11 +26,12 @@ find_package(KF5 ${KF5_DEP_VERSION}
 		I18n
 )
 
+# not required
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG COMPONENTS TextToSpeech)
 
-if(TTS_ENABLED AND NOT Qt5TextToSpeech_FOUND)
-	message(FATAL_ERROR "You asked for TTS, but it couldn't be found.")
-elseif(NOT TTS_ENABLED)
+cmake_dependent_option(TTS_ENABLED "Compile with text-to-speech support" ON Qt5TextToSpeech_FOUND OFF)
+
+if(NOT TTS_ENABLED)
 	add_compile_definitions(NO_TTS)
 endif()
 
