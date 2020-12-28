@@ -278,8 +278,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
     m_layout->addWidget(m_memorizeEdit, 0, 0);
     m_layout->addLayout(btnRow, 1, 0);
 
-    m_memorizeEdit->setFocus();
-
     // now we can set the layout
     this->setLayout(m_layout);
 
