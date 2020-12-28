@@ -33,6 +33,14 @@ If you want text-to-speech, you will need to install the Qt Speech module as wel
 sudo apt install libqt5texttospeech5-dev sword-devel sword-text-kjv
 ```
 
+### Fedora
+```bash
+# Again, qt5-qtspeech-devel is not required
+dnf install cmake extra-cmake-modules qt5-qtbase-devel kf5-ki18n-devel kf5-kxmlgui-devel qt5-qtspeech-devel sword-devel
+# Note that Fedora does not bundle any Sword modules; you will need to install them yourself. To get Sword's installmgr program, install this:
+dnf install sword-utils
+```
+
 Build and install with cmake.
 
 ```bash
