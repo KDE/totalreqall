@@ -16,13 +16,16 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+          
+      - name: Setup packages
+        run: |
+          sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev sword-devel
 
       - name: Build
         run: |
           mkdir build && cd build
-          qmake ../TotalReqall.pro
-          make
-          cd ..
+          cmake ..
+          cmake --build .
 
   windows:
     name: Windows desktop
@@ -35,6 +38,14 @@ jobs:
       # get the build environment set up
       - name: Add msbuild to PATH
         uses: seanmiddleditch/gha-setup-vsdevenv@master
+        
+      # ... install KF5 ...
+      - name: Install KF5
+        shell: powershell
+        run: |
+          Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+          iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/KDE/craft/master/setup/install_craft.ps1'))
+          C:\CraftRoot\craft\craftenv.ps1
 
         # grab the source
       - name: Checkout code
@@ -45,8 +56,8 @@ jobs:
       - name: Build
         run: |
           mkdir build && cd build
-          qmake ../TotalReqall.pro
-          nmake
+          cmake ..
+          cmake --build .
 
   macos:
     name: macOS desktop
@@ -56,6 +67,14 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.9.0
 
+      # ... install KF5 ...
+      - name: Install KF5
+        run: |
+          brew untap kde-mac/kde 2> /dev/null
+          brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
+          "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
+          "$(brew --repo kde-mac/kde)/tools/install.sh"
+
         # grab the source
       - name: Checkout code
         uses: actions/checkout@v2
@@ -65,68 +84,5 @@ jobs:
       - name: Build
         run: |
           mkdir build && cd build
-          qmake ../TotalReqall.pro
-          make
-          cd ..
-
-  wasm:
-    name: WebAssembly
-    runs-on: ubuntu-latest
-    steps:
-      # gotta get Qt set up first
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2.9.0
-        with:
-          version: '5.13.1' # 5.13.0 was the first with official WASM support
-          arch: wasm_32
-
-      # set up emscripten for WASM builds
-      - name: Install emsdk
-        uses: mymindstorm/setup-emsdk@v7
-        # needed to make Qt work
-        # the sdk-*-64bit are an old naming convention
-        with:
-          version: sdk-fastcomp-1.38.30-64bit
-
-        # grab the source
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
-
-      - name: Add optimizations # we want to have a super-optimized deployed app
-        run: |
-          mv TotalReqall.pro TotalReqall.pro.bak
-          cat << EOF >> TotalReqall.pro
-          QMAKE_CXXFLAGS_RELEASE -= -O2
-          QMAKE_CXXFLAGS_RELEASE += -O3
-          QMAKE_LFLAGS_RELEASE -= 0O
-          EOF
-          cat < TotalReqall.pro.bak >> TotalReqall.pro
-          rm TotalReqall.pro.bak
-
-      - name: Build
-        run: |
-          mkdir build && cd build
-          qmake ../TotalReqall.pro
-          make
-          cd ..
-
-      - name: Prepare deployment
-        if: success()
-        run: | # the svg line is to get the Qt logo
-          mkdir deploy
-          cp build/*.html deploy/
-          cp build/*.wasm deploy/
-          cp build/*.js deploy/
-          cp build/*.svg deploy/
-
-      - name: Deploy to GitHub Pages
-        if: success()
-        uses: JamesIves/github-pages-deploy-action@3.7.1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: deploy
-          TARGET_FOLDER: wasm
-          
+          cmake ..
+          cmake --build .
