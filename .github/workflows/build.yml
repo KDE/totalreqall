@@ -74,11 +74,15 @@ jobs:
       # ... install KF5 ...
       - name: Install KF5
         run: |
-          curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
-          python3 setup.py --prefix ~/CraftRoot --use-defaults
-          source ~/CraftRoot/craft/craftenv.sh
-          craft ki18n
-          craft kxmlgui
+          brew untap kde-mac/kde 2> /dev/null
+          brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
+          sudo brew install kde-mac/kde/kf5-kxmlgui
+        # run: |
+        #   curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
+        #   python3 setup.py --prefix ~/CraftRoot --use-defaults
+        #   source ~/CraftRoot/craft/craftenv.sh
+        #   craft ki18n
+        #   craft kxmlgui
 
       - name: Install miscellaneous dependencies
         run: sudo brew install sword kde-extra-cmake-modules gettext
