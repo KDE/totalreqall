@@ -77,8 +77,8 @@ jobs:
           curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
           python3 setup.py --prefix ~/CraftRoot --use-defaults
           source ~/CraftRoot/craft/craftenv.sh
-          craft kf5-i18n
-          craft kf5-kxmlgui
+          craft ki18n
+          craft kxmlgui
 
       # grab the source
       - name: Checkout code
