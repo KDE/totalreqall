@@ -5,7 +5,7 @@ on: push
 jobs:
   linux:
     name: Linux desktop
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       # gotta get Qt set up first
       - name: Install Qt
