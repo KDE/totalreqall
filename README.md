@@ -30,7 +30,7 @@ If you want text-to-speech, you will need to install the Qt Speech module as wel
 ```bash
 # sword-text-kjv is the King James Version module for Sword
 # If you don't want text-to-speech, you don't need libqt5texttospeech5-dev
-sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev sword-devel sword-text-kjv
+sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev sword-text-kjv
 ```
 
 ### Fedora
