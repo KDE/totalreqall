@@ -76,7 +76,7 @@ jobs:
         run: |
           brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
           "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
-          sudo brew install kde-mac/kde/kf5-kxmlgui
+          brew install kde-mac/kde/kf5-kxmlgui
         # run: |
         #   curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
         #   python3 setup.py --prefix ~/CraftRoot --use-defaults
@@ -85,7 +85,7 @@ jobs:
         #   craft kxmlgui
 
       - name: Install miscellaneous dependencies
-        run: sudo brew install sword kde-extra-cmake-modules gettext
+        run: brew install sword kde-extra-cmake-modules gettext
 
       # grab the source
       - name: Checkout code
