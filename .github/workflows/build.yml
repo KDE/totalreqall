@@ -10,16 +10,17 @@ jobs:
       # gotta get Qt set up first
       - name: Install Qt
         uses: jurplel/install-qt-action@v2.9.0
+          
+      # install all necessary packages
+      - name: Setup packages
+        run: |
+          sudo apt install build-essential cmake extra-cmake-modules libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev
 
         # grab the source
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
-          
-      - name: Setup packages
-        run: |
-          sudo apt install build-essential cmake extra-cmake-modules qt5-default qtbase5-dev libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev
 
       - name: Build
         run: |
