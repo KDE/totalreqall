@@ -75,7 +75,7 @@ jobs:
       - name: Install KF5
         run: |
         curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
-        python3 setup.py --use-defaults --prefix ~/CraftRoot
+        python3 setup.py --prefix ~/CraftRoot --use-defaults
         source ~/CraftRoot/craft/craftenv.sh
         craft kf5-i18n
         craft kf5-kxmlgui
