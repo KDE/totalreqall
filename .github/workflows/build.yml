@@ -19,7 +19,7 @@ jobs:
           
       - name: Setup packages
         run: |
-          sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev
+          sudo apt install build-essential cmake extra-cmake-modules qt5-default qtbase5-dev libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev
 
       - name: Build
         run: |
