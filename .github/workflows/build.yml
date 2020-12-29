@@ -74,10 +74,17 @@ jobs:
       # ... install KF5 ...
       - name: Install KF5
         run: |
-          brew untap kde-mac/kde 2> /dev/null
-          brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
-          "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
-          brew install kde-mac/kde/kf5-kxmlgui
+          curl https://raw.githubusercontent.com/KDE/craft/master/setup/CraftBootstrap.py -o setup.py
+          python3 setup.py --prefix ~/CraftRoot
+          source ~/CraftRoot/craft/craftenv.sh
+          craft kf5-i18n
+          craft kf5-kxmlgui
+
+        # run: |
+        #   brew untap kde-mac/kde 2> /dev/null
+        #   brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
+        #   "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
+        #   brew install kde-mac/kde/kf5-kxmlgui
 
         # grab the source
       - name: Checkout code
