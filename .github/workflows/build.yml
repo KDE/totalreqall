@@ -14,7 +14,7 @@ jobs:
       # install all necessary packages
       - name: Setup packages
         run: |
-          sudo apt install build-essential cmake extra-cmake-modules libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev
+          sudo apt install build-essential cmake extra-cmake-modules libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev gettext
 
         # grab the source
       - name: Checkout code
@@ -28,36 +28,40 @@ jobs:
           cmake ..
           cmake --build .
 
-  windows:
-    name: Windows desktop
-    runs-on: windows-latest
-    steps:
-      # gotta get Qt set up first
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v2.9.0
+# Windows builds are halted currently because of problems with setting up KF5
+  # windows:
+  #   name: Windows desktop
+  #   runs-on: windows-latest
+  #   steps:
+  #     # gotta get Qt set up first
+  #     - name: Install Qt
+  #       uses: jurplel/install-qt-action@v2.9.0
         
-      # get the build environment set up
-      - name: Add msbuild to PATH
-        uses: seanmiddleditch/gha-setup-vsdevenv@master
+  #     # get the build environment set up
+  #     - name: Add msbuild to PATH
+  #       uses: seanmiddleditch/gha-setup-vsdevenv@master
         
-      # ... install KF5 ...
-      - name: Install KF5
-        shell: powershell
-        run: |
-          Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
-          iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/KDE/craft/master/setup/install_craft.ps1'))
 
-        # grab the source
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          submodules: 'recursive'
 
-      - name: Build
-        run: |
-          mkdir build && cd build
-          cmake ..
-          cmake --build .
+  #     # ... install KF5 ...
+  #     - name: Install KF5
+  #       shell: powershell
+  #       run: |
+  #         Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+  #         iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/KDE/craft/master/setup/install_craft.ps1'))
+  #         C:\CraftRoot\craft\craftenv.ps1
+
+  #       # grab the source
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
+  #       with:
+  #         submodules: 'recursive'
+
+  #     - name: Build
+  #       run: |
+  #         mkdir build && cd build
+  #         cmake ..
+  #         cmake --build .
 
   macos:
     name: macOS desktop
@@ -73,7 +77,7 @@ jobs:
           brew untap kde-mac/kde 2> /dev/null
           brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
           "$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
-          "$(brew --repo kde-mac/kde)/tools/install.sh"
+          brew install kde-mac/kde/kf5-kxmlgui
 
         # grab the source
       - name: Checkout code
