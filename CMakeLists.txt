@@ -18,7 +18,7 @@ include(FeatureSummary)
 include(CMakeDependentOption)
 
 # not required
-# this is first to (hopefully) set Qt5_FOUND to ON even if the TTS is not found
+# this is first to set Qt5_FOUND to ON even if the TTS is not found
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG COMPONENTS TextToSpeech)
 
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
