@@ -30,7 +30,7 @@ If you want text-to-speech, you will need to install the Qt Speech module as wel
 ```bash
 # sword-text-kjv is the King James Version module for Sword
 # If you don't want text-to-speech, you don't need libqt5texttospeech5-dev
-sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev sword-text-kjv
+sudo apt install build-essential cmake extra-cmake-modules qt5-default qtbase5-dev libkf5i18n-dev libkf5xmlgui-dev libqt5texttospeech5-dev libsword-dev sword-text-kjv
 ```
 
 ### Fedora
@@ -39,6 +39,14 @@ sudo apt install build-essential cmake extra-cmake-modules libqt5core5a libkf5i1
 dnf install g++ ninja cmake extra-cmake-modules qt5-qtbase-devel kf5-ki18n-devel kf5-kxmlgui-devel qt5-qtspeech-devel sword-devel
 # Note that Fedora does not bundle any Sword modules; you will need to install them yourself. To get Sword's installmgr program, install this:
 dnf install sword-utils
+```
+
+### macOS (Untested, please get in touch if you've got this working)
+```bash
+brew tap kde-mac/kde https://invent.kde.org/packaging/homebrew-kde.git --force-auto-update
+# This command is optional. If you find yourself having linking problems with any KDE libraries, run this before installing the KDE libraries.
+"$(brew --repo kde-mac/kde)/tools/do-caveats.sh"
+brew install qt kde-mac/kde/kf5-kcoreaddons kde-ki18n kde-mac/kde/kf5- kde-mac/kde/kde-extra-cmake-modules sword gettext
 ```
 
 Build and install with cmake.
