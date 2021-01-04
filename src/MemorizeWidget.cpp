@@ -255,8 +255,6 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                 allSegmentsProperSize &= (i.size() < settings->splitThreshold());
         } while (!allSegmentsProperSize);
     }
-    else
-        m_content << memorizeContent;
 
     if (!MemorizeWidget::s_memorizedContent.contains(m_originalContent))
         m_difficulty = Difficulty::Easy; // completely memorize this
