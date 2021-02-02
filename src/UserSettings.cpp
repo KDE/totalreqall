@@ -81,6 +81,9 @@ void UserSettings::save()
     settings.setValue("defaultStartVerse", m_defaultStartVerse);
     settings.setValue("defaultEndVerse", m_defaultEndVerse);
 
+    settings.setValue("lastBibleVersion", m_lastBibleVersion);
+    settings.setValue("defaultBibleVersion", m_defaultBibleVersion);
+
     settings.endGroup(); // ChooseReferenceWidget
     settings.beginGroup("MainWindow");
 
