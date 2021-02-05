@@ -21,6 +21,8 @@ include(CMakeDependentOption)
 # this is first to set Qt5_FOUND to ON even if the TTS is not found
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG COMPONENTS TextToSpeech)
 
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(SWORD REQUIRED IMPORTED_TARGET sword)
 find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets LinguistTools)
 find_package(sword REQUIRED)
 find_package(KF5 ${KF5_DEP_VERSION}
@@ -61,6 +63,7 @@ target_link_libraries(totalreqall
 	KF5::CoreAddons
 	KF5::XmlGui
 	KF5::I18n
+    PkgConfig::SWORD
 )
 
 if(TTS_ENABLED)
