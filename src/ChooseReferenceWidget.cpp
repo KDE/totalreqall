@@ -6,6 +6,7 @@
 #include "MainWindow.h"
 #include "UserSettings.h"
 #include <KLocalizedString>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QFile>
 #include <QGridLayout>
@@ -469,6 +470,16 @@ void ChooseReferenceWidget::saveItem()
                     m_endVerses->currentText().toInt() - m_startVerses->currentText().toInt());
         item.insert("bibleVersion", m_bibleVersion->currentText());
         item.insert("completed", false);
+        item.insert("id",
+                    QString{ QCryptographicHash::hash(item["title"]
+                                                          .toString()
+                                                          .append(item["startRef"].toString())
+                                                          .append(item["endRef"].toString())
+                                                          .append(item["numExtraVerses"].toString())
+                                                          .append(item["bibleVersion"].toString())
+                                                          .append(item["type"].toString())
+                                                          .toUtf8(),
+                                                      QCryptographicHash::Sha256) });
 
         QJsonDocument doc{ QJsonDocument::fromJson(file.readAll()) };
         QJsonArray a;

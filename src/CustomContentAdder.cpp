@@ -4,6 +4,7 @@
 #include "CustomContentAdder.h"
 
 #include <KLocalizedString>
+#include <QCryptographicHash>
 #include <QDebug>
 #include <QDialogButtonBox>
 #include <QFile>
@@ -107,6 +108,10 @@ void CustomContentAdder::saveItem()
         item.insert("title", m_title->text());
         item.insert("content", m_content->toPlainText());
         item.insert("completed", false);
+        item.insert("id",
+                    QString{ QCryptographicHash::hash(
+                        m_title->text().append(m_content->toPlainText()).append("custom").toUtf8(),
+                        QCryptographicHash::Sha256) });
 
         QJsonDocument doc{ QJsonDocument::fromJson(file.readAll()) };
         QJsonArray a;
