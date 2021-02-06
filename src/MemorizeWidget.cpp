@@ -4,6 +4,7 @@
 #include "MemorizeWidget.h"
 
 #include "UserSettings.h"
+#include "Helper.h"
 #include <KLocalizedString>
 #include <QDebug>
 #include <QGridLayout>
@@ -198,67 +199,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
       m_endSession{ new QPushButton },
       m_originalContent{ memorizeContent }
 {
-    auto settings = UserSettings::global();
-
-    m_content << memorizeContent;
-    if (settings->splitContent())
-    {
-        bool allSegmentsProperSize = false;
-        do
-        {
-            for (int i = 0; i < m_content.size(); ++i)
-            {
-                if (m_content.at(i).size() > settings->splitThreshold())
-                {
-                    if (m_content[i].split("\n\n").size() > 1)
-                    {
-                        QString sep = "\n\n";
-                        QStringList split = m_content.at(i).split(sep);
-                        m_content.removeAt(i);
-                        for (int j = 0; j < split.size(); ++j)
-                        {
-                            if (split[j].size() < settings->chunkSize() &&
-                                QString(split[j] + split[j + 1]).size() < settings->chunkSize())
-                            {
-                                m_content.insert(i + j, split[j] + sep + split[j + 1]);
-                                split.removeAt(j + 1);
-                            }
-                            else
-                                m_content.insert(i + j, split[j]);
-                        }
-                        continue;
-                    }
-
-                    // This is not an "else if" because the previous "if" may have split
-                    // m_content[i] into a chunk that is still too large, meaning that this block
-                    // needs to run as well
-                    if (m_content[i].split("\n").size() > 2)
-                    {
-                        QString sep = "\n";
-                        QStringList split = m_content.at(i).split(sep);
-                        m_content.removeAt(i);
-                        for (int j = 0; j < split.size() - 1; ++j)
-                        {
-                            if (split[j].size() < settings->chunkSize() &&
-                                QString(split[j] + split[j + 1]).size() < settings->chunkSize())
-                            {
-                                m_content.insert(i + j, split[j] + sep + split[j + 1]);
-                                split.removeAt(j + 1);
-                            }
-                            else
-                                m_content.insert(i + j, split[j]);
-                        }
-                        continue;
-                    }
-                    else
-                        allSegmentsProperSize = true; // this couldn't be split
-                }
-            }
-            allSegmentsProperSize = true;
-            for (auto i : m_content)
-                allSegmentsProperSize &= (i.size() < settings->splitThreshold());
-        } while (!allSegmentsProperSize);
-    }
+    m_content = TotalReqall::splitItem(memorizeContent);
 
     if (!MemorizeWidget::s_memorizedContent.contains(m_originalContent))
         m_difficulty = Difficulty::Easy; // completely memorize this

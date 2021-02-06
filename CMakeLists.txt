@@ -27,7 +27,7 @@ find_package(Qt5 ${QT_MIN_VERSION} CONFIG REQUIRED COMPONENTS Core Gui Widgets L
 find_package(sword REQUIRED)
 find_package(KF5 ${KF5_DEP_VERSION}
 	REQUIRED COMPONENTS
-	    XmlGui
+		XmlGui
 		CoreAddons
 		I18n
 )
@@ -45,6 +45,7 @@ include_directories(src)
 add_executable(totalreqall
 	src/ChooseReferenceWidget.cpp
 	src/CustomContentAdder.cpp
+	src/Helper.cpp
 	src/MainWindow.cpp
 	src/MemorizeWidget.cpp
 	src/SavedContentLoader.cpp
@@ -63,7 +64,7 @@ target_link_libraries(totalreqall
 	KF5::CoreAddons
 	KF5::XmlGui
 	KF5::I18n
-    PkgConfig::SWORD
+	PkgConfig::SWORD
 )
 
 if(TTS_ENABLED)
