@@ -59,7 +59,7 @@ sudo cmake --install .
 ```
 
 ## Contributing
-All MRs will be reviewed, even if they are not accepted. Please run `clang-format -i *.cpp *.h` in the root of the repo before committing.
+All MRs will be reviewed, even if they are not accepted. Please run `clang-format -i src/*.cpp src/*.h` in the root of the repo before committing.
 
 ## Bugs
 Use the TotalReqall product on [bugs.kde.org](https://bugs.kde.org).
