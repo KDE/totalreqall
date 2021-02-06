@@ -75,8 +75,8 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
     // make sure there's still something to take care of
     else if (m_words.length() > 0)
     {
-        // Some words aren't going to be things that we want to actually memorize, so let's take care of them.
-        // This should likely be handled somewhere else, though
+        // Some words aren't going to be things that we want to actually memorize, so let's take
+        // care of them. This should likely be handled somewhere else, though
         if (m_words[0].isNull() || m_words[0] == "" || m_words[0] == "<br>")
         {
             m_richText.append(m_words.front());
@@ -134,7 +134,8 @@ void MemorizeEdit::keyPressEvent(QKeyEvent *event)
         }
     }
 
-    // TODO: This is supposed to make sure that the user can always see what they are typing; however, it doesn't work. This needs fixing.
+    // TODO: This is supposed to make sure that the user can always see what they are typing;
+    // however, it doesn't work. This needs fixing.
     textCursor().setPosition(document()->toPlainText().length());
     textCursor().movePosition(QTextCursor::End);
     for (auto x : m_words)
@@ -216,7 +217,8 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                         m_content.removeAt(i);
                         for (int j = 0; j < split.size(); ++j)
                         {
-                            if (split[j].size() < settings->chunkSize() && QString(split[j] + split[j + 1]).size() < settings->chunkSize())
+                            if (split[j].size() < settings->chunkSize() &&
+                                QString(split[j] + split[j + 1]).size() < settings->chunkSize())
                             {
                                 m_content.insert(i + j, split[j] + sep + split[j + 1]);
                                 split.removeAt(j + 1);
@@ -227,8 +229,9 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                         continue;
                     }
 
-                    // This is not an "else if" because the previous "if" may have split m_content[i] into a chunk that is still too large,
-                    // meaning that this block needs to run as well
+                    // This is not an "else if" because the previous "if" may have split
+                    // m_content[i] into a chunk that is still too large, meaning that this block
+                    // needs to run as well
                     if (m_content[i].split("\n").size() > 2)
                     {
                         QString sep = "\n";
@@ -236,7 +239,8 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                         m_content.removeAt(i);
                         for (int j = 0; j < split.size() - 1; ++j)
                         {
-                            if (split[j].size() < settings->chunkSize() && QString(split[j] + split[j + 1]).size() < settings->chunkSize())
+                            if (split[j].size() < settings->chunkSize() &&
+                                QString(split[j] + split[j + 1]).size() < settings->chunkSize())
                             {
                                 m_content.insert(i + j, split[j] + sep + split[j + 1]);
                                 split.removeAt(j + 1);

@@ -5,12 +5,12 @@
 #define CUSTOMCONTENTADDER_H
 
 #include <QLineEdit>
+#include <QPushButton>
 #include <QTextEdit>
 #include <QWidget>
-#include <QPushButton>
 
 #ifndef NO_TTS
-#include <QTextToSpeech>
+    #include <QTextToSpeech>
 #endif
 
 class CustomContentAdder : public QWidget
