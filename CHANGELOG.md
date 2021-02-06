@@ -1,3 +1,23 @@
+## 0.6.0 (2/05/2021)
+### What's new
+- TotalReqall is working its way into KDE!
+- TotalReqall now uses Sword for Bible content.
+- Adding custom content and saving items is now supported.
+  - On startup, TotalReqall now presents a screen which allows you to load saved items, create custom content, or select a Bible verse.
+  - Saved items can be deleted.
+    - Note that this is buggy: if you have multiple items with the same title and delete one, all of them will be deleted.
+- The source files now contain SPDX license headers.
+- Large items can now be split into chunks at memorization time.
+- TotalReqall can now speak items using the QtSpeech text-to-speech system.
+  - This can be disabled on a per-build status by setting `TTS_ENABLED` to `OFF` when configuring CMake.
+  - If QtSpeech is not installed, TTS will be disabled.
+
+### Changes
+- The build system has been switched from Qt .pro to CMake.
+- The changelog and help are no longer bundled with TotalReqall.
+- TotalReqall now displays the selected verse all the time, instead of requiring manual display.
+- The status bar at the bottom of the window has been removed.
+
 ## 0.5.0 (11/10/2020)
 ### What's new
 - When a verse is being memorized for the first time in a session, 3 memorization passes are made, each giving the user fewer and fewer hints; after this initial memorization, one pass is made for each memorization of the verse
