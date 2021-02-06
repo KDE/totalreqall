@@ -198,7 +198,7 @@ QString SavedContentLoader::prepareContent(QListWidgetItem *item, bool emitSigna
                         for (sword::VerseKey otherKey{
                                  jsonObj["endRef"].toString().toStdString().c_str() };
                              *key <= otherKey; key->increment())
-                            text += module->renderText();
+                            text += module->renderText() + "\n";
                         content = text;
 
                         foundInJson = true;
