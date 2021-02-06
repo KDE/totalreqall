@@ -1,4 +1,4 @@
-## 0.6.0 (2/05/2021)
+## 0.6.0 (2/06/2021)
 ### What's new
 - TotalReqall is working its way into KDE!
 - TotalReqall now uses Sword for Bible content.
