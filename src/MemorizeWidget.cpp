@@ -3,8 +3,8 @@
 
 #include "MemorizeWidget.h"
 
-#include "UserSettings.h"
 #include "Helper.h"
+#include "UserSettings.h"
 #include <KLocalizedString>
 #include <QDebug>
 #include <QGridLayout>
@@ -166,6 +166,10 @@ QString MemorizeEdit::formattedEndString(Difficulty difficulty)
     switch (difficulty)
     {
     case Difficulty::Easy:
+        // note that I'd rather use the Qt default placeholder text color, but in some themes
+        // (Breeze Dark, I'm looking at you) placeholder text is the same color as normal text, so
+        // that doesn't work, and I can't find any other good color to use, so I'm sticking with
+        // this
         formatted = "<span style=\"color:#8b8b8b;\">" + m_words.join(" ") + "</span>";
         break;
 
