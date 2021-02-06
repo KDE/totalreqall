@@ -158,7 +158,6 @@ void SavedContentLoader::refresh()
 
     // there should ideally always be one item selected
     if (m_contentList->count() > 0)
-//        m_contentList->setsel
         m_contentList->item(0)->setSelected(true);
 }
 
