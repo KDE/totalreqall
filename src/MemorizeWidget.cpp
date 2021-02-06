@@ -234,7 +234,7 @@ MemorizeWidget::MemorizeWidget(QString memorizeContent, QWidget *parent)
                         QString sep = "\n";
                         QStringList split = m_content.at(i).split(sep);
                         m_content.removeAt(i);
-                        for (int j = 0; j < split.size() - 1; ++j)
+                        for (int j = 0; j < split.size(); ++j)
                         {
                             if (split[j].size() < settings->chunkSize() && QString(split[j] + split[j + 1]).size() < settings->chunkSize())
                             {
