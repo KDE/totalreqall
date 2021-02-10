@@ -9,6 +9,7 @@
   <name xml:lang="en-GB">TotalReqall</name>
   <name xml:lang="es">TotalReqall</name>
   <name xml:lang="fr">TotalReqall</name>
+  <name xml:lang="id">TotalReqall</name>
   <name xml:lang="it">TotalReqall</name>
   <name xml:lang="nl">TotalReqall</name>
   <name xml:lang="nn">TotalReqall</name>
@@ -23,6 +24,7 @@
   <summary xml:lang="en-GB">Memorise the Bible or anything else</summary>
   <summary xml:lang="es">Memorice la Biblia o cualquier otra cosa</summary>
   <summary xml:lang="fr">Mémoriser la Bible ou autre chose</summary>
+  <summary xml:lang="id">Hafalkan Alkitab atau apapun</summary>
   <summary xml:lang="it">Memorizza la Bibbia o qualsiasi altra cosa</summary>
   <summary xml:lang="nl">De Bijbel of iets anders te memoriseren</summary>
   <summary xml:lang="nn">Pugg vers frå Bibelen eller andre ting</summary>
@@ -37,6 +39,7 @@
     <p xml:lang="en-GB">TotalReqall is a memorisation tool which allows memorising the Bible in many different translations, as well as memorising any other content you want to.</p>
     <p xml:lang="es">TotalReqall es una herramienta de memorización que le permite memorizar la Biblia en muchas traducciones distintas, así como memorizar cualquier otro tipo de contenido que desee.</p>
     <p xml:lang="fr">TotalReqall est un outil de mémorisation pour se rappeler de la Bible sous différentes traductions, ainsi que se souvenir de n'importe quel autre contenu que vous souhaitez.</p>
+    <p xml:lang="id">TotalReqall adalah alat menghafal yang memungkinkan menghafal Alkitab dalam banyak terjemahan berbeda, serta menghafal konten lain yang kamu inginkan.</p>
     <p xml:lang="it">TotalReqall è uno strumento di memorizzazione che permette di memorizzare la Bibbia in molte traduzioni diverse, oltre a memorizzare qualsiasi altro contenuto che desideri.</p>
     <p xml:lang="nl">TotalReqall is een hulpmiddel voor memoriseren voor het memoriseren van Bijbelteksten in vele verschillende vertalingen, evenals het memoriseren van elke andere inhoud die u zou willen.</p>
     <p xml:lang="nn">TotalReqall er eit puggeverktøy du kan bruka til å læra vers i Bibelen, på ulike språk, eller annan tekst du vil læra utanboks.</p>
@@ -50,6 +53,7 @@
     <p xml:lang="en-GB">TotalReqall uses the Sword library to manage Biblical texts. This makes it simple to add new translations to TotalReqall by simply installing a new Sword module on your system.</p>
     <p xml:lang="es">TotalReqall usa la biblioteca Sword para gestionar textos bíblicos. Facilita la adición de nuevas traducciones a TotalReqall con solo instalar un nuevo módulo de Sword en el sistema.</p>
     <p xml:lang="fr">TotalReqall utilise la bibliothèque « Sword » pour gérer les textes de la Bible. Ceci rend les choses simples pour ajouter de nouvelles traductions à TotalReqall. Il suffit juste d'installer un nouveau module « Sword » sur votre système.</p>
+    <p xml:lang="id">TotalReqall menggunakan pustaka Sword untuk mengelola teks-teks Biblical. Ini membuatnya mudah untuk menambahkan terjemahan baru ke TotalReqall hanya dengan menginstal modul Sword baru di sistem kamu.</p>
     <p xml:lang="it">TotalReqall utilizza la libreria Sword per gestire i testi biblici. Ciò rende semplice aggiungere nuove traduzioni a TotalReqall: basta semplicemente installare un nuovo modulo di Sword nel tuo sistema.</p>
     <p xml:lang="nl">TotalReqall gebruikt de Sword bibliotheek om Bijbelse teksten te beheren. Dit maakt het eenvoudig om nieuwe vertalingen aan TotalReqall toe te voegen door eenvoudig een nieuwe Sword module op uw systeem te installeren.</p>
     <p xml:lang="nn">TotalReqall brukar Sword-biblioteket til hand­saming av bibeltekstar. Dette gjer det lett å leggja til bibel­omsetjingar i TotalReqall. Du treng berre installera ein ny Sword-modul på systemet.</p>
@@ -63,6 +67,7 @@
     <p xml:lang="en-GB">For custom content, merely enter what you want to memorise, along with a unique title for identification. Then you can memorise it just like you would memorise a Bible verse.</p>
     <p xml:lang="es">Para contenido personalizado, introduzca simplemente lo que desee memorizar junto con un título único a modo de identificación. A continuación podrá memorizarlo como haría con un versículo de la Biblia.</p>
     <p xml:lang="fr">Pour du contenu personnalisé, saisissez simplement ce que vous voulez mémoriser, ainsi qu'un titre unique pour son identification. Alors, vous pourrez le mémoriser, exactement comme vous pourriez mémoriser un verset de la Bible.</p>
+    <p xml:lang="id">Untuk konten khusus, cukup masukkan apa yang ingin kamu hafalkan, bersama dengan judul unik untuk identifikasi. Kemudian kamu bisa menghafalnya seperti kamu menghafal ayat Alkitab.</p>
     <p xml:lang="it">Per i contenuti personalizzati, inserisci semplicemente ciò che desideri memorizzare insieme a un titolo univoco per l'identificazione: puoi quindi memorizzarlo, proprio come faresti con un verso della Bibbia.</p>
     <p xml:lang="nl">Voor eigen inhoud, voer gewoon wat u wilt memoriseren in, samen met een unieke titel voor identificatie. Daarna kunt u het memoriseren net als u een Bijbelvers zou doen.</p>
     <p xml:lang="nn">For sjølvdefinert innhald kan du skriva inn det du vil læra. Du kan så pugga det på same måte som bibelvers.</p>
@@ -83,6 +88,7 @@
       <caption xml:lang="en-GB">The TotalReqall welcome page</caption>
       <caption xml:lang="es">La página de bienvenida de TotalReqall</caption>
       <caption xml:lang="fr">La page d'accueil de TotalReqall</caption>
+      <caption xml:lang="id">Halaman selamat datang TotalReqall</caption>
       <caption xml:lang="it">La pagina di benvenuto di TotalReqall</caption>
       <caption xml:lang="nl">De welkomstpagina van TotalReqall</caption>
       <caption xml:lang="nn">Velkomstsida i TotalReqall</caption>
@@ -101,6 +107,7 @@
       <caption xml:lang="en-GB">Choosing a verse</caption>
       <caption xml:lang="es">Escoger un versículo</caption>
       <caption xml:lang="fr">Sélection d'un verset</caption>
+      <caption xml:lang="id">Memilih sebuah ayat</caption>
       <caption xml:lang="it">Scegliere un verso</caption>
       <caption xml:lang="nl">Een vers kiezen</caption>
       <caption xml:lang="nn">Val av bibelvers</caption>
@@ -119,6 +126,7 @@
       <caption xml:lang="en-GB">Entering custom content</caption>
       <caption xml:lang="es">Introducción de contenido personalizado</caption>
       <caption xml:lang="fr">Saisie d'un contenu personnalisé</caption>
+      <caption xml:lang="id">Memasukkan konten kustom</caption>
       <caption xml:lang="it">Inserire un contenuto personalizzato</caption>
       <caption xml:lang="nl">Eigen inhoud invoeren</caption>
       <caption xml:lang="nn">Skriving av sjølvdefinert innhald</caption>
@@ -137,6 +145,7 @@
       <caption xml:lang="en-GB">Selecting a saved item to memorise</caption>
       <caption xml:lang="es">Selección de un elemento guardado para memorizarlo</caption>
       <caption xml:lang="fr">Sélection d'un élément enregistré à mémoriser</caption>
+      <caption xml:lang="id">Memilih sebuah item yang disimpan untuk dihafalkan</caption>
       <caption xml:lang="it">Selezionare un elemento salvato da memorizzare</caption>
       <caption xml:lang="nl">Een opgeslagen item om te memoriseren selecteren</caption>
       <caption xml:lang="nn">Val av lagra tekst som skal puggast</caption>
@@ -155,6 +164,7 @@
       <caption xml:lang="en-GB">Memorising a verse</caption>
       <caption xml:lang="es">Memorizar un versículo</caption>
       <caption xml:lang="fr">Mémorisation d'un verset</caption>
+      <caption xml:lang="id">Menghafalkan sebuah ayat</caption>
       <caption xml:lang="it">Memorizzare un verso</caption>
       <caption xml:lang="nl">Een vers memoriseren</caption>
       <caption xml:lang="nn">Pugging av bibelvers</caption>
