@@ -14,6 +14,7 @@
   <name xml:lang="nl">TotalReqall</name>
   <name xml:lang="nn">TotalReqall</name>
   <name xml:lang="pt">TotalReqall</name>
+  <name xml:lang="pt-BR">TotalReqall</name>
   <name xml:lang="sk">TotalReqall</name>
   <name xml:lang="sv">TotalReqall</name>
   <name xml:lang="uk">TotalReqall</name>
@@ -29,6 +30,7 @@
   <summary xml:lang="nl">De Bijbel of iets anders te memoriseren</summary>
   <summary xml:lang="nn">Pugg vers frå Bibelen eller andre ting</summary>
   <summary xml:lang="pt">Memorizar a Bíblia ou outra obra qualquer</summary>
+  <summary xml:lang="pt-BR">Memorize a Bíblia ou qualquer outra coisa</summary>
   <summary xml:lang="sv">Memorera bibeln eller någonting annat</summary>
   <summary xml:lang="uk">Вивчення напам'ять Біблії або будь-яких інших текстів</summary>
   <summary xml:lang="x-test">xxMemorize the Bible or anything elsexx</summary>
@@ -93,6 +95,7 @@
       <caption xml:lang="nl">De welkomstpagina van TotalReqall</caption>
       <caption xml:lang="nn">Velkomstsida i TotalReqall</caption>
       <caption xml:lang="pt">A página de boas-vindas do TotalReqall</caption>
+      <caption xml:lang="pt-BR">A página de boas vindas do TotalReqall</caption>
       <caption xml:lang="sv">Välkomstsidan för TotalReqall</caption>
       <caption xml:lang="uk">Початкова сторінка TotalReqall</caption>
       <caption xml:lang="x-test">xxThe TotalReqall welcome pagexx</caption>
@@ -112,6 +115,7 @@
       <caption xml:lang="nl">Een vers kiezen</caption>
       <caption xml:lang="nn">Val av bibelvers</caption>
       <caption xml:lang="pt">Escolher um verso</caption>
+      <caption xml:lang="pt-BR">Escolhendo um verso</caption>
       <caption xml:lang="sv">Välja en vers</caption>
       <caption xml:lang="uk">Вибір вірша</caption>
       <caption xml:lang="x-test">xxChoosing a versexx</caption>
@@ -150,6 +154,7 @@
       <caption xml:lang="nl">Een opgeslagen item om te memoriseren selecteren</caption>
       <caption xml:lang="nn">Val av lagra tekst som skal puggast</caption>
       <caption xml:lang="pt">Seleccionar um item gravado para memorizar</caption>
+      <caption xml:lang="pt-BR">Selecionando um item salvo para memorizar</caption>
       <caption xml:lang="sv">Välja ett sparat objekt att memorera</caption>
       <caption xml:lang="uk">Вибір збереженого запису для вивчення напам'ять</caption>
       <caption xml:lang="x-test">xxSelecting a saved item to memorizexx</caption>
@@ -169,6 +174,7 @@
       <caption xml:lang="nl">Een vers memoriseren</caption>
       <caption xml:lang="nn">Pugging av bibelvers</caption>
       <caption xml:lang="pt">Memorizar um verso</caption>
+      <caption xml:lang="pt-BR">Memorizando um verso</caption>
       <caption xml:lang="sv">Memorera en vers</caption>
       <caption xml:lang="uk">Вивчення вірша напам'ять</caption>
       <caption xml:lang="x-test">xxMemorizing a versexx</caption>
