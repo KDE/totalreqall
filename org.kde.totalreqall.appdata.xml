@@ -7,6 +7,7 @@
   <name xml:lang="ca">TotalReqall</name>
   <name xml:lang="ca-valencia">TotalReqall</name>
   <name xml:lang="cs">TotalReqall</name>
+  <name xml:lang="de">TotalReqall</name>
   <name xml:lang="en-GB">TotalReqall</name>
   <name xml:lang="es">TotalReqall</name>
   <name xml:lang="fi">TotalReqall</name>
@@ -89,6 +90,7 @@
       <caption>The TotalReqall welcome page</caption>
       <caption xml:lang="ca">La pàgina de benvinguda del TotalReqall</caption>
       <caption xml:lang="ca-valencia">La pàgina de benvinguda del TotalReqall</caption>
+      <caption xml:lang="de">Startseite von TotalReqall</caption>
       <caption xml:lang="en-GB">The TotalReqall welcome page</caption>
       <caption xml:lang="es">La página de bienvenida de TotalReqall</caption>
       <caption xml:lang="fr">La page d'accueil de TotalReqall</caption>
