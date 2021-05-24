@@ -65,7 +65,7 @@ All MRs will be reviewed, even if they are not accepted. Please run `clang-forma
 Use the TotalReqall product on [bugs.kde.org](https://bugs.kde.org).
 
 ## Contact
-Drop a line at [#totalreqall:kde.org](https://matrix.to/#/#totalreqall:kde.org) or join #kde-totalreqall on Freenode. Note: Matrix is preferred.
+Drop a line at [#totalreqall:kde.org](https://matrix.to/#/#totalreqall:kde.org) or join #kde-totalreqall on irc.libera.chat. Note: Matrix is preferred.
 
 ## What's with the name?
 This program is designed to help you memorize things, hence "Total Recall". The *q* in "TotalReqall" references the fact that this software is made using Qt.
